@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class UserSignServiceImp implements UserSignService {
+public class UserSignServiceImpl implements UserSignService {
     @Autowired
     UserDao userDAO;
     @Autowired

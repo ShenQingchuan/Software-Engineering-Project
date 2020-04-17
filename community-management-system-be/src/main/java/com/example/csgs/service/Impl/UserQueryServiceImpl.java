@@ -14,12 +14,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Slf4j
 @Service
-public class UserQueryServiceImp implements UserQueryService {
+public class UserQueryServiceImpl implements UserQueryService {
     @Autowired
     UserDao userDAO;
     @Autowired
@@ -40,7 +41,7 @@ public class UserQueryServiceImp implements UserQueryService {
         if (queryUser.isPresent()) {
             UserEntity user = queryUser.get();
             user.setUserPassword(null);
-            user.setPwdProtectionEntity(null);
+            user.setPwdProEntity(null);
             return user;
         }
         return null;
@@ -126,7 +127,7 @@ public class UserQueryServiceImp implements UserQueryService {
                     UserEntity userEntity = queryUser.get();
                     if (getUserDistrict(userEntity).equals(getUserDistrict(adminUser.get()))) {
                         userEntity.setUserPassword(null);
-                        userEntity.setPwdProtectionEntity(null);
+                        userEntity.setPwdProEntity(null);
                         return userEntity;
                     }
                 }
