@@ -11,4 +11,6 @@ import java.util.Optional;
 public interface GridDao extends PagingAndSortingRepository<OfGridEntity, Long> {
     Optional<OfGridEntity> findById(Long uid);
 
+    Optional<OfGridEntity> findByDistrictAndCommunity(String district,String community);
+
 }

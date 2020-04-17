@@ -40,14 +40,13 @@ public class UserProfile implements Serializable {
 
     String bloodType;           //血型
 
-    String Occupation;          //职业
+    String occupation;          //职业
 
     String email;               //用户邮箱
 
     String politicCountenance;  //用户政治面貌
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ofGrid", referencedColumnName = "id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ofGrid")
     OfGridEntity ofGridEntity;  //用户所属网格
-
 }

@@ -33,7 +33,7 @@ public class UserEntity implements Serializable {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "pwdProtection", referencedColumnName = "id")
-    public PwdProtectionEntity pwdProtectionEntity;
+    public PwdProEntity pwdProEntity;
 
 
 }

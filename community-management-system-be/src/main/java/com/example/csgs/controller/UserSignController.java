@@ -5,6 +5,7 @@ import com.example.csgs.bean.LoginState;
 import com.example.csgs.service.UserSignService;
 import com.example.csgs.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,11 +18,8 @@ import java.util.Set;
 @RequestMapping("/sign")
 @Slf4j
 public class UserSignController {
-    final UserSignService userSignService;
-
-    public UserSignController(UserSignService userSignService) {
-        this.userSignService = userSignService;
-    }
+    @Autowired
+    UserSignService userSignService;
 
     /**
      * 登录接口
