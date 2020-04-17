@@ -24,7 +24,4 @@ public class OfGridEntity implements Serializable {
     @Column(nullable = false)
     String community;               //所属小区
 
-    @Column(nullable = false)
-    String gridNumber;              //所属网格号
-
 }

@@ -6,6 +6,7 @@ import com.example.csgs.entity.UserEntity;
 import com.example.csgs.service.UserPwdProService;
 import com.example.csgs.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -13,12 +14,8 @@ import java.util.*;
 @Slf4j
 @Service
 public class UserPwdProServiceImpl implements UserPwdProService {
-
-    private final UserDao userDAO;
-
-    public UserPwdProServiceImpl(UserDao iUserDAO, RedisUtils redisUtils) {
-        userDAO = iUserDAO;
-    }
+    @Autowired
+    UserDao userDAO;
 
     private void addPwdPro(PwdProtectionEntity pwdProEntity, List<String> list) {
         pwdProEntity.setQuestionOne(list.get(0));

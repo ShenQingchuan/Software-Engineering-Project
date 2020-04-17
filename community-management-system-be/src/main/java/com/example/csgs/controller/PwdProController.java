@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @RestController
 @RequestMapping("/pwdPro")
 @Slf4j
@@ -20,7 +19,6 @@ public class PwdProController {
     public PwdProController(UserPwdProService userPwdProService) {
         this.userPwdProService = userPwdProService;
     }
-
 
     /**
      * 设置密保接口
@@ -47,7 +45,7 @@ public class PwdProController {
     }
 
     /**
-     * 返回密保问题接口
+     * 返回密保问题接口(两个密保问题)
      */
     @GetMapping("/returnPwdProQue/{id}")
     public Object returnPwdPro(@PathVariable String id) {
@@ -62,7 +60,7 @@ public class PwdProController {
     }
 
     /**
-     * 比较密保答案接口
+     * 比较密保答案接口（验证上传的密保答案）
      */
     @PostMapping("/comparePwdProAns/{id}")
     public Object comparePwdPro(@RequestBody JSONObject jsonObject, @PathVariable String id) {

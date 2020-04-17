@@ -1,58 +1,22 @@
 package com.example.csgs.bean;
 
+import lombok.Data;
+
+@Data
 public class User {
-    private long uid;
-    private Object password;
-    private String nickname;
-    private String email;
+    private long id;
+    private String userID;
+    private String userName;
+    private String telPhone;
+    private String Community;
+    private String District;
 
-    public User(long uid, Object password, String nickname, String email) {
-        this.uid = uid;
-        this.password = password;
-        this.nickname = nickname;
-        this.email = email;
+    public User(long uid, String userID, String userName, String telPhone, String community, String district) {
+        this.id = uid;
+        this.userID = userID;
+        this.userName = userName;
+        this.telPhone = telPhone;
+        Community = community;
+        District = district;
     }
-
-    @Override
-    public String toString() {
-        return "UserEntity{" +
-                "uid=" + uid +
-                ", password=" + password +
-                ", nickname='" + nickname + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
-
-    public long getUid() {
-        return uid;
-    }
-
-    public void setUid(int uid) {
-        this.uid = uid;
-    }
-
-    public Object getPassword() {
-        return password;
-    }
-
-    public void setPassword(Object password) {
-        this.password = password;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
 }

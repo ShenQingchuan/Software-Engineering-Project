@@ -7,6 +7,7 @@ import com.example.csgs.service.UserSignService;
 import com.example.csgs.utils.JwtUtils;
 import com.example.csgs.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
@@ -19,19 +20,14 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class UserSignServiceImp implements UserSignService {
-
-    final UserDao userDAO;
-
-    final RedisUtils redisUtils;
-
-    public UserSignServiceImp(UserDao userDao, RedisUtils redisUtils) {
-        this.userDAO = userDao;
-        this.redisUtils = redisUtils;
-    }
+    @Autowired
+    UserDao userDAO;
+    @Autowired
+    RedisUtils redisUtils;
 
     @Override
-    public Map<Integer, String> sign(String userAccount, String password, HttpServletResponse response) {
-        Optional<UserEntity> userEntitySrc = userDAO.findOneByUserAccount(userAccount);
+    public Map<Integer, String> sign(String userID, String password, HttpServletResponse response) {
+        Optional<UserEntity> userEntitySrc = userDAO.findOneByUserID(userID);
         Map<Integer, String> list = new HashMap<>();
         if (userEntitySrc.isPresent()) { // 判断用户是否存在
 //            if (DigestUtils.md5DigestAsHex(password.getBytes()).equals(userEntitySrc.get().getUserPassword())) { // 校验密码是否一致
