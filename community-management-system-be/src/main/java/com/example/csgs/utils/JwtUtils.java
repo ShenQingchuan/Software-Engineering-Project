@@ -23,7 +23,7 @@ public class JwtUtils {
             token = Jwts.builder()
                     .setSubject(SUBJECT)//发行者
                     .claim("userType", userEntity.getUserType())
-                    .claim("userAccount", userEntity.getUserAccount())
+                    .claim("userAccount", userEntity.getUserID())
                     .setIssuedAt(new Date())//发行日期
                     .signWith(SignatureAlgorithm.HS256, APPSECRET).compact();//签名
         } else {

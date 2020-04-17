@@ -19,7 +19,7 @@ public class UserEntity implements Serializable {
     Long id;
 
     @Column(nullable = false, unique = true)
-    String userAccount;
+    String userID;
 
     @Column(nullable=false,name="userType",columnDefinition="int default 0")
     Integer userType;

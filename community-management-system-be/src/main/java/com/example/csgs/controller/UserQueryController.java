@@ -1,27 +1,22 @@
 package com.example.csgs.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.csgs.dao.UserDao;
+import com.example.csgs.bean.PageQuery;
+
 import com.example.csgs.entity.UserEntity;
+import com.example.csgs.service.UserQueryService;
 import com.example.csgs.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.DigestUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/query")
 @Slf4j
 public class UserQueryController {
-    private final UserDao userDAO;
-
-    public UserQueryController(UserDao userDAO) {
-        this.userDAO = userDAO;
-    }
+    @Autowired
+    UserQueryService userQueryService;
 
     /**
      * 按 id 信息查询用户
@@ -30,50 +25,49 @@ public class UserQueryController {
     @GetMapping("/{id}")
     public Object singleUserQuery(@PathVariable String id) {
         Long uid = Long.parseLong(id);
-        Optional<UserEntity> queryUser = userDAO.findById(uid);
-        if (queryUser.isPresent()) {
-            UserEntity user = queryUser.get();
-            user.setUserPassword(null);
-            return ResultUtils.success(JSON.toJSON(user),"用户个人资料获取成功");
+        UserEntity userEntity = userQueryService.singleUserQuery(uid);
+        if (userEntity != null) {
+            return ResultUtils.success(userEntity, "用户个人资料获取成功");
         }
-        return ResultUtils.error("没有找到 uid: "+ uid + " 的用户");
+        return ResultUtils.error("没有找到 uid: " + uid + " 的用户");
+    }
+
+    /**
+     * 通过网格员id查询居民用户信息列表
+     * 场景：网格员登陆进入主界面，数据列表界面
+     */
+    @GetMapping("/allUserOfGrid/{id}")
+    public Object allUserOfGrid(@PathVariable String id, @RequestParam String page) {
+        Long uid = Long.parseLong(id);
+        PageQuery pageQuery = userQueryService.allUserOfGrid(uid, page);
+        if (pageQuery != null) {
+            return ResultUtils.success(pageQuery, "居民用户信息获取成功！");
+        }
+        return ResultUtils.error("居民用户信息获取失败！");
     }
 
     /**
      * 按各种用户身份信息进行查询
      * 场景：网格员查询用户信息
+     * 组合：归属地区、归属地区和归属小区、
      */
-    @GetMapping("/singleUser")
-    public Object operatorSingleUserQuery(@RequestBody JSONObject jsonObject) {
-        String userAccount = jsonObject.getString("userAccount");
+    @GetMapping("/multipleConditions/{id}")
+    public Object multipleConditions(@RequestBody JSONObject jsonObject, @PathVariable String id, @RequestParam String page) {
+        String userID = jsonObject.getString("userID");
         String userName = jsonObject.getString("userName");
-        String userCommunity = jsonObject.getString("userCommunity");
-        String userArea = jsonObject.getString("userArea");
-        
-        Optional<UserEntity> queryUser = userDAO.findOneByUserAccount(userAccount);
+        String community = jsonObject.getString("community");
 
-        if (queryUser.isPresent()) {
-            UserEntity temp = queryUser.get();
-            temp.setUserPassword(null);
-            return ResultUtils.success(JSON.toJSON(temp),"查询用户资料成功");
+        Object result = userQueryService.multipleConditions(userID, userName, community, Long.parseLong(id), page);
+        if (result instanceof UserEntity) {
+            UserEntity userEntity = (UserEntity) result;
+            return ResultUtils.success(userEntity, "居民用户信息获取成功");
+        } else if (result instanceof PageQuery) {
+            PageQuery pageQuery = (PageQuery) result;
+            return ResultUtils.success(pageQuery, "居民用户信息获取成功！");
+        } else if (result instanceof Integer){
+            return ResultUtils.error("你没有该查询权限！");
+        } else {
+            return ResultUtils.error("居民用户信息获取失败！");
         }
-        return ResultUtils.error("没有找到 userAccount: "+ userAccount + " 的用户");
     }
-
-    /**
-     * （分页查询）获取所有用户
-     * 场景：主界面用户信息列表查询
-     */
-    @GetMapping("/allUser")
-    public Object findAll() {
-        List<UserEntity> all = (List<UserEntity>) userDAO.findAll();
-        for (UserEntity temp : all) {
-            temp.setUserPassword(null);//对密码进行过滤
-        }
-        return ResultUtils.success(
-            JSONArray.parseArray(JSON.toJSONString(all)),
-            "获取用户列表成功"
-        );
-    }
-
 }

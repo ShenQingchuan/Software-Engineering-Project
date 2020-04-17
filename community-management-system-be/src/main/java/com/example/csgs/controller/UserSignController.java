@@ -29,16 +29,16 @@ public class UserSignController {
     @PostMapping("/signIn")
     public Object login(@RequestBody JSONObject jsonObject, HttpServletResponse response) {
 
-        String userAccount = jsonObject.getString("userAccount");
+        String userID = jsonObject.getString("userID");
         String password = jsonObject.getString("password");
 
-        Map<Integer, String> integerStringMap = userSignService.sign(userAccount, password, response);
+        Map<Integer, String> integerStringMap = userSignService.sign(userID, password, response);
         Set<Integer> integers = integerStringMap.keySet();
 
         for (Integer integer : integers) {
             switch (integer) {
                 case LoginState.STATE_SUCCESS:
-                    log.info("用户 <" + userAccount + "> 登录成功!");
+                    log.info("用户 <" + userID + "> 登录成功!");
                     Map<String, Object> map = new HashMap<>();
                     map.put("token", integerStringMap.get(integer));
                     return ResultUtils.success(map, "登录成功"); // 登录成功
