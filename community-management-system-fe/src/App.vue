@@ -10,6 +10,13 @@
   padding: 0;
 }
 
+a,
+a:link,
+a:visited {
+  color: #2c3e50;
+  text-decoration: none;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

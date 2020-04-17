@@ -43,6 +43,7 @@
               </div>
             </template>
             <el-input
+              type="password"
               placeholder="请输入密码"
               v-model="signInform.password"
             ></el-input>
@@ -83,9 +84,22 @@ export default {
     };
   },
   methods: {
+    validateLogin() {
+      if (this.signInform.userId.length === 0) {
+        this.$message.warning("您还没有填写身份证号!");
+        return false;
+      } else if (this.signInform.password.length === 0) {
+        this.$message.warning("您还没有填写密码!");
+        return false;
+      }
+      return true;
+    },
     signIn() {
       // TODO: 登录功能
-      this.$message.warning("暂未实现登录！");
+      if (this.validateLogin()) {
+        this.$message.warning("暂未实现登录！");
+        this.$router.push("/dashboard");
+      }
     }
   }
 };

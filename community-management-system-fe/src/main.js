@@ -23,13 +23,17 @@ import {
   Tabs,
   TabPane,
   Tag,
+  Table,
+  TableColumn,
   Aside,
+  Card,
   Message,
   MessageBox,
   Notification,
   Loading
 } from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
+import "./assets/styles/common.scss"; // 公共样式
 
 Vue.config.productionTip = false;
 Vue.use(Button)
@@ -46,10 +50,13 @@ Vue.use(Button)
   .use(Container)
   .use(Header)
   .use(Main)
+  .use(Card)
   .use(Footer)
   .use(Form)
   .use(FormItem)
   .use(Input)
+  .use(Table)
+  .use(TableColumn)
   .use(Tag)
   .use(TabPane)
   .use(Tabs)

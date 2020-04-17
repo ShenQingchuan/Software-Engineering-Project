@@ -9,7 +9,9 @@
           <common-header />
         </el-header>
         <el-main>
-          这里是主视图
+          <div class="main-view">
+            <router-view></router-view>
+          </div>
         </el-main>
       </el-container>
     </el-container>
@@ -34,5 +36,8 @@ export default {
   justify-content: flex-end;
   align-items: center;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+}
+.main-view {
+  padding: 20px;
 }
 </style>

@@ -1,0 +1,16 @@
+.flex-box {
+  display: flex;
+  align-items: center;
+}
+.flex-col {
+  flex-direction: column;
+}
+.jy-center {
+  justify-content: center;
+}
+.jy-start {
+  justify-content: flex-start;
+}
+.jy-end {
+  justify-content: flex-end;
+}
