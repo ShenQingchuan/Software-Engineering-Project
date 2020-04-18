@@ -1,63 +1,53 @@
 <template>
   <div class="subpage-user-manage">
-    <el-tabs v-model="activeTab">
-      <el-tab-pane label="网格员用户" name="stuff">
-        <el-form inline class="user-manage-query-form">
-          <el-form-item label="归属小区: ">
-            <el-input
-              v-model="userManageQueryForm.community"
-              placeholder="请输入归属小区"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="用户ID: ">
-            <el-input
-              v-model="userManageQueryForm.userId"
-              placeholder="请输入用户ID"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="姓名: ">
-            <el-input
-              v-model="userManageQueryForm.userName"
-              placeholder="请输入姓名"
-            ></el-input>
-          </el-form-item>
-        </el-form>
-        <el-button type="primary" plain>查询</el-button>
-        <el-button type="primary" plain>导入</el-button>
-        <el-button type="primary" plain>导出</el-button>
-        <el-button type="primary" plain>添加</el-button>
-        <el-table
-          class="user-manage-data-table"
-          :data="userManageTableData"
-          border
-          style="width: 100%"
-        >
-          <el-table-column fixed prop="area" label="归属地区" width="200">
-          </el-table-column>
-          <el-table-column prop="community" label="归属小区" width="200">
-          </el-table-column>
-          <el-table-column prop="userId" label="用户ID" width="200">
-          </el-table-column>
-          <el-table-column prop="userName" label="姓名" width="200">
-          </el-table-column>
-          <el-table-column prop="phone" label="手机" width="200">
-          </el-table-column>
-          <el-table-column fixed="right" label="操作">
-            <template slot-scope="scope">
-              <el-button
-                @click="handleClick(scope.row)"
-                type="text"
-                size="small"
-                >查看
-              </el-button>
-              <el-button type="text" size="small">编辑</el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-      <el-tab-pane label="领导用户" name="leader">领导用户</el-tab-pane>
-      <el-tab-pane label="居民用户" name="third">居民用户</el-tab-pane>
-    </el-tabs>
+    <el-form inline class="user-manage-query-form">
+      <el-form-item label="归属小区: ">
+        <el-input
+          v-model="userManageQueryForm.community"
+          placeholder="请输入归属小区"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="用户ID: ">
+        <el-input
+          v-model="userManageQueryForm.userId"
+          placeholder="请输入用户ID"
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="姓名: ">
+        <el-input
+          v-model="userManageQueryForm.userName"
+          placeholder="请输入姓名"
+        ></el-input>
+      </el-form-item>
+    </el-form>
+    <el-button type="primary" plain>查询</el-button>
+    <el-button type="primary" plain>导入</el-button>
+    <el-button type="primary" plain>导出</el-button>
+    <el-button type="primary" plain>添加</el-button>
+    <el-table
+      class="user-manage-data-table"
+      :data="userManageTableData"
+      border
+      style="width: 100%"
+    >
+      <el-table-column fixed prop="area" label="归属地区" width="200">
+      </el-table-column>
+      <el-table-column prop="community" label="归属小区" width="200">
+      </el-table-column>
+      <el-table-column prop="userId" label="用户ID" width="200">
+      </el-table-column>
+      <el-table-column prop="userName" label="姓名" width="200">
+      </el-table-column>
+      <el-table-column prop="phone" label="手机" width="200"> </el-table-column>
+      <el-table-column fixed="right" label="操作">
+        <template slot-scope="scope">
+          <el-button @click="handleClick(scope.row)" type="text" size="small"
+            >查看
+          </el-button>
+          <el-button type="text" size="small">编辑</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 

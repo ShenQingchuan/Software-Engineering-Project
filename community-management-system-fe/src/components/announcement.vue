@@ -66,9 +66,9 @@ export default {
       top: 20px;
       content: "";
       width: 0;
-      height: 3px;
+      height: 2px;
       background-color: #2c3e506e;
-      border-radius: 25%;
+      border-radius: 40px;
       transition: width 0.4s ease;
     }
     a:hover {

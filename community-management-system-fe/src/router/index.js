@@ -3,6 +3,8 @@ import VueRouter from "vue-router";
 import DashBoard from "../views/DashBoard.vue";
 import userManage from "../views/subviews/userManage";
 import residentOverview from "../views/subviews/residentOverview";
+import userInfoShow from "../views/subviews/userInfoShow";
+import userInfoUpdate from "../views/subviews/userInfoUpdate";
 
 Vue.use(VueRouter);
 
@@ -37,6 +39,22 @@ const routes = [
         component: residentOverview,
         meta: {
           title: buildTitle("居民用户总览页")
+        }
+      },
+      {
+        path: "userInfoShow",
+        name: "userInfoShow",
+        component: userInfoShow,
+        meta: {
+          title: buildTitle("我的个人信息")
+        }
+      },
+      {
+        path: "userInfoUpdate",
+        name: "userInfoUpdate",
+        component: userInfoUpdate,
+        meta: {
+          title: buildTitle("修改个人信息")
         }
       }
     ]

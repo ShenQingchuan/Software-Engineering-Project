@@ -109,10 +109,6 @@
         </el-card>
       </div>
     </div>
-    <!-- 操作按钮组 -->
-    <div class="actions-group">
-      <el-button type="primary" plain>我的车辆信息</el-button>
-    </div>
     <!-- 社区公告速览 -->
     <announcement class="announcement-card"></announcement>
   </div>

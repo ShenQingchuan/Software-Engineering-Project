@@ -27,6 +27,9 @@ import {
   TableColumn,
   Aside,
   Card,
+  Select,
+  Upload,
+  Option,
   Message,
   MessageBox,
   Notification,
@@ -53,6 +56,9 @@ Vue.use(Button)
   .use(Card)
   .use(Footer)
   .use(Form)
+  .use(Upload)
+  .use(Select)
+  .use(Option)
   .use(FormItem)
   .use(Input)
   .use(Table)

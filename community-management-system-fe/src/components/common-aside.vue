@@ -22,12 +22,14 @@
     </div>
 
     <br />
+    <!--侧边栏菜单-->
     <div class="menu">
       <el-menu :default-openeds="['1']">
         <el-submenu index="1">
           <template slot="title"
             ><i class="el-icon-s-operation" />常用操作
           </template>
+          <!--居民用户操作组-->
           <el-menu-item-group>
             <template slot="title">居民自理：</template>
             <el-menu-item
@@ -37,11 +39,16 @@
               <i class="el-icon-guide" />
               <a>居民首页</a>
             </el-menu-item>
-            <el-menu-item @click="() => $router.push('/')" index="1-2">
+            <el-menu-item
+              @click="() => $router.push('/dashboard/userInfoShow')"
+              index="1-2"
+            >
               <i class="el-icon-set-up" />
               <a>信息更新</a>
             </el-menu-item>
           </el-menu-item-group>
+
+          <!--网格员操作组-->
           <el-menu-item-group>
             <template slot="title">网格员管理：</template>
             <el-menu-item

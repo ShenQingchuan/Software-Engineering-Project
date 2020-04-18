@@ -1,3 +1,22 @@
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+.slide-fade-enter-active {
+  transition: all 0.5s ease-in;
+}
+.slide-fade-leave-active {
+  transition: all 0.5s ease-out;
+}
+.slide-fade-enter, .slide-fade-leave-to
+  /* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
 .flex-box {
   display: flex;
   align-items: center;
@@ -14,9 +33,16 @@
 .jy-end {
   justify-content: flex-end;
 }
+.jy-between {
+  justify-content: space-between;
+}
 .as-start {
   align-items: flex-start;
 }
 .as-end {
   align-items: flex-end;
+}
+.bb-full {
+  box-sizing: border-box;
+  width: 100%;
 }
