@@ -1,7 +1,52 @@
 <template>
   <div class="flex-box flex-col jy-center subpage-resident-overview">
-    <div class="announcement-show"></div>
+    <!-- 小区名称 -->
+    <div class="community-title">
+      所属小区：<span>{{ communityName }}</span>
+    </div>
+    <!-- 数据纵览卡片组 -->
     <div class="flex-box jy-center overview-card-group">
+      <div class="flex-box overview-card">
+        <el-card shadow="hover">
+          <svg
+            t="1587168238324"
+            class="icon"
+            viewBox="0 0 1024 1024"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            p-id="5848"
+            id="mx_n_1587168238324"
+            width="50"
+            height="50"
+          >
+            <path
+              d="M341.333333 953.6H170.666667a42.666667 42.666667 0 0 1-42.666667-42.666667v-512a42.666667 42.666667 0 0 1 42.666667-42.666666h170.666666a42.666667 42.666667 0 0 1 42.666667 42.666666v512a42.666667 42.666667 0 0 1-42.666667 42.666667z m-128-85.333333h85.333334v-426.666667H213.333333z"
+              p-id="5849"
+              data-spm-anchor-id="a313x.7781069.0.i17"
+              class="selected"
+              fill="#1296db"
+            ></path>
+            <path
+              d="M682.666667 953.6H341.333333a42.666667 42.666667 0 0 1-42.666666-42.666667v-768a42.666667 42.666667 0 0 1 42.666666-42.666666h341.333334a42.666667 42.666667 0 0 1 42.666666 42.666666v768a42.666667 42.666667 0 0 1-42.666666 42.666667z m-298.666667-85.333333h256v-682.666667H384z"
+              p-id="5850"
+              data-spm-anchor-id="a313x.7781069.0.i16"
+              class=""
+              fill="#1296db"
+            ></path>
+            <path
+              d="M853.333333 953.6h-170.666666a42.666667 42.666667 0 0 1-42.666667-42.666667v-341.333333a42.666667 42.666667 0 0 1 42.666667-42.666667h170.666666a42.666667 42.666667 0 0 1 42.666667 42.666667v341.333333a42.666667 42.666667 0 0 1-42.666667 42.666667z m-128-85.333333h85.333334v-256h-85.333334z"
+              p-id="5851"
+            ></path>
+            <path
+              d="M896 953.6H128a42.666667 42.666667 0 0 1 0-85.333333h768a42.666667 42.666667 0 0 1 0 85.333333zM533.333333 825.6h-42.666666a21.333333 21.333333 0 0 1-21.333334-21.333333 21.333333 21.333333 0 0 1 21.333334-21.333334h42.666666a21.333333 21.333333 0 0 1 21.333334 21.333334 21.333333 21.333333 0 0 1-21.333334 21.333333zM533.333333 441.6h-42.666666a21.333333 21.333333 0 0 1-21.333334-21.333333 21.333333 21.333333 0 0 1 21.333334-21.333334h42.666666a21.333333 21.333333 0 0 1 21.333334 21.333334 21.333333 21.333333 0 0 1-21.333334 21.333333zM533.333333 313.6h-42.666666a21.333333 21.333333 0 0 1-21.333334-21.333333 21.333333 21.333333 0 0 1 21.333334-21.333334h42.666666a21.333333 21.333333 0 0 1 21.333334 21.333334 21.333333 21.333333 0 0 1-21.333334 21.333333zM533.333333 569.6h-42.666666a21.333333 21.333333 0 0 1-21.333334-21.333333 21.333333 21.333333 0 0 1 21.333334-21.333334h42.666666a21.333333 21.333333 0 0 1 21.333334 21.333334 21.333333 21.333333 0 0 1-21.333334 21.333333zM533.333333 697.6h-42.666666a21.333333 21.333333 0 0 1-21.333334-21.333333 21.333333 21.333333 0 0 1 21.333334-21.333334h42.666666a21.333333 21.333333 0 0 1 21.333334 21.333334 21.333333 21.333333 0 0 1-21.333334 21.333333z"
+              p-id="5852"
+            ></path>
+          </svg>
+          <br />
+          本小区住宅总数：
+          <span class="population-count">{{ houseCount }}</span>
+        </el-card>
+      </div>
       <div class="flex-box overview-card">
         <el-card shadow="hover">
           <svg
@@ -29,10 +74,11 @@
             ></path>
           </svg>
           <br />
-          本小区居民数量： <span class="population-count">193</span>
+          本小区居民数量：
+          <span class="population-count">{{ residentCount }}</span>
         </el-card>
       </div>
-      <div class="overview-card">
+      <div class="flex-box overview-card">
         <el-card shadow="hover">
           <svg
             t="1587101236970"
@@ -59,19 +105,32 @@
             ></path>
           </svg>
           <br />
-          本小区停车位数量：<span class="car-count">100</span>
+          本小区停车位数量：<span class="car-count">{{ parkingCount }}</span>
         </el-card>
       </div>
     </div>
+    <!-- 操作按钮组 -->
     <div class="actions-group">
       <el-button type="primary" plain>我的车辆信息</el-button>
     </div>
+    <!-- 社区公告速览 -->
+    <announcement class="announcement-card"></announcement>
   </div>
 </template>
 
 <script>
+import Announcement from "../../components/announcement";
 export default {
-  name: "residentOverview"
+  name: "residentOverview",
+  components: { Announcement },
+  data() {
+    return {
+      communityName: "蓝光金悦天骄",
+      houseCount: 1630,
+      residentCount: 3133,
+      parkingCount: 160
+    };
+  }
 };
 </script>
 
@@ -80,20 +139,37 @@ export default {
   margin-top: 20px;
   width: 90%;
 
-  .announcement-show {
+  .announcement-card {
+    margin-top: 20px;
     width: 100%;
+  }
+
+  .community-title {
+    margin: 10px 0;
+    padding: 10px;
+    width: max-content;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+    user-select: none;
+    span {
+      font-size: 18px;
+      font-weight: bold;
+      color: cadetblue;
+    }
   }
   .overview-card-group {
     margin: 20px;
     width: 100%;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: bold;
 
     .overview-card {
+      user-select: none;
       svg {
         margin-bottom: 20px;
       }
-      margin: 20px;
+      margin: 20px 20px 0 20px;
       .population-count,
       .car-count {
         color: chocolate;

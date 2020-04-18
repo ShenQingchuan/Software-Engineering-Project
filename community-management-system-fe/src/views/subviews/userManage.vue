@@ -3,12 +3,6 @@
     <el-tabs v-model="activeTab">
       <el-tab-pane label="网格员用户" name="stuff">
         <el-form inline class="user-manage-query-form">
-          <el-form-item label="归属地区: ">
-            <el-input
-              v-model="userManageQueryForm.area"
-              placeholder="请输入归属地区"
-            ></el-input>
-          </el-form-item>
           <el-form-item label="归属小区: ">
             <el-input
               v-model="userManageQueryForm.community"
@@ -77,7 +71,6 @@ export default {
       activeTab: "stuff",
 
       userManageQueryForm: {
-        area: "",
         community: "",
         userId: "",
         userName: ""

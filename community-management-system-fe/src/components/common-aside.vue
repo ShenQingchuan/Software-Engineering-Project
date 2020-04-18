@@ -29,13 +29,17 @@
             ><i class="el-icon-s-operation" />常用操作
           </template>
           <el-menu-item-group>
-            <template slot="title">网格员管理：</template>
+            <template slot="title">居民自理：</template>
             <el-menu-item
               @click="() => $router.push('/dashboard/residentOverview')"
               index="1-1"
             >
-              <i class="el-icon-user" />
-              <a>居民入口</a>
+              <i class="el-icon-guide" />
+              <a>居民首页</a>
+            </el-menu-item>
+            <el-menu-item @click="() => $router.push('/')" index="1-2">
+              <i class="el-icon-set-up" />
+              <a>信息更新</a>
             </el-menu-item>
           </el-menu-item-group>
           <el-menu-item-group>
