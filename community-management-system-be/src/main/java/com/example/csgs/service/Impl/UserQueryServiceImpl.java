@@ -52,13 +52,13 @@ public class UserQueryServiceImpl implements UserQueryService {
      * 场景：网格员登陆进入主界面，数据列表界面
      */
     @Override
-    public PageQuery allUserOfGrid(Long id,String page) {
+    public PageQuery allUserOfGrid(Long id, String page) {
         Optional<UserEntity> queryUser = userDAO.findById(id);
 
         if (queryUser.isPresent()) {
             String userDistrict = getUserDistrict(queryUser.get());
 
-            pageable = PageRequest.of(Integer.parseInt(page), pageSize, Sort.by("id").ascending());
+            pageable = PageRequest.of(Integer.parseInt(page)-1, pageSize, Sort.by("id").ascending());
             Iterable<UserProfile> byOfGridEntity = profileDao.findByDistrict(userDistrict, pageable);
 
             return addUserInList(byOfGridEntity, queryUser.get().getUserProfile(), userDistrict);
@@ -115,7 +115,7 @@ public class UserQueryServiceImpl implements UserQueryService {
      * 组合：归属地区、归属地区和归属小区、
      */
     @Override
-    public Object multipleConditions(String userID,String userName,String community,Long id,String page) {
+    public Object multipleConditions(String userID, String userName, String community, Long id, String page) {
         Optional<UserEntity> adminUser = userDAO.findById(id);
 
         if (adminUser.isPresent()) {
@@ -131,12 +131,12 @@ public class UserQueryServiceImpl implements UserQueryService {
                         return userEntity;
                     }
                 }
-                return null;
+                return 0;
             } else {
                 UserProfile userProfile = adminUser.get().getUserProfile();
                 String userDistrict = getUserDistrict(adminUser.get());
                 Iterable<UserProfile> resultProfile = null;
-                pageable = PageRequest.of(Integer.parseInt(page), pageSize, Sort.by("id").ascending());
+                pageable = PageRequest.of(Integer.parseInt(page)-1, pageSize, Sort.by("id").ascending());
                 if (!userName.equals("") && !community.equals("")) {
                     resultProfile = profileDao.findByUserNameAndCommunity(userName, community, userDistrict, pageable);
                 } else if (!userName.equals("")) {

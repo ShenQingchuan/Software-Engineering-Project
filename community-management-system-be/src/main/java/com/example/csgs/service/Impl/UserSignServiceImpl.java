@@ -6,9 +6,11 @@ import com.example.csgs.entity.UserEntity;
 import com.example.csgs.service.UserSignService;
 import com.example.csgs.utils.JwtUtils;
 import com.example.csgs.utils.RedisUtils;
+import com.example.csgs.utils.SHA256Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -30,11 +32,12 @@ public class UserSignServiceImpl implements UserSignService {
         Optional<UserEntity> userEntitySrc = userDAO.findOneByUserID(userID);
         Map<Integer, String> list = new HashMap<>();
         if (userEntitySrc.isPresent()) { // 判断用户是否存在
-//            if (DigestUtils.md5DigestAsHex(password.getBytes()).equals(userEntitySrc.get().getUserPassword())) { // 校验密码是否一致
-            if (password.equals(userEntitySrc.get().getUserPassword())) { // 校验密码是否一致
+            String sha256String = SHA256Util.getSHA256String(DigestUtils.md5DigestAsHex(password.getBytes()));
+            if (sha256String.equals(userEntitySrc.get().getUserPassword())) { // 校验密码是否一致
+//            if (password.equals(userEntitySrc.get().getUserPassword())) { // 校验密码是否一致
                 String token = JwtUtils.genJsonWebToken(userEntitySrc.get()); // 得到 Token
                 // 登录成功后 把token放到Redis Key 存 token ，value 存用户userType
-                redisUtils.set(token, userEntitySrc.get().getUserType().toString(), JwtUtils.TOKEN_EXPIRE_TIME);
+                redisUtils.set(token, userEntitySrc.get().getUserID(), JwtUtils.TOKEN_EXPIRE_TIME);
                 //登陆成功后 把token和真实姓名返回
                 Cookie tokenCookie = new Cookie("csgs_token", token);
                 response.addCookie(tokenCookie);
