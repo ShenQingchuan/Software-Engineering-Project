@@ -1,9 +1,6 @@
 <template>
   <div class="flex-box flex-col comp-announcement">
-    <div class="announcement-header">
-      社区最新公告 <br />
-      <a href="">查看更多</a>
-    </div>
+    <div class="announcement-header">社区公告 <br /></div>
 
     <div
       v-for="(a, i) in announcement"
@@ -13,28 +10,34 @@
       <div v-if="a.coverUrl && a.coverUrl.length !== 0" class="cover-img">
         <img :src="a.coverUrl" alt="" />
       </div>
-      <div class="content-box jy-start  flex-box flex-col">
+      <div class="content-box jy-start flex-box flex-col">
         <div class="title">{{ a.title }}</div>
         <div class="content-slice">{{ a.content.slice(0, 140) }} ...</div>
-        <div class="meta">
-          创建者：{{ a.creatorName }} ｜ 时间：{{
-            moment(new Date(a.createTime)).calendar()
-          }}
+        <div class="flex-box jy-between meta">
+          <span
+            >创建者：{{ a.creatorName }} ｜ 时间：{{
+              $moment(new Date(a.createTime * 1000)).locale()
+            }}</span
+          >
+          <el-button size="mini" type="text">查看原文</el-button>
         </div>
       </div>
     </div>
+
+    <el-button type="text">加载更多</el-button>
   </div>
 </template>
 
 <script>
 import announcementMock from "../mock/announcement";
-import moment from "moment";
 
 export default {
-  name: "announcement",
+  name: "announcementList",
+  props: {
+    editable: Boolean
+  },
   data() {
     return {
-      moment,
       announcement: announcementMock
     };
   }
@@ -104,6 +107,7 @@ export default {
         color: dimgray;
       }
       .meta {
+        width: 100%;
         margin-top: 10px;
         font-size: 12px;
         color: grey;

@@ -2,6 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import moment from "moment";
 import {
   Button,
   Badge,
@@ -30,35 +31,46 @@ import {
   Select,
   Upload,
   Option,
+  Steps,
+  Step,
+  TimePicker,
+  DatePicker,
+  Pagination,
   Message,
   MessageBox,
   Notification,
   Loading
 } from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
-import "./assets/styles/common.scss"; // 公共样式
+import "./assets/styles/common.scss";
+// 公共样式
 
 Vue.config.productionTip = false;
 Vue.use(Button)
-  .use(Badge)
-  .use(Menu)
-  .use(Submenu)
-  .use(MenuItem)
-  .use(MenuItemGroup)
-  .use(DropdownMenu)
+    .use(Badge)
+    .use(Menu)
+    .use(Submenu)
+    .use(MenuItem)
+    .use(MenuItemGroup)
+    .use(DropdownMenu)
+    .use(TimePicker)
+    .use(DatePicker)
   .use(DropdownItem)
   .use(Dropdown)
-  .use(Icon)
-  .use(Aside)
-  .use(Container)
-  .use(Header)
-  .use(Main)
-  .use(Card)
-  .use(Footer)
-  .use(Form)
-  .use(Upload)
-  .use(Select)
-  .use(Option)
+    .use(Icon)
+    .use(Aside)
+    .use(Container)
+    .use(Header)
+    .use(Main)
+    .use(Card)
+    .use(Footer)
+    .use(Form)
+    .use(Upload)
+    .use(Select)
+    .use(Steps)
+    .use(Step)
+    .use(Option)
+    .use(Pagination)
   .use(FormItem)
   .use(Input)
   .use(Table)
@@ -75,6 +87,7 @@ Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
+Vue.prototype.$moment = moment;
 
 new Vue({
   router,

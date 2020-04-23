@@ -58,7 +58,10 @@
               <i class="el-icon-user" />
               <a>用户管理</a>
             </el-menu-item>
-            <el-menu-item index="2-2">
+            <el-menu-item
+              @click="() => $router.push('/dashboard/announcementManage')"
+              index="2-2"
+            >
               <i class="el-icon-chat-line-round" />
               公告管理
             </el-menu-item>

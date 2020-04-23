@@ -110,23 +110,23 @@
       </div>
     </div>
     <!-- 社区公告速览 -->
-    <announcement class="announcement-card"></announcement>
+    <announcement-list class="announcement-card"></announcement-list>
   </div>
 </template>
 
 <script>
-import Announcement from "../../components/announcement";
+    import announcementList from "../../components/announcementList";
 export default {
-  name: "residentOverview",
-  components: { Announcement },
-  data() {
-    return {
-      communityName: "蓝光金悦天骄",
-      houseCount: 1630,
-      residentCount: 3133,
-      parkingCount: 160
-    };
-  }
+    name: "residentOverview",
+    components: {announcementList},
+    data() {
+        return {
+            communityName: "蓝光金悦天骄",
+            houseCount: 1630,
+            residentCount: 3133,
+            parkingCount: 160
+        };
+    }
 };
 </script>
 

@@ -5,6 +5,8 @@ import userManage from "../views/subviews/userManage";
 import residentOverview from "../views/subviews/residentOverview";
 import userInfoShow from "../views/subviews/userInfoShow";
 import userInfoUpdate from "../views/subviews/userInfoUpdate";
+import announcementManage from "../views/subviews/announcementManage";
+import passwordReset from "../views/subviews/passwordReset";
 
 Vue.use(VueRouter);
 
@@ -55,6 +57,22 @@ const routes = [
         component: userInfoUpdate,
         meta: {
           title: buildTitle("修改个人信息")
+        }
+      },
+      {
+        path: "announcementManage",
+        name: "announcementManage",
+        component: announcementManage,
+        meta: {
+          title: buildTitle("管理公告")
+        }
+      },
+      {
+        path: "passwordReset",
+        name: "passwordReset",
+        component: passwordReset,
+        meta: {
+          title: buildTitle("修改密码")
         }
       }
     ]
