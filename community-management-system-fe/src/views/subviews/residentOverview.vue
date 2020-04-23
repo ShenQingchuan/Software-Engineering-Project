@@ -115,18 +115,18 @@
 </template>
 
 <script>
-    import announcementList from "../../components/announcementList";
+import announcementList from "../../components/announcementList";
 export default {
-    name: "residentOverview",
-    components: {announcementList},
-    data() {
-        return {
-            communityName: "蓝光金悦天骄",
-            houseCount: 1630,
-            residentCount: 3133,
-            parkingCount: 160
-        };
-    }
+  name: "residentOverview",
+  components: { announcementList },
+  data() {
+    return {
+      communityName: "蓝光金悦天骄",
+      houseCount: 1630,
+      residentCount: 3133,
+      parkingCount: 160
+    };
+  }
 };
 </script>
 

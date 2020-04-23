@@ -9,33 +9,32 @@
       </el-form-item>
       <el-form-item label="用户ID: ">
         <el-input
-                v-model="userManageQueryForm.userId"
-                placeholder="请输入用户ID"
+          v-model="userManageQueryForm.userId"
+          placeholder="请输入用户ID"
         ></el-input>
       </el-form-item>
-        <el-form-item label="姓名: ">
-            <el-input
-                    v-model="userManageQueryForm.userName"
-                    placeholder="请输入姓名"
-            ></el-input>
-        </el-form-item>
+      <el-form-item label="姓名: ">
+        <el-input
+          v-model="userManageQueryForm.userName"
+          placeholder="请输入姓名"
+        ></el-input>
+      </el-form-item>
     </el-form>
-      <el-button icon="el-icon-search" plain type="primary">查询</el-button>
-      <el-button icon="el-icon-plus" plain type="success">添加用户</el-button>
-      <el-button icon="el-icon-tickets" plain type="primary"
+    <el-button icon="el-icon-search" plain type="primary">查询</el-button>
+    <el-button icon="el-icon-plus" plain type="success">添加用户</el-button>
+    <el-button icon="el-icon-tickets" plain type="primary"
       >导出用户数据表
-      </el-button
-      >
-      <el-table
-              class="user-manage-data-table"
-              :data="userManageTableData"
-              border
-              style="width: 100%"
-      >
-          <el-table-column fixed prop="area" label="归属地区" width="200">
-          </el-table-column>
-          <el-table-column prop="community" label="归属小区" width="200">
-          </el-table-column>
+    </el-button>
+    <el-table
+      class="user-manage-data-table"
+      :data="userManageTableData"
+      border
+      style="width: 100%"
+    >
+      <el-table-column fixed prop="area" label="归属地区" width="200">
+      </el-table-column>
+      <el-table-column prop="community" label="归属小区" width="200">
+      </el-table-column>
       <el-table-column prop="userId" label="用户ID" width="200">
       </el-table-column>
       <el-table-column prop="userName" label="姓名" width="200">

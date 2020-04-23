@@ -128,21 +128,17 @@
           v-model="updateForm.occupation"
         ></el-input>
       </el-form-item>
-        <el-form-item class="form-item" label-width="100px">
-            <template v-slot:label
-            ><span class="form-label">联系手机：</span></template
-            >
-            <el-input class="form-inputer" v-model="updateForm.phone"></el-input>
-        </el-form-item>
-        <el-form-item class="form-item" label-width="100px">
-            <template v-slot:label><span class="form-label">邮箱：</span></template>
-            <el-input
-                    class="form-inputer"
-                    v-model="updateForm.email"
-            ></el-input>
-        </el-form-item
+      <el-form-item class="form-item" label-width="100px">
+        <template v-slot:label
+          ><span class="form-label">联系手机：</span></template
         >
-        s
+        <el-input class="form-inputer" v-model="updateForm.phone"></el-input>
+      </el-form-item>
+      <el-form-item class="form-item" label-width="100px">
+        <template v-slot:label><span class="form-label">邮箱：</span></template>
+        <el-input class="form-inputer" v-model="updateForm.email"></el-input>
+      </el-form-item>
+      s
     </el-form>
 
     <!--动作按钮-->
