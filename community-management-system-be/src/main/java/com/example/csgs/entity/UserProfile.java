@@ -49,4 +49,5 @@ public class UserProfile implements Serializable {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ofGrid")
     OfGridEntity ofGridEntity;  //用户所属网格
+
 }

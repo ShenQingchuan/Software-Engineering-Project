@@ -3,9 +3,17 @@ package com.example.csgs.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.example.csgs.service.UserPwdProService;
 import com.example.csgs.utils.ResultUtils;
+import com.example.csgs.utils.SHA256Util;
+import com.sun.org.apache.xml.internal.security.algorithms.MessageDigestAlgorithm;
+import com.sun.org.apache.xml.internal.security.algorithms.implementations.SignatureDSA;
 import lombok.extern.slf4j.Slf4j;
+import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
+import sun.security.provider.SHA;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,9 +47,23 @@ public class PwdProController {
         list.add(answerTwo);
 
         if (userPwdProService.setPwdPro(uid,list)) {
-            return ResultUtils.success("密保修改成功");
+            return ResultUtils.success("密保设置成功");
         }
-        return ResultUtils.error("密保修改失败！");
+        return ResultUtils.error("密保设置失败！");
+    }
+
+    /**
+     * 修改密码接口
+     * 场景：在回答正确密保问题后，进入修改密码界面，提交修改后的密码
+     */
+    @PutMapping("/modifyPwd/{id}")
+    public Object updatePwd(@RequestParam String newPassword, @PathVariable String id)  {
+
+        String decryptPassword = DigestUtils.md5DigestAsHex(newPassword.getBytes());
+        String sha256String = SHA256Util.getSHA256String(decryptPassword);
+
+        userPwdProService.modifyPwd(sha256String,Long.parseLong(id));
+        return ResultUtils.success("密码修改成功！");
     }
 
     /**

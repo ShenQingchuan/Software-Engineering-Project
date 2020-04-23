@@ -11,7 +11,7 @@ public class User {
     private String Community;
     private String District;
 
-    public User(long uid, String userID, String userName, String telPhone, String community, String district) {
+    public User(long uid, String userID, String userName, String telPhone, String district, String community) {
         this.id = uid;
         this.userID = userID;
         this.userName = userName;

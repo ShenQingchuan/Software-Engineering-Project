@@ -29,7 +29,7 @@ public class UserProfileController {
      * 场景：用户进入资料编辑界面，对可修改的信息进行修改
      */
 
-    @PostMapping("/update/{id}")
+    @PostMapping("/modify/{id}")
     public Object updateMaterial(@RequestBody JSONObject jsonObject, @PathVariable String id) {
         if (userProfileService.updateMaterial(jsonObject, Long.parseLong(id))) {
             return ResultUtils.success("用户资料修改成功！");
@@ -41,7 +41,7 @@ public class UserProfileController {
      * 获取用户资料接口
      * 场景：用户进入资料编辑界面，展示资料信息
      */
-    @GetMapping("/getAll/{id}")
+    @GetMapping("/getProfile/{id}")
     public Object getMaterial(@PathVariable String id) {
 
         UserProfile material = userProfileService.getMaterial(Long.parseLong(id));
