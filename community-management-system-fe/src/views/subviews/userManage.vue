@@ -49,11 +49,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="flex-box pagination">
+      共 {{ userRecordCount }} 条记录
+      <el-pagination :total="totalCount" layout="prev, pager, next">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
-import userManageTableData from "@/mock/userManageTableData";
+import userManageTableDataMock from "@/mock/userManageTableData";
 
 export default {
   name: "userManage",
@@ -66,7 +71,9 @@ export default {
         userId: "",
         userName: ""
       },
-      userManageTableData
+      userRecordCount: 65,
+      totalCount: 70,
+      userManageTableData: userManageTableDataMock
     };
   },
   methods: {

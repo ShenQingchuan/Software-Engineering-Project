@@ -7,6 +7,9 @@ import userInfoShow from "../views/subviews/userInfoShow";
 import userInfoUpdate from "../views/subviews/userInfoUpdate";
 import announcementManage from "../views/subviews/announcementManage";
 import passwordReset from "../views/subviews/passwordReset";
+import editAnnouncement from "../views/subviews/editAnnouncement";
+import logManage from "../views/subviews/logManage";
+import editLog from "../views/subviews/editLog";
 
 Vue.use(VueRouter);
 
@@ -68,11 +71,36 @@ const routes = [
         }
       },
       {
+        path: "logManage",
+        name: "logManage",
+        component: logManage,
+        meta: {
+          title: buildTitle("管理日志")
+        }
+      },
+
+      {
         path: "passwordReset",
         name: "passwordReset",
         component: passwordReset,
         meta: {
           title: buildTitle("修改密码")
+        }
+      },
+      {
+        path: "addAnnouncement",
+        name: "addAnnouncement",
+        component: editAnnouncement,
+        meta: {
+          title: buildTitle("新建公告")
+        }
+      },
+      {
+        path: "addLog",
+        name: "addLog",
+        component: editLog,
+        meta: {
+          title: buildTitle("新建公告")
         }
       }
     ]

@@ -65,6 +65,25 @@
               <i class="el-icon-chat-line-round" />
               公告管理
             </el-menu-item>
+            <el-menu-item
+              @click="() => $router.push('/dashboard/logManage')"
+              index="2-3"
+            >
+              <i class="el-icon-notebook-1" />
+              日志管理
+            </el-menu-item>
+          </el-menu-item-group>
+
+          <!--  系统管理员操作组-->
+          <el-menu-item-group>
+            <template slot="title">系统管理员：</template>
+            <el-menu-item
+              @click="() => $router.push('/dashboard/addLog')"
+              index="3-1"
+            >
+              <i class="el-icon-medal" />
+              <a>网格员管理</a>
+            </el-menu-item>
           </el-menu-item-group>
         </el-submenu>
       </el-menu>

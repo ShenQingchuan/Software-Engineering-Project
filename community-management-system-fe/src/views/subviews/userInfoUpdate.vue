@@ -201,7 +201,7 @@ export default {
     i {
       z-index: 9;
       color: white;
-      line-height: 36px;
+      line-height: 40px;
       font-weight: bold;
     }
   }

@@ -6,7 +6,11 @@ import moment from "moment";
 import {
   Button,
   Badge,
+  Radio,
+  RadioGroup,
   Menu,
+  Checkbox,
+  CheckboxGroup,
   Submenu,
   MenuItem,
   MenuItemGroup,
@@ -45,9 +49,15 @@ import "element-ui/lib/theme-chalk/index.css";
 import "./assets/styles/common.scss";
 // 公共样式
 
+import mavonEditor from "mavon-editor";
+import "mavon-editor/dist/css/index.css";
+
+Vue.use(mavonEditor);
+
 Vue.config.productionTip = false;
 Vue.use(Button)
   .use(Badge)
+  .use(Checkbox)
   .use(Menu)
   .use(Submenu)
   .use(MenuItem)
@@ -64,6 +74,8 @@ Vue.use(Button)
   .use(Main)
   .use(Card)
   .use(Footer)
+  .use(Radio)
+  .use(RadioGroup)
   .use(Form)
   .use(Upload)
   .use(Select)
@@ -73,6 +85,7 @@ Vue.use(Button)
   .use(Pagination)
   .use(FormItem)
   .use(Input)
+  .use(CheckboxGroup)
   .use(Table)
   .use(TableColumn)
   .use(Tag)

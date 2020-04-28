@@ -33,6 +33,16 @@
       @forward="stepForward"
       v-show="verifyType === '手机验证' && step === 0"
     />
+    <!-- 最后显示成功 -->
+    <div class="finished-view tb-gap flex-box flex-col" v-show="step === 2">
+      <i
+        class="el-icon-finished"
+        style="padding: 10px; border-radius: 100%; border: 5px solid darkgreen; color: darkgreen; font-size: 50px; font-weight: bold"
+      ></i>
+      <b class="tb-gap" style="color: darkgreen; margin-left: 20px;"
+        >密码修改成功 ！</b
+      >
+    </div>
 
     <!-- 修改密码 -->
     <final-reset-password @forward="stepForward" v-show="step === 1" />
