@@ -7,11 +7,13 @@ import com.example.csgs.service.UserPwdProService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Slf4j
 @Service
+@Transactional
 public class UserPwdProServiceImpl implements UserPwdProService {
     @Autowired
     UserDao userDAO;
@@ -67,6 +69,10 @@ public class UserPwdProServiceImpl implements UserPwdProService {
         return false;
     }
 
+    @Override
+    public void modifyPwd(String newPassword,Long uid) {
+        userDAO.modifyPassword(newPassword,uid);
+    }
 
 
 }

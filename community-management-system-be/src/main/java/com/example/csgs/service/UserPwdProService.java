@@ -11,4 +11,6 @@ public interface UserPwdProService {
     List<String> returnPwdProQue(Long id);
 
     boolean comparePwdProAns(Long id,List<String> list);
+
+    void modifyPwd(String newPassword,Long uid);
 }

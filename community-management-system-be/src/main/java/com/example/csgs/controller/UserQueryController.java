@@ -49,7 +49,7 @@ public class UserQueryController {
     /**
      * 按各种用户身份信息进行查询
      * 场景：网格员查询用户信息
-     * 组合：归属地区、归属地区和归属小区、
+     * 组合：<归属地区、归属地区>、<归属小区>、<归属地区>、<userID>
      */
     @GetMapping("/multipleConditions/{id}")
     public Object multipleConditions(@RequestBody JSONObject jsonObject, @PathVariable String id, @RequestParam String page) {
