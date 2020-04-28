@@ -1,6 +1,7 @@
 package com.example.csgs.service.Impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.csgs.bean.CommunityInfo;
 import com.example.csgs.bean.OfGrid;
 import com.example.csgs.dao.GridDao;
 import com.example.csgs.dao.ProfileDao;
@@ -83,4 +84,15 @@ public class UserProfileServiceImpl implements UserProfileService {
         Optional<UserEntity> byIdUser = userDao.findById(id);
         return (UserProfile) byIdUser.<Object>map(UserEntity::getUserProfile).orElse(null);
     }
+
+    @Override
+    public CommunityInfo findCommunityInfo(Long id) {
+        Optional<UserEntity> targetResidentUser = userDao.findById(id);
+        if (targetResidentUser.isPresent()) {
+            OfGridEntity ofGridEntity = targetResidentUser.get().getUserProfile().getOfGridEntity();
+            return new CommunityInfo(ofGridEntity.getNumHouses(),ofGridEntity.getNumResidents(),ofGridEntity.getNumParkingSpaces());
+        }
+        return null;
+    }
+
 }

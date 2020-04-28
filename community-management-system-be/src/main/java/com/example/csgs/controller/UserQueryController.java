@@ -1,6 +1,7 @@
 package com.example.csgs.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.csgs.bean.CommunityInfo;
 import com.example.csgs.bean.PageQuery;
 
 import com.example.csgs.entity.UserEntity;
@@ -17,20 +18,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserQueryController {
     @Autowired
     UserQueryService userQueryService;
-
-    /**
-     * 按 id 信息查询用户
-     * 场景：用户进入自己的资料查看界面
-     */
-    @GetMapping("/{id}")
-    public Object singleUserQuery(@PathVariable String id) {
-        Long uid = Long.parseLong(id);
-        UserEntity userEntity = userQueryService.singleUserQuery(uid);
-        if (userEntity != null) {
-            return ResultUtils.success(userEntity, "用户个人资料获取成功");
-        }
-        return ResultUtils.error("没有找到 uid: " + uid + " 的用户");
-    }
 
     /**
      * 通过网格员id查询居民用户信息列表
@@ -64,10 +51,24 @@ public class UserQueryController {
         } else if (result instanceof PageQuery) {
             PageQuery pageQuery = (PageQuery) result;
             return ResultUtils.success(pageQuery, "居民用户信息获取成功！");
-        } else if (result instanceof Integer){
+        } else if (result instanceof Integer) {
             return ResultUtils.error("你没有该查询权限！");
         } else {
             return ResultUtils.error("居民用户信息获取失败！");
         }
     }
+
+    /**
+     * 网格员删除自己所管辖区的用户
+     * 场景：网格员在查看用户数据列表时，可以删除相应的用户
+     * URL中的id是居民用户的id
+     */
+    @GetMapping("/deleteResident/{uid}")
+    public Object deleteUser(@PathVariable String uid) {
+        if (userQueryService.deleteUser(Long.parseLong(uid))) {
+            return ResultUtils.success("用户删除成功！");
+        }
+        return ResultUtils.error("用户删除失败！");
+    }
+
 }

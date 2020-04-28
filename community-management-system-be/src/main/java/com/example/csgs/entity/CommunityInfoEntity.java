@@ -3,6 +3,7 @@ package com.example.csgs.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.engine.internal.Cascade;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,15 +12,16 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "of_grid")
-public class OfGridEntity implements Serializable {
+@Table(name = "CommunityInfo")
+public class CommunityInfoEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column(nullable = false)
-    String district;                //所属区
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "districtID",referencedColumnName = "id")
+    DistrictEntity districtID;
 
     @Column(nullable = false)
     String community;               //所属小区
