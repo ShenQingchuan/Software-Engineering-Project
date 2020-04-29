@@ -22,22 +22,33 @@
     </div>
 
     <br />
+    <!--侧边栏菜单-->
     <div class="menu">
       <el-menu :default-openeds="['1']">
         <el-submenu index="1">
           <template slot="title"
             ><i class="el-icon-s-operation" />常用操作
           </template>
+          <!--居民用户操作组-->
           <el-menu-item-group>
-            <template slot="title">网格员管理：</template>
+            <template slot="title">居民自理：</template>
             <el-menu-item
               @click="() => $router.push('/dashboard/residentOverview')"
               index="1-1"
             >
-              <i class="el-icon-user" />
-              <a>居民入口</a>
+              <i class="el-icon-guide" />
+              <a>居民首页</a>
+            </el-menu-item>
+            <el-menu-item
+              @click="() => $router.push('/dashboard/userInfoShow')"
+              index="1-2"
+            >
+              <i class="el-icon-set-up" />
+              <a>信息更新</a>
             </el-menu-item>
           </el-menu-item-group>
+
+          <!--网格员操作组-->
           <el-menu-item-group>
             <template slot="title">网格员管理：</template>
             <el-menu-item
@@ -47,9 +58,31 @@
               <i class="el-icon-user" />
               <a>用户管理</a>
             </el-menu-item>
-            <el-menu-item index="2-2">
+            <el-menu-item
+              @click="() => $router.push('/dashboard/announcementManage')"
+              index="2-2"
+            >
               <i class="el-icon-chat-line-round" />
               公告管理
+            </el-menu-item>
+            <el-menu-item
+              @click="() => $router.push('/dashboard/logManage')"
+              index="2-3"
+            >
+              <i class="el-icon-notebook-1" />
+              日志管理
+            </el-menu-item>
+          </el-menu-item-group>
+
+          <!--  系统管理员操作组-->
+          <el-menu-item-group>
+            <template slot="title">系统管理员：</template>
+            <el-menu-item
+              @click="() => $router.push('/dashboard/addLog')"
+              index="3-1"
+            >
+              <i class="el-icon-medal" />
+              <a>网格员管理</a>
             </el-menu-item>
           </el-menu-item-group>
         </el-submenu>

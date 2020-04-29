@@ -3,6 +3,13 @@ import VueRouter from "vue-router";
 import DashBoard from "../views/DashBoard.vue";
 import userManage from "../views/subviews/userManage";
 import residentOverview from "../views/subviews/residentOverview";
+import userInfoShow from "../views/subviews/userInfoShow";
+import userInfoUpdate from "../views/subviews/userInfoUpdate";
+import announcementManage from "../views/subviews/announcementManage";
+import passwordReset from "../views/subviews/passwordReset";
+import editAnnouncement from "../views/subviews/editAnnouncement";
+import logManage from "../views/subviews/logManage";
+import editLog from "../views/subviews/editLog";
 
 Vue.use(VueRouter);
 
@@ -37,6 +44,63 @@ const routes = [
         component: residentOverview,
         meta: {
           title: buildTitle("居民用户总览页")
+        }
+      },
+      {
+        path: "userInfoShow",
+        name: "userInfoShow",
+        component: userInfoShow,
+        meta: {
+          title: buildTitle("我的个人信息")
+        }
+      },
+      {
+        path: "userInfoUpdate",
+        name: "userInfoUpdate",
+        component: userInfoUpdate,
+        meta: {
+          title: buildTitle("修改个人信息")
+        }
+      },
+      {
+        path: "announcementManage",
+        name: "announcementManage",
+        component: announcementManage,
+        meta: {
+          title: buildTitle("管理公告")
+        }
+      },
+      {
+        path: "logManage",
+        name: "logManage",
+        component: logManage,
+        meta: {
+          title: buildTitle("管理日志")
+        }
+      },
+
+      {
+        path: "passwordReset",
+        name: "passwordReset",
+        component: passwordReset,
+        meta: {
+          title: buildTitle("修改密码")
+        }
+      },
+      {
+        path: "addAnnouncement",
+        name: "addAnnouncement",
+        component: editAnnouncement,
+        meta: {
+          title: buildTitle("新建公告")
+        }
+      },
+      {
+        path: "addLog",
+        name: "addLog",
+        component: editLog,
+        meta: {
+          title: buildTitle("新建公告")
         }
       }
     ]

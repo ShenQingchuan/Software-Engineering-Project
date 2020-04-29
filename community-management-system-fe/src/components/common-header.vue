@@ -7,8 +7,12 @@
         <i class="el-icon-arrow-down el-icon--right" />
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item>个人信息</el-dropdown-item>
-        <el-dropdown-item>修改密码</el-dropdown-item>
+        <el-dropdown-item>
+          <div @click="$router.push('/dashboard/passwordReset')">
+            修改密码
+          </div>
+        </el-dropdown-item>
+        <el-dropdown-item>退出登录</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
 
