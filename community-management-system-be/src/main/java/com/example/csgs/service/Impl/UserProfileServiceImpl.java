@@ -3,10 +3,10 @@ package com.example.csgs.service.Impl;
 import com.alibaba.fastjson.JSONObject;
 import com.example.csgs.bean.CommunityInfo;
 import com.example.csgs.bean.OfGrid;
-import com.example.csgs.dao.GridDao;
+import com.example.csgs.dao.CommunityInfoDao;
 import com.example.csgs.dao.ProfileDao;
 import com.example.csgs.dao.UserDao;
-import com.example.csgs.entity.OfGridEntity;
+import com.example.csgs.entity.CommunityInfoEntity;
 import com.example.csgs.entity.UserEntity;
 import com.example.csgs.entity.UserProfile;
 import com.example.csgs.service.UserProfileService;
@@ -26,13 +26,15 @@ public class UserProfileServiceImpl implements UserProfileService {
     @Autowired
     ProfileDao profileDao;
     @Autowired
-    GridDao gridDao;
+    CommunityInfoDao communityInfoDao;
 
+    /**
+     * 修改资料接口
+     * 场景：用户进入资料编辑界面，对可修改的信息进行修改
+     */
     @Override
     public boolean updateMaterial(JSONObject jsonObject, Long id) {
-        /*Set<String> strings = jsonObject.keySet();
-        String[] keyName = new String[]{"occupation", "avatarUrl", "bloodType", "degreeOfEducation",
-                "email", "nation", "politicCountenance", "sex", "stature", "telPhone", "userName", "ofGrid"};*/
+
         Optional<UserEntity> byIdUser = userDao.findById(id);
         if (byIdUser.isPresent()) {
             UserProfile userProfile = byIdUser.get().getUserProfile();
@@ -60,15 +62,9 @@ public class UserProfileServiceImpl implements UserProfileService {
                 JSONObject ofGridObject = jsonObject.getJSONObject("ofGrid");
                 OfGrid ofGrid = JSONObject.toJavaObject(ofGridObject,OfGrid.class);
 
-                Optional<OfGridEntity> ofGridEntitySrc = gridDao.findByDistrictAndCommunity(ofGrid.getDistrict(), ofGrid.getCommunity());
-                if (ofGridEntitySrc.isPresent()) {
-                    profileDao.updateByOfGridEntity(ofGridEntitySrc.get(), userProfile.getId());
-                }else {
-                    OfGridEntity ofGridEntity = new OfGridEntity();
-                    ofGridEntity.setCommunity(ofGrid.getCommunity());
-                    ofGridEntity.setDistrict(ofGrid.getDistrict());
-                    gridDao.save(ofGridEntity);
-                    profileDao.updateByOfGridEntity(ofGridEntity,userProfile.getId());
+                CommunityInfoEntity communityInfoEntity = communityInfoDao.findByOfGrid(ofGrid.getDistrict(),ofGrid.getCommunity());
+                if (communityInfoEntity != null) {
+                    userProfile.setCommunityInfoEntity(communityInfoEntity);
                 }
             }
 
@@ -79,18 +75,29 @@ public class UserProfileServiceImpl implements UserProfileService {
         return false;
     }
 
+    /**
+     * 获取用户资料接口
+     * 场景：用户进入资料编辑界面，展示资料信息
+     */
     @Override
     public UserProfile getMaterial(Long id) {
         Optional<UserEntity> byIdUser = userDao.findById(id);
         return (UserProfile) byIdUser.<Object>map(UserEntity::getUserProfile).orElse(null);
     }
 
+
+    /**
+     * 场景：居民用户登陆，居民首页呈现自己所住小区名、房屋数量、停车位数量、居民数量
+     * 和网格员向本小区发送的公告信息
+     * 注意：当前id是居民用户的id
+     */
     @Override
     public CommunityInfo findCommunityInfo(Long id) {
         Optional<UserEntity> targetResidentUser = userDao.findById(id);
         if (targetResidentUser.isPresent()) {
-            OfGridEntity ofGridEntity = targetResidentUser.get().getUserProfile().getOfGridEntity();
-            return new CommunityInfo(ofGridEntity.getNumHouses(),ofGridEntity.getNumResidents(),ofGridEntity.getNumParkingSpaces());
+            CommunityInfoEntity communityInfoEntity = targetResidentUser.get().getUserProfile().getCommunityInfoEntity();
+            return new CommunityInfo(communityInfoEntity.getCommunityName(),communityInfoEntity.getNumHouses(),
+                    communityInfoEntity.getNumResidents(),communityInfoEntity.getNumParkingSpaces());
         }
         return null;
     }

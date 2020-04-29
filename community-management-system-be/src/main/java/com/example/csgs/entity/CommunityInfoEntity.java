@@ -24,7 +24,7 @@ public class CommunityInfoEntity implements Serializable {
     DistrictEntity districtID;
 
     @Column(nullable = false)
-    String community;               //所属小区
+    String communityName;               //所属小区
 
     @Column(nullable = false)       //小区住在数量
     Long numHouses;
@@ -34,4 +34,8 @@ public class CommunityInfoEntity implements Serializable {
 
     @Column(nullable = false)       //小区停车位数量
     Long numParkingSpaces;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "gridID",referencedColumnName = "id")
+    GridEntity gridEntity;
 }

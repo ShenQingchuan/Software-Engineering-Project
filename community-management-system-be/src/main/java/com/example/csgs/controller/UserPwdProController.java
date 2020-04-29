@@ -17,12 +17,12 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/pwdPro")
 @Slf4j
-public class PwdProController {
+public class UserPwdProController {
 
     final UserPwdProService userPwdProService;
     final UserDao userDao;
 
-    public PwdProController(UserPwdProService userPwdProService, UserDao userDao) {
+    public UserPwdProController(UserPwdProService userPwdProService, UserDao userDao) {
         this.userPwdProService = userPwdProService;
         this.userDao = userDao;
     }

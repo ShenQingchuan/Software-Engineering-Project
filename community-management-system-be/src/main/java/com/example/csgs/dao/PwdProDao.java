@@ -1,6 +1,5 @@
 package com.example.csgs.dao;
 
-import com.example.csgs.entity.OfGridEntity;
 import com.example.csgs.entity.PwdProEntity;
 import org.springframework.data.repository.PagingAndSortingRepository;
 

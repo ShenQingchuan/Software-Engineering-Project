@@ -53,7 +53,7 @@ public class UserProfileController {
     }
 
     /**
-     * 场景：居民用户登陆，居民首页呈现自己所住小区的房屋、停车位、居民数量
+     * 场景：居民用户登陆，居民首页呈现自己所住小区名、房屋数量、停车位数量、居民数量
      * 和网格员向本小区发送的公告信息
      * 注意：当前id是居民用户的id
      */
@@ -62,7 +62,8 @@ public class UserProfileController {
         CommunityInfo communityInfo = userProfileService.findCommunityInfo(Long.parseLong(id));
         if (communityInfo != null) {
             //获取用户所在社区发布的公告（网格员所发布）
-            return ResultUtils.success(communityInfo,"用户所在社区信息获取成功！");
+
+            return ResultUtils.success(communityInfo, "用户所在社区信息获取成功！");
         }
         return ResultUtils.error("用户所在社区信息获取失败！");
     }
