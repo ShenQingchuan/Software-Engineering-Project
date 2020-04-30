@@ -12,11 +12,12 @@ import java.util.Optional;
 public interface UserDao extends PagingAndSortingRepository<UserEntity, Long> {
     Optional<UserEntity> findById(Long uid);
 
-    Optional<UserEntity> findOneByUserID(String userAccount);
+    Optional<UserEntity> findOneByUserID(String userID);
 
     Optional<UserEntity> findByUserProfile(UserProfile userProfile);
 
     @Modifying
     @Query(value = "update UserEntity u set u.userPassword = ?1 where u.id = ?2")
     void modifyPassword(String newPassword,Long id);
+
 }

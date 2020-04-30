@@ -46,8 +46,8 @@ public class UserProfile implements Serializable {
 
     String politicCountenance;  //用户政治面貌
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ofGrid")
-    OfGridEntity ofGridEntity;  //用户所属网格
+    @ManyToOne()
+    @JoinColumn(name = "communityInfo")
+    CommunityInfoEntity communityInfoEntity;  //用户所属网格
 
 }

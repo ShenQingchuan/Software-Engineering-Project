@@ -11,17 +11,13 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "of_grid")
-public class OfGridEntity implements Serializable {
+@Table(name = "district")
+public class DistrictEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
     @Column(nullable = false)
-    String district;                //所属区
-
-    @Column(nullable = false)
-    String community;               //所属小区
-
+    String districtName;                //所属区
 }

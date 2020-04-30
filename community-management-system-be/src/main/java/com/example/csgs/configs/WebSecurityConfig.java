@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
             "/user/*", "/sign/*"
     };
     private final List<String> GetWhiteList = Arrays.asList(
-            "/query/allUser"
+            "/admin/getAreaList"
     );
 
     public WebSecurityConfig(RedisUtils redisUtils) {

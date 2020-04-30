@@ -1,7 +1,7 @@
 package com.example.csgs.dao;
 
-import com.example.csgs.bean.OfGrid;
-import com.example.csgs.entity.OfGridEntity;
+import com.example.csgs.entity.CommunityInfoEntity;
+import com.example.csgs.entity.DistrictEntity;
 import com.example.csgs.entity.UserProfile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,16 +14,16 @@ import java.util.Optional;
 public interface ProfileDao extends PagingAndSortingRepository<UserProfile, Long> {
     Optional<UserProfile> findById(Long uid);
 
-    @Query(value = "select p from UserProfile p join p.ofGridEntity g where g.district = :district")
-    Page<UserProfile> findByDistrict(String district,Pageable pageable);
+    @Query(value = "select p from UserProfile p join p.communityInfoEntity c where c.districtID.districtName = :district")
+    Page<UserProfile> findByDistrict(String  district, Pageable pageable);
 
-    @Query(value = "select p from UserProfile p join p.ofGridEntity g where p.userName = :userName and g.district = :district")
+    @Query(value = "select p from UserProfile p join p.communityInfoEntity c where p.userName = :userName and c.districtID.districtName = :district")
     Page<UserProfile>  findByUserName(String userName,String district,Pageable pageable);
 
-    @Query(value = "select p from UserProfile p join p.ofGridEntity g where g.community = :community and g.district = :district")
+    @Query(value = "select p from UserProfile p join p.communityInfoEntity c where c.communityName = :community and c.districtID.districtName = :district")
     Page<UserProfile>  findByCommunity(String community,String district,Pageable pageable);
 
-    @Query(value = "select p from UserProfile p join p.ofGridEntity g where g.community = :community and p.userName = :userName and g.district = :district")
+    @Query(value = "select p from UserProfile p join p.communityInfoEntity c where c.communityName = :community and p.userName = :userName and c.districtID.districtName = :district")
     Page<UserProfile>  findByUserNameAndCommunity(String userName,String community,String district,Pageable pageable);
 
     @Modifying
@@ -71,6 +71,6 @@ public interface ProfileDao extends PagingAndSortingRepository<UserProfile, Long
     void updateByTelPhone(String telPhone,Long id);
 
     @Modifying
-    @Query(value = "update UserProfile p set p.ofGridEntity = ?1 where p.id = ?2")
-    void updateByOfGridEntity(OfGridEntity ofGridEntity, Long id);
+    @Query(value = "update UserProfile p set p.communityInfoEntity = ?1 where p.id = ?2")
+    void updateByOfGridEntity(CommunityInfoEntity communityInfoEntity, Long id);
 }
