@@ -70,8 +70,8 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
-            <el-button @click="handleEdit(scope.row)" size="small" type="text"
-              >编辑
+            <el-button @click="handleDelete(scope.row)" size="small" type="text"
+            >删除
             </el-button>
           </template>
         </el-table-column>
@@ -116,8 +116,10 @@ export default {
     };
   },
   methods: {
-    handleEdit(row) {
-      console.log(row);
+    handleDelete(row) {
+      // TODO: 实现删除日志
+      this.$message.warning("TODO: 实现删除日志");
+      this.announcementData.splice(row, 1);
     }
   }
 };
