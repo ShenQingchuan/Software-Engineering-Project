@@ -61,10 +61,10 @@
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
             <el-button @click="() => {}" size="small" type="text"
-            >查看
+              >查看
             </el-button>
             <el-button @click="handleEdit(scope.row)" size="small" type="text"
-            >编辑
+              >编辑
             </el-button>
           </template>
         </el-table-column>
