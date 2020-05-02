@@ -9,13 +9,7 @@
         <el-input v-model="title" placeholder="请输入标题"></el-input>
       </div>
       <div class="meta-form-item tb-gap flex-box jy-start">
-        <label>发布范围：</label>
         <el-checkbox v-model="fixedTop">是否置顶</el-checkbox>
-        <el-select class="scope-selector" v-model="scope">
-          <el-option label="所有成员" value="所有成员"></el-option>
-          <el-option label="全体居民" value="全体居民"></el-option>
-          <el-option label="全体网格员" value="全体网格员"></el-option>
-        </el-select>
       </div>
     </div>
 
@@ -52,7 +46,6 @@ export default {
     return {
       title: "",
       fixedTop: "",
-      scope: "",
       editor: {
         type: "",
         source: "",

@@ -10,6 +10,7 @@ import passwordReset from "../views/subviews/passwordReset";
 import editAnnouncement from "../views/subviews/editAnnouncement";
 import logManage from "../views/subviews/logManage";
 import editLog from "../views/subviews/editLog";
+import officerManage from "../views/subviews/officerManage";
 
 Vue.use(VueRouter);
 
@@ -101,6 +102,14 @@ const routes = [
         component: editLog,
         meta: {
           title: buildTitle("新建公告")
+        }
+      },
+      {
+        path: "officerManage",
+        name: "officerManage",
+        component: officerManage,
+        meta: {
+          title: buildTitle("网格员管理")
         }
       }
     ]

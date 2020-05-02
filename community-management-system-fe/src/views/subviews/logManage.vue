@@ -42,9 +42,9 @@
     </div>
     <div class="flex-box log-table-container">
       <el-table class="log-table" :data="logData">
-        <el-table-column fixed label="日志内容" prop="content">
+        <el-table-column fixed label="日志标题" prop="content">
           <template slot-scope="scope">
-            <b>{{ scope.row.content.slice(0, 40) }} ...</b>
+            <b>{{ scope.row.title }}</b>
           </template>
         </el-table-column>
         <el-table-column fixed label="创建者" prop="creatorName">
@@ -60,6 +60,9 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
+            <el-button @click="() => {}" size="small" type="text"
+              >查看
+            </el-button>
             <el-button @click="handleEdit(scope.row)" size="small" type="text"
               >编辑
             </el-button>

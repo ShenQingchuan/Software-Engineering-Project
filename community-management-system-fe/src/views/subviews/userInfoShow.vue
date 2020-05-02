@@ -32,7 +32,6 @@
         </div>
       </div>
     </div>
-
     <!--其他详细信息-->
     <div class="flex-box flex-col meta-info">
       <div class="info-list">

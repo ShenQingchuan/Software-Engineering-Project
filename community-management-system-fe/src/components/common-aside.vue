@@ -50,7 +50,7 @@
 
           <!--网格员操作组-->
           <el-menu-item-group>
-            <template slot="title">网格员管理：</template>
+            <template slot="title">网格员：</template>
             <el-menu-item
               @click="() => $router.push('/dashboard/userManage')"
               index="2-1"
@@ -78,7 +78,7 @@
           <el-menu-item-group>
             <template slot="title">系统管理员：</template>
             <el-menu-item
-              @click="() => $router.push('/dashboard/addLog')"
+              @click="() => $router.push('/dashboard/officerManage')"
               index="3-1"
             >
               <i class="el-icon-medal" />
