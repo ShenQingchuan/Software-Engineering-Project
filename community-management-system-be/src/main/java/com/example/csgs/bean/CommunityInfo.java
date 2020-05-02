@@ -7,12 +7,14 @@ public class CommunityInfo {
     private String community;
     private long numHouses;
     private long numResidents;
-    private long numSparkingSpaces;
+    private long numParkingSpaces;
+    private PageQuery<Announcement> announcementList;
 
-    public CommunityInfo(String community,long numHouses, long numResidents, long numSparkingSpaces) {
+    public CommunityInfo(String community, long numHouses, long numResidents, long numParkingSpaces, PageQuery<Announcement> announcementList) {
+        this.community = community;
         this.numHouses = numHouses;
         this.numResidents = numResidents;
-        this.numSparkingSpaces = numSparkingSpaces;
-        this.community = community;
+        this.numParkingSpaces = numParkingSpaces;
+        this.announcementList = announcementList;
     }
 }

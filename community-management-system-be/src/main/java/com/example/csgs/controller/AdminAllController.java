@@ -2,7 +2,9 @@ package com.example.csgs.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.csgs.bean.*;
+import com.example.csgs.entity.UserProfile;
 import com.example.csgs.service.AdminAllService;
+import com.example.csgs.service.UserProfileService;
 import com.example.csgs.utils.ResultUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,16 +22,30 @@ public class AdminAllController {
     AdminAllService adminAllService;
 
     /**
+     * 获取用户资料接口
+     * 场景：系统管理员添加网格员时，需要查看该居民用户的基本资料信息
+     */
+    @GetMapping("/getGridProfile")
+    public Object getMaterial(@RequestBody JSONObject jsonObject) {
+        String userID = jsonObject.getString("userID");
+        UserProfile material = adminAllService.getGridMaterial(userID);
+        if (material != null) {
+            return ResultUtils.success(material, "用户资料获取成功！");
+        }
+        return ResultUtils.error("用户资料获取失败！");
+    }
+    /**
      * 场景：系统管理员新增网格员，首先要获取区域数据信息，然后在其中选择区域分配网格员
      * 重点：这里我们返回的区域是，还没有被划分的区域，如果某一区域已经被分配，那么不返回该区域信息
      */
     @GetMapping("/getAreaList")
-    public Object getAreaList() {
-        List<AreaList> areaList = adminAllService.getAreaList();
-        if (!areaList.isEmpty()) {
+    public Object getAreaList(@RequestBody JSONObject jsonObject) {
+        String userID = jsonObject.getString("userID");
+        AreaList areaList = adminAllService.getAreaList(userID);
+        if (areaList != null) {
             return ResultUtils.success(areaList, "获取区域数据信息成功！");
         }
-        return ResultUtils.error("获取区域数据信息失败！");
+        return ResultUtils.error("获取区域数据信息失败(该用户已经是一名网格员)！");
     }
 
     /**
@@ -77,7 +93,7 @@ public class AdminAllController {
     /**
      * 功能：删除某一网格员（user表中任然存在，只是grid表中不存在了）
      */
-    @PutMapping("/deleteOneGrid/{id}")
+    @DeleteMapping("/deleteOneGrid/{id}")
     public Object deleteOneGrid(@PathVariable String id) {
         if (adminAllService.deleteOneGrid(Long.parseLong(id))) {
             return ResultUtils.success("删除id为"+ id +"的网格员操作成功！");

@@ -2,10 +2,7 @@ package com.example.csgs.service.Impl;
 
 import com.example.csgs.bean.*;
 import com.example.csgs.dao.*;
-import com.example.csgs.entity.CommunityInfoEntity;
-import com.example.csgs.entity.DistrictEntity;
-import com.example.csgs.entity.GridEntity;
-import com.example.csgs.entity.UserEntity;
+import com.example.csgs.entity.*;
 import com.example.csgs.service.AdminAllService;
 import com.example.csgs.utils.CalculatePageUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -37,14 +34,27 @@ public class AdminAllServiceImpl implements AdminAllService {
     GridDao gridDao;
 
     /**
+     * 获取用户资料接口
+     * 场景：系统管理员添加网格员时，需要查看该居民用户的基本资料信息
+     */
+    @Override
+    public UserProfile getGridMaterial(String userID) {
+        Optional<UserEntity> byIdUser = userDao.findOneByUserID(userID);
+        return (UserProfile) byIdUser.<Object>map(UserEntity::getUserProfile).orElse(null);
+    }
+
+    /**
      * 场景：系统管理员新增网格员，首先要获取区域数据信息，然后在其中选择区域分配网格员
      * 重点：这里我们返回的区域是，还没有被划分的区域，如果某一区域已经被分配，那么不返回该区域信息
      */
     @Override
-    public List<AreaList> getAreaList() {
-        Iterable<DistrictEntity> districtEntities = districtDao.findAll();
-        List<AreaList> areaLists = new ArrayList<>();
-        for (DistrictEntity districtEntity : districtEntities) {
+    public AreaList getAreaList(String userID) {
+        Optional<UserEntity> userEntity = userDao.findOneByUserID(userID);
+
+        //在添加网格员之前，如果这位用户已经是网格员了，就不能再进行一下操作
+        //所以我们通过判断用户userType的方法，事先进行一个身份信息判断
+        if (userEntity.isPresent() && userEntity.get().getUserType() != 1) {
+            DistrictEntity districtEntity = userEntity.get().getUserProfile().getCommunityInfoEntity().getDistrictID();
 
             List<String> communityNameList = new ArrayList<>();
             List<CommunityInfoEntity> communityInfoList = communityInfoDao.findByDistrictName_toCommunity(districtEntity.getDistrictName());
@@ -54,12 +64,11 @@ public class AdminAllServiceImpl implements AdminAllService {
                     communityNameList.add(infoEntity.getCommunityName());
                 }
             }
-
             String[] districtNameArray = communityNameList.toArray(new String[0]);
-            AreaList areaList = new AreaList(districtEntity.getDistrictName(), districtNameArray);
-            areaLists.add(areaList);
+            return new AreaList(districtEntity.getDistrictName(), districtNameArray);
         }
-        return areaLists;
+        return null;
+
     }
 
     /**
@@ -128,7 +137,6 @@ public class AdminAllServiceImpl implements AdminAllService {
         Optional<GridEntity> gridEntity = gridDao.findById(id);
         String[] communityArray = areaList.getCommunityArray();
 
-
         if (gridEntity.isPresent()) {
             //将该网格员之前所负责管理的区域置空（释放区域管理权）
             List<CommunityInfoEntity> communityOldList = communityInfoDao.findByGridEntity(gridEntity.get());
@@ -173,7 +181,7 @@ public class AdminAllServiceImpl implements AdminAllService {
      */
     public void modifyGridIdOfCommunity(String[] communityArray,GridEntity gridEntity){
         List<String> list = Arrays.asList(communityArray);
-        //在将字符串数组转化成List集合时，Arrays.asList() 返回的是Arrays的内部类ArrayList，而不是java.util.ArrayList，
+        //在将字符串数组转化成List集合时，Arrays.asList()返回的是Arrays的内部类ArrayList，而不是java.util.ArrayList，
         //所以在使用remove、add等方法是会产生异常“UnsupportedOperationException”，因此我们要进行如下操作。
         List<String> communityList = new ArrayList<>(list);
         List<CommunityInfoEntity> communityInfoAllList = communityInfoDao.findByDistrictName_toCommunity(gridEntity.getDistrictName());
@@ -196,4 +204,5 @@ public class AdminAllServiceImpl implements AdminAllService {
             }
         }
     }
+
 }

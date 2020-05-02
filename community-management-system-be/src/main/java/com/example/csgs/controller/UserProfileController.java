@@ -44,7 +44,6 @@ public class UserProfileController {
      */
     @GetMapping("/getProfile/{id}")
     public Object getMaterial(@PathVariable String id) {
-
         UserProfile material = userProfileService.getMaterial(Long.parseLong(id));
         if (material != null) {
             return ResultUtils.success(material, "用户资料获取成功！");
@@ -58,10 +57,10 @@ public class UserProfileController {
      * 注意：当前id是居民用户的id
      */
     @GetMapping("/CommunityInfo/{id}")
-    public Object queryCommunityInfo(@PathVariable String id) {
-        CommunityInfo communityInfo = userProfileService.findCommunityInfo(Long.parseLong(id));
+    public Object queryCommunityInfo(@PathVariable String id,@RequestParam String page) {
+        CommunityInfo communityInfo = userProfileService.findCommunityInfo(Long.parseLong(id),page);
         if (communityInfo != null) {
-            //获取用户所在社区发布的公告（网格员所发布）
+
 
             return ResultUtils.success(communityInfo, "用户所在社区信息获取成功！");
         }

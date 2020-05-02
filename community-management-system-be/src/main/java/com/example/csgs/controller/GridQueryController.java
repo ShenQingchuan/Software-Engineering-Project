@@ -45,9 +45,9 @@ public class GridQueryController {
         String community = jsonObject.getString("community");
 
         Object result = gridQueryService.multipleConditions(userID, userName, community, Long.parseLong(id), page);
-        if (result instanceof UserEntity) {
-            UserEntity userEntity = (UserEntity) result;
-            return ResultUtils.success(userEntity, "居民用户信息获取成功");
+        if (result instanceof User) {
+            User user = (User) result;
+            return ResultUtils.success(user, "居民用户信息获取成功");
         } else if (result instanceof PageQuery) {
             PageQuery<User> pageQuery = (PageQuery<User>) result;
             return ResultUtils.success(pageQuery, "居民用户信息获取成功！");

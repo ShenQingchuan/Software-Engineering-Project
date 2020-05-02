@@ -1,5 +1,6 @@
 package com.example.csgs.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,7 @@ public class UserEntity implements Serializable {
     Integer userType;
 
     @Column(nullable = false)
+    @JsonIgnore
     String userPassword;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -32,6 +34,7 @@ public class UserEntity implements Serializable {
     public UserProfile userProfile;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     @JoinColumn(name = "pwdProtection", referencedColumnName = "id")
     public PwdProEntity pwdProEntity;
 
