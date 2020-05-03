@@ -174,6 +174,8 @@ public class GridManageServiceImpl implements GridManageService {
 
         UserProfile userProfile = new UserProfile();
         CommunityInfoEntity communityInfoEntity = communityInfoDao.findByOfGrid(district, community);
+        Long numResidents = communityInfoEntity.getNumResidents();
+        communityInfoEntity.setNumResidents(numResidents+1);
         userProfile.setCommunityInfoEntity(communityInfoEntity);
         profileDao.save(userProfile);
 
