@@ -71,15 +71,7 @@ public class GridQueryServiceImpl implements GridQueryService {
         }
         userList.clear();
         for (UserEntity userEntity : userEntityList) {
-            Long id1 = userEntity.getId();
-            String userID = userEntity.getUserID();
-            String userName = userEntity.getUserProfile().getUserName();
-            String telPhone = userEntity.getUserProfile().getTelPhone();
-            String district = userEntity.getUserProfile().getCommunityInfoEntity().getDistrictID().getDistrictName();
-            String community = userEntity.getUserProfile().getCommunityInfoEntity().getCommunityName();
-
-            User user = new User(id1, userID, userName, telPhone, district, community);
-            userList.add(user);
+            userList.add(getUserBean(userEntity));
         }
         return  CalculatePageUtils.getPageInfo(userEntityList.size(),pageSize,pageable,userList);
 
@@ -102,9 +94,7 @@ public class GridQueryServiceImpl implements GridQueryService {
                 if (queryUser.isPresent()) {
                     UserEntity userEntity = queryUser.get();
                     if (getUserDistrict(userEntity).equals(getUserDistrict(adminUser.get()))) {
-                        userEntity.setUserPassword(null);
-                        userEntity.setPwdProEntity(null);
-                        return userEntity;
+                        return getUserBean(userEntity);
                     }
                 }
                 return 0;
@@ -139,5 +129,15 @@ public class GridQueryServiceImpl implements GridQueryService {
         return false;
     }
 
+    public User getUserBean(UserEntity userEntity){
+        Long id1 = userEntity.getId();
+        String userID = userEntity.getUserID();
+        String userName = userEntity.getUserProfile().getUserName();
+        String telPhone = userEntity.getUserProfile().getTelPhone();
+        String district = userEntity.getUserProfile().getCommunityInfoEntity().getDistrictID().getDistrictName();
+        String community = userEntity.getUserProfile().getCommunityInfoEntity().getCommunityName();
+
+        return new User(id1, userID, userName, telPhone, district, community);
+    }
 }
 

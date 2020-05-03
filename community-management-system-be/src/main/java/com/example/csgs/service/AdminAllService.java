@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface AdminAllService {
 
-    List<AreaList> getAreaList();
+    AreaList getAreaList(String userID);
 
     boolean addGrid(CreateGridInfo createGridInfo);
 
@@ -18,4 +18,6 @@ public interface AdminAllService {
     boolean deleteOneGrid(Long id);
 
     boolean modifyGrid(AreaList areaList,Long id);
+
+    UserProfile getGridMaterial(String userID);
 }

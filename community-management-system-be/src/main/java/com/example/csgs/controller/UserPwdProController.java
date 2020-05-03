@@ -57,7 +57,6 @@ public class UserPwdProController {
      */
     @PutMapping("/modifyPwd/{id}")
     public Object updatePwd(@RequestBody String newPassword, @PathVariable String id) {
-
         String decryptPassword = DigestUtils.md5DigestAsHex(newPassword.getBytes());
         String sha256String = SHA256Util.getSHA256String(decryptPassword);
 

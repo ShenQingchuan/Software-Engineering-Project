@@ -1,15 +1,21 @@
 package com.example.csgs.service.Impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.csgs.bean.Announcement;
 import com.example.csgs.bean.CommunityInfo;
 import com.example.csgs.bean.OfGrid;
+import com.example.csgs.bean.PageQuery;
+import com.example.csgs.dao.AnnouncementDao;
 import com.example.csgs.dao.CommunityInfoDao;
 import com.example.csgs.dao.ProfileDao;
 import com.example.csgs.dao.UserDao;
 import com.example.csgs.entity.CommunityInfoEntity;
+import com.example.csgs.entity.GridEntity;
 import com.example.csgs.entity.UserEntity;
 import com.example.csgs.entity.UserProfile;
+import com.example.csgs.service.GridManageService;
 import com.example.csgs.service.UserProfileService;
+import com.example.csgs.utils.GetAnnounceListUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +33,9 @@ public class UserProfileServiceImpl implements UserProfileService {
     ProfileDao profileDao;
     @Autowired
     CommunityInfoDao communityInfoDao;
+    @Autowired
+    AnnouncementDao announcementDao;
+
 
     /**
      * 修改资料接口
@@ -92,12 +101,22 @@ public class UserProfileServiceImpl implements UserProfileService {
      * 注意：当前id是居民用户的id
      */
     @Override
-    public CommunityInfo findCommunityInfo(Long id) {
+    public CommunityInfo findCommunityInfo(Long id,String page) {
         Optional<UserEntity> targetResidentUser = userDao.findById(id);
         if (targetResidentUser.isPresent()) {
             CommunityInfoEntity communityInfoEntity = targetResidentUser.get().getUserProfile().getCommunityInfoEntity();
-            return new CommunityInfo(communityInfoEntity.getCommunityName(),communityInfoEntity.getNumHouses(),
-                    communityInfoEntity.getNumResidents(),communityInfoEntity.getNumParkingSpaces());
+            String communityName = communityInfoEntity.getCommunityName();
+            Long numHouses = communityInfoEntity.getNumHouses();
+            Long numResidents = communityInfoEntity.getNumResidents();
+            Long numParkingSpaces = communityInfoEntity.getNumParkingSpaces();
+
+            //获取用户所在社区发布的公告（网格员所发布）,事先的找出管理自己所在辖区的网格员是谁？
+            GridEntity gridEntity = communityInfoEntity.getGridEntity();
+            UserEntity userEntity = gridEntity.getUserEntity();
+            PageQuery<Announcement> announcementList =
+                    GetAnnounceListUtils.getAnnouncementList(userDao, announcementDao, page, userEntity.getId());
+
+            return new CommunityInfo(communityName,numHouses,numResidents,numParkingSpaces,announcementList);
         }
         return null;
     }

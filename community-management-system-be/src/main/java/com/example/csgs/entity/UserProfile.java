@@ -1,5 +1,6 @@
 package com.example.csgs.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -47,6 +48,7 @@ public class UserProfile implements Serializable {
     String politicCountenance;  //用户政治面貌
 
     @ManyToOne()
+    @JsonIgnore
     @JoinColumn(name = "communityInfo")
     CommunityInfoEntity communityInfoEntity;  //用户所属网格
 
