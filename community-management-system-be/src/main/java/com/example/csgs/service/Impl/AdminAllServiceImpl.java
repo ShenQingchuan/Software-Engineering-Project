@@ -47,6 +47,7 @@ public class AdminAllServiceImpl implements AdminAllService {
      * 场景：系统管理员新增网格员，首先要获取区域数据信息，然后在其中选择区域分配网格员
      * 重点：这里我们返回的区域是，还没有被划分的区域，如果某一区域已经被分配，那么不返回该区域信息
      */
+
     @Override
     public AreaList getAreaList(String userID) {
         Optional<UserEntity> userEntity = userDao.findOneByUserID(userID);
@@ -55,20 +56,37 @@ public class AdminAllServiceImpl implements AdminAllService {
         //所以我们通过判断用户userType的方法，事先进行一个身份信息判断
         if (userEntity.isPresent() && userEntity.get().getUserType() != 1) {
             DistrictEntity districtEntity = userEntity.get().getUserProfile().getCommunityInfoEntity().getDistrictID();
-
-            List<String> communityNameList = new ArrayList<>();
-            List<CommunityInfoEntity> communityInfoList = communityInfoDao.findByDistrictName_toCommunity(districtEntity.getDistrictName());
-
-            for (CommunityInfoEntity infoEntity : communityInfoList) {
-                if (infoEntity.getGridEntity() == null) {
-                    communityNameList.add(infoEntity.getCommunityName());
-                }
-            }
-            String[] districtNameArray = communityNameList.toArray(new String[0]);
-            return new AreaList(districtEntity.getDistrictName(), districtNameArray);
+            return findCommunityArray(districtEntity);
         }
         return null;
+    }
 
+    private AreaList findCommunityArray(DistrictEntity districtEntity) {
+        List<String> communityNameList = new ArrayList<>();
+        List<CommunityInfoEntity> communityInfoList = communityInfoDao.findByDistrictName_toCommunity(districtEntity.getDistrictName());
+
+        for (CommunityInfoEntity infoEntity : communityInfoList) {
+            if (infoEntity.getGridEntity() == null) {
+                communityNameList.add(infoEntity.getCommunityName());
+            }
+        }
+        String[] districtNameArray = communityNameList.toArray(new String[0]);
+        return new AreaList(districtEntity.getDistrictName(), districtNameArray);
+    }
+
+    /**
+     * 场景：系统管理员在修改网格员管理区域之前，首先要获取所有的区域数据信息，然后在其中选择区域分配网格员
+     * 重点：这里我们返回的区域是，还没有被划分的区域，如果某一区域已经被分配，那么不返回该区域信息
+     */
+    @Override
+    public List<AreaList> getAllAreaList() {
+        Iterable<DistrictEntity> districtEntities = districtDao.findAll();
+        List<AreaList> areaLists = new ArrayList<>();
+        for (DistrictEntity districtEntity : districtEntities) {
+            AreaList areaList = findCommunityArray(districtEntity);
+            areaLists.add(areaList);
+        }
+        return areaLists;
     }
 
     /**

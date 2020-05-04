@@ -11,6 +11,8 @@ public interface AdminAllService {
 
     AreaList getAreaList(String userID);
 
+    List<AreaList> getAllAreaList();
+
     boolean addGrid(CreateGridInfo createGridInfo);
 
     PageQuery<GridPersonalInfo> getAllGrids(String page);
