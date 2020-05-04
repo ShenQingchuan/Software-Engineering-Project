@@ -15,4 +15,5 @@ public interface AnnouncementDao extends PagingAndSortingRepository<Announcement
 
     @Query(value = "select a from AnnouncementEntity a where a.creator = ?1")
     List<AnnouncementEntity> findByCreator_ToAnnouncement(UserEntity userEntity);
+
 }

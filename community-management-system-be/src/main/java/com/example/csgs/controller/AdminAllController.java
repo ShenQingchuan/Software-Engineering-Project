@@ -43,9 +43,22 @@ public class AdminAllController {
         String userID = jsonObject.getString("userID");
         AreaList areaList = adminAllService.getAreaList(userID);
         if (areaList != null) {
-            return ResultUtils.success(areaList, "获取区域数据信息成功！");
+            return ResultUtils.success(areaList, "获取"+ areaList.getDistrictName() +"区域数据信息成功！");
         }
         return ResultUtils.error("获取区域数据信息失败(该用户已经是一名网格员)！");
+    }
+
+    /**
+     * 场景：系统管理员在修改网格员管理区域之前，首先要获取所有的区域数据信息，然后在其中选择区域分配网格员
+     * 重点：这里我们返回的区域是，还没有被划分的区域，如果某一区域已经被分配，那么不返回该区域信息
+     */
+    @GetMapping("/getAllAreaList")
+    public Object getAllAreaList() {
+        List<AreaList> allAreaList = adminAllService.getAllAreaList();
+        if (!allAreaList.isEmpty()) {
+            return ResultUtils.success(allAreaList, "获取所有区域数据信息成功！");
+        }
+        return ResultUtils.error("获取所有区域数据信息失败！");
     }
 
     /**
