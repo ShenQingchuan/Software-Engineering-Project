@@ -1,44 +1,17 @@
 <template>
   <div class="page-announcement-manage">
     <div class="flex-box announcement-actions">
-      <el-form class="announcement-manage-form" inline>
-        <el-form-item label="公告时间：">
-          <el-date-picker
-            end-placeholder="结束日期"
-            range-separator="至"
-            start-placeholder="开始日期"
-            type="daterange"
-            v-model="queryForm.dateRange"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="公告类型：">
-          <el-select placeholder="请选择" v-model="queryForm.logType">
-            <el-option
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-              v-for="item in logOptions"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-button icon="el-icon-search" plain type="primary"
-          >执行查询
-        </el-button>
-        <el-button
-          @click="
-            () => {
-              $router.push('./addAnnouncement');
-            }
-          "
-          icon="el-icon-plus"
-          plain
-          type="success"
-          >新增公告</el-button
-        >
-      </el-form>
+      <el-button
+        @click="
+          () => {
+            $router.push('./addAnnouncement');
+          }
+        "
+        icon="el-icon-plus"
+        plain
+        type="success"
+        >新增公告</el-button
+      >
     </div>
     <div class="flex-box announcement-table-container">
       <el-table :data="announcementData">
@@ -47,12 +20,10 @@
             <b>{{ scope.row.title }}</b>
           </template>
         </el-table-column>
-        <el-table-column fixed label="公告内容" prop="content" width="500">
+        <el-table-column fixed label="公告内容" prop="content" width="600">
           <template slot-scope="scope">
             {{ scope.row.content.slice(0, 40) }} ...
           </template>
-        </el-table-column>
-        <el-table-column fixed label="创建者" prop="creatorName" width="200">
         </el-table-column>
         <el-table-column
           fixed
@@ -68,7 +39,7 @@
             }}
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="100">
+        <el-table-column fixed="right" label="操作" width="150">
           <template slot-scope="scope">
             <el-button @click="handleDelete(scope.row)" size="small" type="text"
               >删除
@@ -79,7 +50,7 @@
     </div>
     <div class="flex-box pagination">
       共 {{ announcementCount }} 条记录
-      <el-pagination :total="totalPage" layout="prev, pager, next">
+      <el-pagination :total="announcementCount" layout="prev, pager, next">
       </el-pagination>
     </div>
   </div>
@@ -111,7 +82,6 @@ export default {
         logType: ""
       },
       announcementCount: 61,
-      totalPage: 70,
       announcementData: announcementMock
     };
   },
@@ -128,6 +98,8 @@ export default {
 <style lang="scss" scoped>
 .page-announcement-manage {
   margin-top: 20px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+  padding: 20px;
 
   .announcement-table-container {
     width: 90%;

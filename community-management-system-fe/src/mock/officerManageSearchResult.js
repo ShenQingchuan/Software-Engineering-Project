@@ -10,5 +10,8 @@ export default {
       politicCountenance: "共青团员"
     }
   },
-  communityArray: ["理想城邦", "长安新城", "万科新城", "卓越云际"]
+  options: {
+    districtName: "金牛区",
+    communityArray: ["理想城邦", "长安新城", "万科新城", "卓越云际"]
+  }
 };

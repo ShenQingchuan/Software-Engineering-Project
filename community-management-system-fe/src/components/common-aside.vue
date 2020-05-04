@@ -31,13 +31,12 @@
           </template>
           <!--居民用户操作组-->
           <el-menu-item-group>
-            <template slot="title">居民自理：</template>
             <el-menu-item
               @click="() => $router.push('/dashboard/residentOverview')"
               index="1-1"
             >
               <i class="el-icon-guide" />
-              <a>居民首页</a>
+              <a>信息纵览</a>
             </el-menu-item>
             <el-menu-item
               @click="() => $router.push('/dashboard/userInfoShow')"
@@ -50,7 +49,6 @@
 
           <!--网格员操作组-->
           <el-menu-item-group>
-            <template slot="title">网格员：</template>
             <el-menu-item
               @click="() => $router.push('/dashboard/userManage')"
               index="2-1"
@@ -74,14 +72,33 @@
             </el-menu-item>
           </el-menu-item-group>
 
-          <!--  系统管理员操作组-->
+          <!--领导操作组-->
           <el-menu-item-group>
-            <template slot="title">系统管理员：</template>
+            <template slot="title">领导功能组：</template>
             <el-menu-item
-              @click="() => $router.push('/dashboard/officerManage')"
+              @click="() => $router.push('/dashboard/statistics')"
               index="3-1"
             >
+              <i class="el-icon-data-analysis" />
+              <a>数据视图</a>
+            </el-menu-item>
+          </el-menu-item-group>
+
+          <!--  系统管理员操作组-->
+          <el-menu-item-group>
+            <template slot="title">系统管理员功能组：</template>
+            <el-menu-item
+              @click="() => $router.push('/dashboard/addOfficer')"
+              index="4-1"
+            >
               <i class="el-icon-medal" />
+              <a>添加网格员</a>
+            </el-menu-item>
+            <el-menu-item
+              @click="() => $router.push('/dashboard/officerManage')"
+              index="4-1"
+            >
+              <i class="el-icon-connection" />
               <a>网格员管理</a>
             </el-menu-item>
           </el-menu-item-group>
