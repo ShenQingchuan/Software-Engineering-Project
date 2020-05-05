@@ -3,8 +3,8 @@ package com.example.csgs.configs;
 import com.alibaba.fastjson.JSONObject;
 import com.example.csgs.utils.JwtUtils;
 import com.example.csgs.utils.RedisUtils;
+import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -27,15 +27,16 @@ import java.util.List;
  * 登录拦截配置
  */
 @Configuration
+@EnableEncryptableProperties
 @Slf4j
 public class WebSecurityConfig extends WebMvcConfigurationSupport {
 
     private final RedisUtils redisUtils;
-    private final String[] allWhiteList = new String[] {
+    private final String[] allWhiteList = new String[]{
             "/user/*", "/sign/*"
     };
     private final List<String> GetWhiteList = Arrays.asList(
-            "/admin/getAreaList"
+            "/admin/getAllAreaList"
     );
 
     public WebSecurityConfig(RedisUtils redisUtils) {
@@ -47,7 +48,7 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
      * 不然过滤器不起作用
      */
 
-    @Bean
+//    @Bean
     public SecurityInterceptor getSecurityInterceptor() {
         return new SecurityInterceptor();
     }
@@ -77,7 +78,11 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
             }
 
             ServletOutputStream out = response.getOutputStream();//创建一个输出流
-            OutputStreamWriter ow = new OutputStreamWriter(out, StandardCharsets.UTF_8);//设置编码格式,防止汉字乱码
+            response.setCharacterEncoding("UTF-8");
+            //指定浏览器以什么码表打开服务器发送的数据
+            response.setContentType("text/html;charset=utf-8");
+
+            OutputStreamWriter ow = new OutputStreamWriter(out);
             JSONObject interceptorRes = new JSONObject();
 
             Cookie[] cookies = request.getCookies();//获取 Token
