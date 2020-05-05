@@ -10,6 +10,9 @@ import passwordReset from "../views/subviews/passwordReset";
 import editAnnouncement from "../views/subviews/editAnnouncement";
 import logManage from "../views/subviews/logManage";
 import editLog from "../views/subviews/editLog";
+import addOfficer from "../views/subviews/addOfficer";
+import OfficerAddUser from "../views/subviews/OfficerAddUser";
+import statistics from "../views/subviews/statistics";
 import officerManage from "../views/subviews/officerManage";
 
 Vue.use(VueRouter);
@@ -101,7 +104,15 @@ const routes = [
         name: "addLog",
         component: editLog,
         meta: {
-          title: buildTitle("新建公告")
+          title: buildTitle("新建日志")
+        }
+      },
+      {
+        path: "addOfficer",
+        name: "addOfficer",
+        component: addOfficer,
+        meta: {
+          title: buildTitle("添加网格员")
         }
       },
       {
@@ -110,6 +121,22 @@ const routes = [
         component: officerManage,
         meta: {
           title: buildTitle("网格员管理")
+        }
+      },
+      {
+        path: "officerAddUser",
+        name: "officerAddUser",
+        component: OfficerAddUser,
+        meta: {
+          title: buildTitle("添加用户")
+        }
+      },
+      {
+        path: "statistics",
+        name: "statistics",
+        component: statistics,
+        meta: {
+          title: buildTitle("数据视图")
         }
       }
     ]

@@ -21,7 +21,13 @@
       </el-form-item>
     </el-form>
     <el-button icon="el-icon-search" plain type="primary">查询</el-button>
-    <el-button icon="el-icon-plus" plain type="success">添加用户</el-button>
+    <el-button
+      @click="() => $router.push('/dashboard/officerAddUser')"
+      icon="el-icon-plus"
+      plain
+      type="success"
+      >添加用户</el-button
+    >
     <el-button icon="el-icon-tickets" plain type="primary"
       >导出用户数据表
     </el-button>

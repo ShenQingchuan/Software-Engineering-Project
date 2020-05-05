@@ -15,22 +15,6 @@
         <el-radio v-model="logType" label="基础设施养护"></el-radio>
         <el-radio v-model="logType" label="阶段工作总结"></el-radio>
       </div>
-      <div class="meta-form-item tb-gap flex-box jy-start">
-        <label>日志时间：</label>
-        <el-date-picker
-          class="lr-gap"
-          v-model="logDate"
-          type="date"
-          placeholder="选择日期"
-        >
-        </el-date-picker>
-        <el-time-picker
-          class="lr-gap"
-          v-model="logTime"
-          placeholder="任意时间点"
-        >
-        </el-time-picker>
-      </div>
     </div>
 
     <!--编辑器-->

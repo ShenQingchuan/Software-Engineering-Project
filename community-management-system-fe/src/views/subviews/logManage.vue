@@ -1,44 +1,17 @@
 <template>
   <div class="page-log-manage">
     <div class="flex-box log-actions">
-      <el-form class="log-manage-form" inline>
-        <el-form-item label="日志发布时间：">
-          <el-date-picker
-            end-placeholder="结束日期"
-            range-separator="至"
-            start-placeholder="开始日期"
-            type="daterange"
-            v-model="queryForm.dateRange"
-          >
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="日志类型：">
-          <el-select placeholder="请选择" v-model="queryForm.logType">
-            <el-option
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-              v-for="item in logOptions"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-button icon="el-icon-search" plain type="primary"
-          >执行查询
-        </el-button>
-        <el-button
-          @click="
-            () => {
-              $router.push('./addLog');
-            }
-          "
-          icon="el-icon-plus"
-          plain
-          type="success"
-          >新增日志</el-button
-        >
-      </el-form>
+      <el-button
+        @click="
+          () => {
+            $router.push('./addLog');
+          }
+        "
+        icon="el-icon-plus"
+        plain
+        type="success"
+        >新增日志</el-button
+      >
     </div>
     <div class="flex-box log-table-container">
       <el-table class="log-table" :data="logData">
@@ -47,7 +20,7 @@
             <b>{{ scope.row.title }}</b>
           </template>
         </el-table-column>
-        <el-table-column fixed label="创建者" prop="creatorName">
+        <el-table-column fixed label="日志类型" prop="creatorName">
         </el-table-column>
         <el-table-column fixed label="日志创建时间" prop="createTime">
           <template slot-scope="scope">
@@ -72,7 +45,7 @@
     </div>
     <div class="flex-box pagination">
       共 {{ logCount }} 条记录
-      <el-pagination :total="totalPage" layout="prev, pager, next">
+      <el-pagination :total="logCount" layout="prev, pager, next">
       </el-pagination>
     </div>
   </div>
@@ -108,7 +81,6 @@ export default {
         logType: ""
       },
       logCount: 61,
-      totalPage: 70,
       logData: logMock
     };
   },
@@ -123,6 +95,8 @@ export default {
 <style lang="scss" scoped>
 .page-log-manage {
   margin-top: 20px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+  padding: 20px;
 
   .log-table-container {
     width: 90%;

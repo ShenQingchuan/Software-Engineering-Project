@@ -52,6 +52,16 @@ import "./assets/styles/common.scss";
 import mavonEditor from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
 
+import ECharts from "vue-echarts"; // 在 webpack 环境下指向 components/ECharts.vue
+
+// 手动引入 ECharts 各模块来减小打包体积
+import "echarts/lib/chart/bar";
+import "echarts/lib/component/tooltip";
+import "echarts/lib/component/legend";
+
+// 注册组件后即可使用
+Vue.component("v-chart", ECharts);
+
 Vue.use(mavonEditor);
 
 Vue.config.productionTip = false;
