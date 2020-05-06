@@ -39,7 +39,7 @@
               <a>信息纵览</a>
             </el-menu-item>
             <el-menu-item
-              @click="() => $router.push('/dashboard/userInfoShow')"
+              @click="() => $router.push('/dashboard/userInfoShow/' + uid)"
               index="1-2"
             >
               <i class="el-icon-set-up" />
@@ -110,7 +110,15 @@
 
 <script>
 export default {
-  name: "common-aside"
+  name: "common-aside",
+  mounted() {
+    this.uid = localStorage.getItem("uid");
+  },
+  data() {
+    return {
+      uid: ""
+    };
+  }
 };
 </script>
 
