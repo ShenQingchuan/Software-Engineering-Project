@@ -2,6 +2,7 @@ package com.example.csgs.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.csgs.bean.CommunityInfo;
+import com.example.csgs.bean.DistrictInfo;
 import com.example.csgs.dao.DistrictDao;
 import com.example.csgs.entity.DistrictEntity;
 import com.example.csgs.service.LeaderViewService;
@@ -23,12 +24,16 @@ public class LeaderViewController {
     LeaderViewService leaderViewService;
 
     /**
-     * 登录接口
+     * 场景：此时，领导想要看的的整体各项数据（以区为单位展示数据信息内容）
+     * 所以，我们要整理出每个区下，Residents、Houses、ParkingSpaces各自总和
      */
-    @PostMapping("/get")
-    public Object login(@RequestBody JSONObject jsonObject, HttpServletResponse response) {
-
-        return null;
+    @GetMapping("/getDistrictRSHList")
+    public Object getDistrictRSHList() {
+        List<DistrictInfo> districtRSHList = leaderViewService.getDistrictRSHList();
+        if (!districtRSHList.isEmpty()) {
+            return ResultUtils.success(districtRSHList, "获取所有区RSH信息成功！ ");
+        }
+        return ResultUtils.error("获取所有区RSH信息失败！ ");
     }
 
     /**
