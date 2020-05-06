@@ -56,7 +56,8 @@ export default {
   methods: {
     submitAnnouncement() {
       this.$message.warning("暂未调试接口");
-      // TODO: 连调测试上传公告
+      // TODO: 连调测试上传公告 /grid/releaseAnnouncement/{id}
+      // https://easydoc.xyz/p/43159074/MAhLR20e
     }
   }
 };

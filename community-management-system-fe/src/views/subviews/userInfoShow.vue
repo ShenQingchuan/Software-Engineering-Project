@@ -79,6 +79,12 @@ import userInfoMock from "../../mock/userInfoShow";
 
 export default {
   name: "userInfoShow",
+  mounted() {
+    // eslint-disable-next-line no-unused-vars
+    const uid = this.$route.params.uid;
+    // TODO： 请求用户的资料（用户自己看 / 网格员查看） /profile/getProfile/{id}
+    // https://easydoc.xyz/p/43159074/MAhLR20e
+  },
   data() {
     return {
       userInfo: userInfoMock

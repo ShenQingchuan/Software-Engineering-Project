@@ -87,7 +87,9 @@ export default {
   },
   methods: {
     handleDelete(row) {
-      // TODO: 实现删除日志
+      // TODO: 实现删除日志 /grid/deleteJournal/{id}
+      // https://easydoc.xyz/p/43159074/MAhLR20e
+
       this.$message.warning("TODO: 实现删除日志");
       this.announcementData.splice(row, 1);
     }

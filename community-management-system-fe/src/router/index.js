@@ -51,7 +51,7 @@ const routes = [
         }
       },
       {
-        path: "userInfoShow",
+        path: "userInfoShow/:uid",
         name: "userInfoShow",
         component: userInfoShow,
         meta: {
@@ -82,7 +82,6 @@ const routes = [
           title: buildTitle("管理日志")
         }
       },
-
       {
         path: "passwordReset",
         name: "passwordReset",

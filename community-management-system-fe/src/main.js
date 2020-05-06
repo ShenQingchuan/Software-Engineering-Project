@@ -58,11 +58,16 @@ import ECharts from "vue-echarts"; // 在 webpack 环境下指向 components/ECh
 import "echarts/lib/chart/bar";
 import "echarts/lib/component/tooltip";
 import "echarts/lib/component/legend";
+import axios from "axios";
 
 // 注册组件后即可使用
 Vue.component("v-chart", ECharts);
-
 Vue.use(mavonEditor);
+
+// 配置 axios
+axios.defaults.baseURL = "http://112.126.85.20:9090/";
+
+Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false;
 Vue.use(Button)
