@@ -1,8 +1,12 @@
 package com.example.csgs.bean;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     private long id;
     private String userID;
@@ -10,13 +14,4 @@ public class User {
     private String telPhone;
     private String Community;
     private String District;
-
-    public User(long uid, String userID, String userName, String telPhone, String district, String community) {
-        this.id = uid;
-        this.userID = userID;
-        this.userName = userName;
-        this.telPhone = telPhone;
-        Community = community;
-        District = district;
-    }
 }

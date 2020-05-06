@@ -42,7 +42,7 @@ public class GridQueryServiceImpl implements GridQueryService {
     public PageQuery<User> allUserOfGrid(Long id, String page) {
         Optional<UserEntity> queryUser = userDAO.findById(id);
 
-        if (queryUser.isPresent()) {
+        if (queryUser.isPresent() && queryUser.get().getUserType() == 1) {
             String userDistrict = getUserDistrict(queryUser.get());
 
             pageable = PageRequest.of(Integer.parseInt(page) - 1, pageSize, Sort.by("id").ascending());

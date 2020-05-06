@@ -7,5 +7,4 @@ import java.util.Optional;
 
 public interface PwdProDao extends PagingAndSortingRepository<PwdProEntity, Long> {
     Optional<PwdProEntity> findById(Long uid);
-
 }
