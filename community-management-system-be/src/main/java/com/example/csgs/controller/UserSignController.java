@@ -57,6 +57,6 @@ public class UserSignController {
         if (userSignService.signOut(request)) {
             return ResultUtils.success("退出登录完成！");
         }
-        return ResultUtils.success("退出登录失败！");
+        return ResultUtils.error("退出登录失败！");
     }
 }

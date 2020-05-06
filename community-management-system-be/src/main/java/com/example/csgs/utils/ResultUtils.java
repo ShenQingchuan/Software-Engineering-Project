@@ -1,11 +1,13 @@
 package com.example.csgs.utils;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 public class ResultUtils {
 
     @Data
     private static class Result {
+        @JsonInclude(JsonInclude.Include.NON_NULL)
         private Object data;//返回数据
         private String msg;//返回信息
         private String resultCode;//返回结果代码
