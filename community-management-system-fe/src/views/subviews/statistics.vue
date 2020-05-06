@@ -1,6 +1,6 @@
 <template>
   <div class="subpage-statistics flex-box flex-col jy-center">
-    <v-chart :options="chartOptions"></v-chart>
+    <v-chart class="main-chart" :options="chartOptions"></v-chart>
     <div class="tb-gap sort-options flex-box jy-center">
       <el-button @click="sortDataSourceBy('住房')" type="primary" plain
         >按照住房数排序</el-button
@@ -23,6 +23,13 @@ export default {
   data() {
     return {
       chartOptions: {
+        grid: {
+          x: 50,
+          y: 50,
+          x2: 50,
+          y2: 60
+        },
+        barGap: "0%",
         legend: {},
         tooltip: {},
         dataset: {
@@ -31,8 +38,7 @@ export default {
         xAxis: {
           type: "category",
           axisLabel: {
-            internal: 0,
-            rotate: -15
+            internal: 0
           }
         },
         yAxis: {},
@@ -48,9 +54,24 @@ export default {
 };
 </script>
 
+<style>
+/**
+ * 默认尺寸为 600px×400px，如果想让图表响应尺寸变化，可以像下面这样
+ * 把尺寸设为百分比值（同时请记得为容器设置尺寸）。
+ */
+.echarts {
+  width: 100%;
+  height: 100%;
+}
+</style>
+
 <style lang="scss" scoped>
 .subpage-statistics {
-  width: 70%;
+  width: 80%;
   margin: 0 auto;
+
+  .main-chart {
+    width: 100%;
+  }
 }
 </style>
