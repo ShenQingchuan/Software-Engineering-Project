@@ -1,10 +1,14 @@
 package com.example.csgs.bean;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Journal {
     private long id;
     private String titleName;
@@ -12,11 +16,4 @@ public class Journal {
     private String creator;
     private String creatTime;
 
-    public Journal(long id, String titleName, String type, String creator, String creatTime) {
-        this.id = id;
-        this.titleName = titleName;
-        this.type = type;
-        this.creator = creator;
-        this.creatTime = creatTime;
-    }
 }

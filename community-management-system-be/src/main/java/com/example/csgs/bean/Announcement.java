@@ -1,22 +1,18 @@
 package com.example.csgs.bean;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Announcement {
     private long id;
     private String titleName;
     private String content;
     private String creator;
     private String creatTime;
-
-    public Announcement(long id, String titleName, String content, String creator, String creatTime) {
-        this.id = id;
-        this.titleName = titleName;
-        this.content = content;
-        this.creator = creator;
-        this.creatTime = creatTime;
-    }
 }
