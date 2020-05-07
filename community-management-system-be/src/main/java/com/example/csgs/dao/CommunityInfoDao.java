@@ -1,6 +1,7 @@
 package com.example.csgs.dao;
 
 import com.example.csgs.entity.CommunityInfoEntity;
+import com.example.csgs.entity.DistrictEntity;
 import com.example.csgs.entity.GridEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -23,4 +24,5 @@ public interface CommunityInfoDao extends PagingAndSortingRepository<CommunityIn
     Optional<CommunityInfoEntity> findByCommunityName(String communityName);
 
     List<CommunityInfoEntity> findByGridEntity(GridEntity gridEntity);
+
 }
