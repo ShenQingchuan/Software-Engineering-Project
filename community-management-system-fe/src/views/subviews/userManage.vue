@@ -31,12 +31,7 @@
     <el-button icon="el-icon-tickets" plain type="primary"
       >导出用户数据表
     </el-button>
-    <el-table
-      class="user-manage-data-table"
-      :data="userManageTableData"
-      border
-      style="width: 100%"
-    >
+    <el-table class="user-manage-data-table" :data="userManageTableData" border>
       <el-table-column fixed prop="area" label="归属地区" width="200">
       </el-table-column>
       <el-table-column prop="community" label="归属小区" width="200">
@@ -54,7 +49,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="flex-box pagination">
+    <div class="user-manage-pagination flex-box pagination">
       共 {{ userRecordCount }} 条记录
       <el-pagination :total="totalCount" layout="prev, pager, next">
       </el-pagination>
@@ -91,6 +86,11 @@ export default {
 
 <style lang="scss" scoped>
 .user-manage-data-table {
-  margin-top: 20px;
+  margin: 20px auto;
+  width: 80%;
+}
+.user-manage-pagination {
+  width: 80%;
+  margin: 0 auto;
 }
 </style>
