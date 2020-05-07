@@ -1,19 +1,35 @@
 <template>
-  <el-tabs v-loading="loadingChart" v-model="activeName">
+  <el-tabs
+    v-loading="loadingChart"
+    v-model="activeName"
+    @tab-click="handleTabClick"
+  >
     <el-tab-pane label="各片区总体" name="first">
       <div class="subpage-statistics flex-box flex-col jy-center">
-        <v-chart
-          class="main-chart"
-          :options="allDistrictChartOptions"
-        ></v-chart>
+        <v-chart :options="allDistrictChartOptions"></v-chart>
         <div class="tb-gap sort-options flex-box jy-center">
-          <el-button @click="sortDataSourceBy('住房')" type="primary" plain
+          <el-button
+            @click="
+              sortDataSourceBy(allDistrictChartOptions.dataset.source, '住房')
+            "
+            type="primary"
+            plain
             >按照住房数排序</el-button
           >
-          <el-button @click="sortDataSourceBy('车位')" type="warning" plain
+          <el-button
+            @click="
+              sortDataSourceBy(allDistrictChartOptions.dataset.source, '车位')
+            "
+            type="warning"
+            plain
             >按照车位数排序</el-button
           >
-          <el-button @click="sortDataSourceBy('人口')" type="success" plain
+          <el-button
+            @click="
+              sortDataSourceBy(allDistrictChartOptions.dataset.source, '人口')
+            "
+            type="success"
+            plain
             >按照人口数排序</el-button
           >
         </div>
@@ -35,20 +51,28 @@
             ></el-option>
           </el-select>
         </div>
-
         <v-chart
           v-if="selectedDistrict !== ''"
           class="main-chart"
           :options="singleChartOptions"
         ></v-chart>
         <div class="tb-gap sort-options flex-box jy-center">
-          <el-button @click="sortDataSourceBy('住房')" type="primary" plain
+          <el-button
+            @click="sortDataSourceBy(singleChartOptions.dataset.source, '住房')"
+            type="primary"
+            plain
             >按照住房数排序</el-button
           >
-          <el-button @click="sortDataSourceBy('车位')" type="warning" plain
+          <el-button
+            @click="sortDataSourceBy(singleChartOptions.dataset.source, '车位')"
+            type="warning"
+            plain
             >按照车位数排序</el-button
           >
-          <el-button @click="sortDataSourceBy('人口')" type="success" plain
+          <el-button
+            @click="sortDataSourceBy(singleChartOptions.dataset.source, '人口')"
+            type="success"
+            plain
             >按照人口数排序</el-button
           >
         </div>
@@ -59,13 +83,14 @@
 
 <script>
 import chartDataMock from "@/mock/charts";
-import allDistrictMock from "@/mock/chartsForAll";
+import chartForAllMock from "@/mock/chartsForAll";
+import allDistrictNameMock from "@/mock/getAllDistrict";
 
 export default {
   name: "statistics",
   data() {
     return {
-      allDistrict: allDistrictMock,
+      allDistrict: allDistrictNameMock,
       selectedDistrict: "",
 
       // Tab
@@ -73,17 +98,10 @@ export default {
 
       loadingChart: false,
       allDistrictChartOptions: {
-        grid: {
-          x: 50,
-          y: 50,
-          x2: 50,
-          y2: 60
-        },
-        barGap: "0%",
         legend: {},
         tooltip: {},
         dataset: {
-          source: allDistrictMock
+          source: []
         },
         xAxis: {
           type: "category",
@@ -119,8 +137,8 @@ export default {
     };
   },
   methods: {
-    sortDataSourceBy(key) {
-      this.singleChartOptions.dataset.source.sort((a, b) => a[key] - b[key]);
+    sortDataSourceBy(arr, key) {
+      arr.sort((a, b) => a[key] - b[key]);
     },
     getChartDataAndSetChartOptions() {
       this.loadingChart = true;
@@ -131,12 +149,21 @@ export default {
 
       // TODO: 此处是每当 select 组件选择的值变化时，就请求 chart 数据
       // https://easydoc.xyz/p/43159074/MAhLR20e
+    },
+    handleTabClick(tab) {
+      if (tab.label === "各片区总体") {
+        this.loadingChart = true;
+        setTimeout(() => {
+          this.allDistrictChartOptions.dataset.source = chartForAllMock;
+          this.loadingChart = false;
+        }, 1000);
+      }
     }
   }
 };
 </script>
 
-<style>
+<style lang="scss">
 /**
  * 默认尺寸为 600px×400px，如果想让图表响应尺寸变化，可以像下面这样
  * 把尺寸设为百分比值（同时请记得为容器设置尺寸）。
@@ -144,6 +171,10 @@ export default {
 .echarts {
   width: 100%;
   height: 100%;
+
+  div {
+    width: 100% !important;
+  }
 }
 </style>
 
@@ -151,9 +182,8 @@ export default {
 .subpage-statistics {
   width: 80%;
   margin: 0 auto;
-
-  .main-chart {
-    width: 100%;
-  }
+}
+.main-chart {
+  width: 100%;
 }
 </style>
