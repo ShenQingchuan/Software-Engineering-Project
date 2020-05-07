@@ -27,10 +27,11 @@
       <el-menu :default-openeds="['1']">
         <el-submenu index="1">
           <template slot="title"
-            ><i class="el-icon-s-operation" />常用操作
+            ><i class="el-icon-s-operation" />操作菜单
           </template>
           <!--居民用户操作组-->
           <el-menu-item-group>
+            <template slot="title">基本功能组：</template>
             <el-menu-item
               @click="() => $router.push('/dashboard/residentOverview')"
               index="1-1"
@@ -49,6 +50,7 @@
 
           <!--网格员操作组-->
           <el-menu-item-group>
+            <template slot="title">网格员功能组：</template>
             <el-menu-item
               @click="() => $router.push('/dashboard/userManage')"
               index="2-1"
