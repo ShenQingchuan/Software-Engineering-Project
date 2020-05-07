@@ -1,4 +1,4 @@
-package com.example.csgs.dao;
+package com.example.csgs.mapper;
 
 import com.example.csgs.entity.PwdProEntity;
 import org.springframework.data.repository.PagingAndSortingRepository;

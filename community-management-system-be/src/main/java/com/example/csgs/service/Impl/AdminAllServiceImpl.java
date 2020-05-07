@@ -1,7 +1,7 @@
 package com.example.csgs.service.Impl;
 
 import com.example.csgs.bean.*;
-import com.example.csgs.dao.*;
+import com.example.csgs.mapper.*;
 import com.example.csgs.entity.*;
 import com.example.csgs.service.AdminAllService;
 import com.example.csgs.utils.CalculatePageUtils;

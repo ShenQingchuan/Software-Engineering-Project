@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface LeaderViewService {
-    List<DistrictInfo> getDistrictRSHList();
+    List<DistrictInfo> getDistrictRPHList();
 
     List<CommunityInfo> getCommunityRPHList(Long id);
 }

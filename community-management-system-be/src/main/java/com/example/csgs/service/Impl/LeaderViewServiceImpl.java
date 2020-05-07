@@ -2,8 +2,8 @@ package com.example.csgs.service.Impl;
 
 import com.example.csgs.bean.CommunityInfo;
 import com.example.csgs.bean.DistrictInfo;
-import com.example.csgs.dao.CommunityInfoDao;
-import com.example.csgs.dao.DistrictDao;
+import com.example.csgs.mapper.CommunityInfoDao;
+import com.example.csgs.mapper.DistrictDao;
 import com.example.csgs.entity.CommunityInfoEntity;
 import com.example.csgs.entity.DistrictEntity;
 import com.example.csgs.service.LeaderViewService;
@@ -26,7 +26,7 @@ public class LeaderViewServiceImpl implements LeaderViewService {
      * 所以，我们要整理出每个区下，Residents、Houses、ParkingSpaces各自总和
      */
     @Override
-    public List<DistrictInfo> getDistrictRSHList() {
+    public List<DistrictInfo> getDistrictRPHList() {
         Iterable<DistrictEntity> districtEntities = districtDao.findAll();
         List<DistrictInfo> districtInfoList = new ArrayList<>();
 

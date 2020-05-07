@@ -1,10 +1,9 @@
 package com.example.csgs.utils;
 
 import com.example.csgs.bean.Announcement;
-import com.example.csgs.bean.CommunityInfo;
 import com.example.csgs.bean.PageQuery;
-import com.example.csgs.dao.AnnouncementDao;
-import com.example.csgs.dao.UserDao;
+import com.example.csgs.mapper.AnnouncementDao;
+import com.example.csgs.mapper.UserDao;
 import com.example.csgs.entity.AnnouncementEntity;
 import com.example.csgs.entity.UserEntity;
 import org.apache.commons.lang3.time.DateFormatUtils;

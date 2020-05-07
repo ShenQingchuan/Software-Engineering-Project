@@ -1,6 +1,5 @@
-package com.example.csgs.dao;
+package com.example.csgs.mapper;
 
-import com.example.csgs.entity.DistrictEntity;
 import com.example.csgs.entity.GridEntity;
 import com.example.csgs.entity.UserEntity;
 import org.springframework.data.repository.PagingAndSortingRepository;

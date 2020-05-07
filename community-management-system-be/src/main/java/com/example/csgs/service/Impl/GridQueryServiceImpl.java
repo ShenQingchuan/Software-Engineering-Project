@@ -2,9 +2,9 @@ package com.example.csgs.service.Impl;
 
 import com.example.csgs.bean.PageQuery;
 import com.example.csgs.bean.User;
-import com.example.csgs.dao.ProfileDao;
-import com.example.csgs.dao.PwdProDao;
-import com.example.csgs.dao.UserDao;
+import com.example.csgs.mapper.ProfileDao;
+import com.example.csgs.mapper.PwdProDao;
+import com.example.csgs.mapper.UserDao;
 import com.example.csgs.entity.CommunityInfoEntity;
 import com.example.csgs.entity.UserEntity;
 import com.example.csgs.entity.UserProfile;

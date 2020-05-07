@@ -46,3 +46,5 @@ jasypt:
 mybatis:
   type-aliases-package: com.example.csgs.entity
   mapper-locations: classpath:mybatis/mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

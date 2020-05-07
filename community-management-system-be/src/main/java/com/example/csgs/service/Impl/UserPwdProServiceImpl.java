@@ -1,6 +1,6 @@
 package com.example.csgs.service.Impl;
 
-import com.example.csgs.dao.UserDao;
+import com.example.csgs.mapper.UserDao;
 import com.example.csgs.entity.PwdProEntity;
 import com.example.csgs.entity.UserEntity;
 import com.example.csgs.service.UserPwdProService;

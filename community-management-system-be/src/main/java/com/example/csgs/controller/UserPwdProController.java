@@ -1,7 +1,7 @@
 package com.example.csgs.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.csgs.dao.UserDao;
+import com.example.csgs.mapper.UserDao;
 import com.example.csgs.entity.UserEntity;
 import com.example.csgs.service.UserPwdProService;
 import com.example.csgs.utils.ResultUtils;

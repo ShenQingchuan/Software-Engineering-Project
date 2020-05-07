@@ -1,7 +1,6 @@
-package com.example.csgs.dao;
+package com.example.csgs.mapper;
 
 
-import com.example.csgs.entity.AdministratorEntity;
 import com.example.csgs.entity.AnnouncementEntity;
 import com.example.csgs.entity.UserEntity;
 import org.springframework.data.jpa.repository.Query;
