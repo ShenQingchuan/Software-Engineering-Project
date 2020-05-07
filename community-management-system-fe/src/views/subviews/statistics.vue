@@ -5,8 +5,13 @@
     @tab-click="handleTabClick"
   >
     <el-tab-pane label="各片区总体" name="first">
-      <div class="subpage-statistics flex-box flex-col jy-center">
-        <v-chart :options="allDistrictChartOptions"></v-chart>
+      <div class="all-district flex-box flex-col jy-center">
+        <v-chart
+          v-if="allDistrictCharShow"
+          autoresize
+          class="main-chart"
+          :options="allDistrictChartOptions"
+        ></v-chart>
         <div class="tb-gap sort-options flex-box jy-center">
           <el-button
             @click="
@@ -97,9 +102,11 @@ export default {
       activeName: "second",
 
       loadingChart: false,
+      allDistrictCharShow: false,
       allDistrictChartOptions: {
-        legend: {},
-        tooltip: {},
+        tooltip: {
+          renderMode: "richText"
+        },
         dataset: {
           source: []
         },
@@ -156,6 +163,8 @@ export default {
         setTimeout(() => {
           this.allDistrictChartOptions.dataset.source = chartForAllMock;
           this.loadingChart = false;
+          this.allDistrictCharShow = true;
+          // TODO：获取所有片区对总体数据图
         }, 1000);
       }
     }
@@ -171,10 +180,6 @@ export default {
 .echarts {
   width: 100%;
   height: 100%;
-
-  div {
-    width: 100% !important;
-  }
 }
 </style>
 
@@ -182,6 +187,9 @@ export default {
 .subpage-statistics {
   width: 80%;
   margin: 0 auto;
+}
+.all-district {
+  width: 100%;
 }
 .main-chart {
   width: 100%;
