@@ -166,6 +166,9 @@ export default {
           this.allDistrictCharShow = true;
           // TODO：获取所有片区对总体数据图
         }, 1000);
+      } else {
+        this.allDistrictCharShow = false;
+        this.allDistrictChartOptions.dataset.source = [];
       }
     }
   }
