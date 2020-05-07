@@ -5,8 +5,12 @@
     @tab-click="handleTabClick"
   >
     <el-tab-pane label="各片区总体" name="first">
-      <div class="subpage-statistics flex-box flex-col jy-center">
-        <v-chart :options="allDistrictChartOptions"></v-chart>
+      <div class="all-district flex-box flex-col jy-center">
+        <v-chart
+          autoresize
+          class="main-chart"
+          :options="allDistrictChartOptions"
+        ></v-chart>
         <div class="tb-gap sort-options flex-box jy-center">
           <el-button
             @click="
@@ -98,7 +102,6 @@ export default {
 
       loadingChart: false,
       allDistrictChartOptions: {
-        legend: {},
         tooltip: {},
         dataset: {
           source: []
@@ -182,6 +185,9 @@ export default {
 .subpage-statistics {
   width: 80%;
   margin: 0 auto;
+}
+.all-district {
+  width: 100%;
 }
 .main-chart {
   width: 100%;
