@@ -1,45 +1,65 @@
 <template>
-  <div
-    v-loading="loadingChart"
-    class="subpage-statistics flex-box flex-col jy-center"
-  >
-    <div class="tb-gap flex-box jy-center">
-      <label class="lr-gap"><b>请选择片区：</b></label>
-      <el-select
-        v-model="selectedDistrict"
-        @change="getChartDataAndSetChartOptions"
-      >
-        <el-option
-          v-for="(e, i) in allDistrict"
-          :key="i"
-          :value="e"
-          :label="e"
-        ></el-option>
-      </el-select>
-    </div>
+  <el-tabs v-loading="loadingChart" v-model="activeName">
+    <el-tab-pane label="各片区总体" name="first">
+      <div class="subpage-statistics flex-box flex-col jy-center">
+        <v-chart
+          class="main-chart"
+          :options="allDistrictChartOptions"
+        ></v-chart>
+        <div class="tb-gap sort-options flex-box jy-center">
+          <el-button @click="sortDataSourceBy('住房')" type="primary" plain
+            >按照住房数排序</el-button
+          >
+          <el-button @click="sortDataSourceBy('车位')" type="warning" plain
+            >按照车位数排序</el-button
+          >
+          <el-button @click="sortDataSourceBy('人口')" type="success" plain
+            >按照人口数排序</el-button
+          >
+        </div>
+      </div>
+    </el-tab-pane>
+    <el-tab-pane label="单片区" name="second">
+      <div class="subpage-statistics flex-box flex-col jy-center">
+        <div class="tb-gap flex-box jy-center">
+          <label class="lr-gap"><b>请选择片区：</b></label>
+          <el-select
+            v-model="selectedDistrict"
+            @change="getChartDataAndSetChartOptions"
+          >
+            <el-option
+              v-for="(e, i) in allDistrict"
+              :key="i"
+              :value="e"
+              :label="e"
+            ></el-option>
+          </el-select>
+        </div>
 
-    <v-chart
-      v-if="selectedDistrict !== ''"
-      class="main-chart"
-      :options="chartOptions"
-    ></v-chart>
-    <div class="tb-gap sort-options flex-box jy-center">
-      <el-button @click="sortDataSourceBy('住房')" type="primary" plain
-        >按照住房数排序</el-button
-      >
-      <el-button @click="sortDataSourceBy('车位')" type="warning" plain
-        >按照车位数排序</el-button
-      >
-      <el-button @click="sortDataSourceBy('人口')" type="success" plain
-        >按照人口数排序</el-button
-      >
-    </div>
-  </div>
+        <v-chart
+          v-if="selectedDistrict !== ''"
+          class="main-chart"
+          :options="singleChartOptions"
+        ></v-chart>
+        <div class="tb-gap sort-options flex-box jy-center">
+          <el-button @click="sortDataSourceBy('住房')" type="primary" plain
+            >按照住房数排序</el-button
+          >
+          <el-button @click="sortDataSourceBy('车位')" type="warning" plain
+            >按照车位数排序</el-button
+          >
+          <el-button @click="sortDataSourceBy('人口')" type="success" plain
+            >按照人口数排序</el-button
+          >
+        </div>
+      </div>
+    </el-tab-pane>
+  </el-tabs>
 </template>
 
 <script>
 import chartDataMock from "@/mock/charts";
-import allDistrictMock from "@/mock/getAllDistrict";
+import allDistrictMock from "@/mock/chartsForAll";
 
 export default {
   name: "statistics",
@@ -48,8 +68,33 @@ export default {
       allDistrict: allDistrictMock,
       selectedDistrict: "",
 
+      // Tab
+      activeName: "second",
+
       loadingChart: false,
-      chartOptions: {
+      allDistrictChartOptions: {
+        grid: {
+          x: 50,
+          y: 50,
+          x2: 50,
+          y2: 60
+        },
+        barGap: "0%",
+        legend: {},
+        tooltip: {},
+        dataset: {
+          source: allDistrictMock
+        },
+        xAxis: {
+          type: "category",
+          axisLabel: {
+            internal: 0
+          }
+        },
+        yAxis: {},
+        series: [{ type: "bar" }, { type: "bar" }, { type: "bar" }]
+      },
+      singleChartOptions: {
         grid: {
           x: 50,
           y: 50,
@@ -75,12 +120,12 @@ export default {
   },
   methods: {
     sortDataSourceBy(key) {
-      this.chartOptions.dataset.source.sort((a, b) => a[key] - b[key]);
+      this.singleChartOptions.dataset.source.sort((a, b) => a[key] - b[key]);
     },
     getChartDataAndSetChartOptions() {
       this.loadingChart = true;
       setTimeout(() => {
-        this.chartOptions.dataset.source = chartDataMock; // TODO: 这一句后面真实请求时删掉，其他不变
+        this.singleChartOptions.dataset.source = chartDataMock; // TODO: 这一句后面真实请求时删掉，其他不变
         this.loadingChart = false;
       }, 1000);
 

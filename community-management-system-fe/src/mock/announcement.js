@@ -35,7 +35,7 @@ export default [
     title: "MMX物业退出管理委员会",
     content: `由街道办事处市政科zz科长主持；4月23日由小区zz总支书记主持，先后召开二次协调会议，出席会议有街道办事处市政科、街道房产办、小区党总支（居委会）、业委会、XX物业公司，协商未结果。`,
     coverUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQzeiKQXrSpSuWgMppYcln-X4nf4WN9DaEdB3SipEPHOlQRdg-K&usqp=CAU",
+      "http://rpzoss.oss-cn-chengdu.aliyuncs.com/tmyBlog/2020-05-07-072510.jpg",
     creatorName: "林达 - 物业",
     createTime: 1584577143
   }
