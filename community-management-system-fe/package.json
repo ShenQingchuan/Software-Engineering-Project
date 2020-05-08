@@ -12,6 +12,7 @@
     "core-js": "^3.6.4",
     "echarts": "^4.7.0",
     "element-ui": "^2.13.0",
+    "leancloud-storage": "^4.5.3",
     "mavon-editor": "^2.9.0",
     "moment": "^2.24.0",
     "vue": "^2.6.11",
