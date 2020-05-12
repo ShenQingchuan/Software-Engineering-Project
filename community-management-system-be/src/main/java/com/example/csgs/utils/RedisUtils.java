@@ -42,7 +42,7 @@ public class RedisUtils {
      * @param time  秒
      */
     public void set(String key, String value, long time) {
-        redisUtils.redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
+        redisUtils.redisTemplate.opsForValue().set(key, value, time, TimeUnit.DAYS);
     }
 
     /**

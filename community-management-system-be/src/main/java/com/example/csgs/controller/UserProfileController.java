@@ -2,28 +2,24 @@ package com.example.csgs.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.csgs.bean.CommunityInfo;
-import com.example.csgs.bean.LoginState;
-import com.example.csgs.entity.UserProfile;
+import com.example.csgs.entity.ProfileInfo;
+import com.example.csgs.mapper.ProfileMapper;
 import com.example.csgs.service.UserProfileService;
-import com.example.csgs.service.UserSignService;
 import com.example.csgs.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/profile")
 @Slf4j
 public class UserProfileController {
-    @Autowired
-    UserProfileService userProfileService;
+    final UserProfileService userProfileService;
+    final ProfileMapper profileMapper;
+
+    public UserProfileController(UserProfileService userProfileService, ProfileMapper profileMapper) {
+        this.userProfileService = userProfileService;
+        this.profileMapper = profileMapper;
+    }
 
     /**
      * 修改资料接口
@@ -44,7 +40,7 @@ public class UserProfileController {
      */
     @GetMapping("/getProfile/{id}")
     public Object getMaterial(@PathVariable String id) {
-        UserProfile material = userProfileService.getMaterial(Long.parseLong(id));
+        ProfileInfo material = profileMapper.getMaterial(Long.parseLong(id));
         if (material != null) {
             return ResultUtils.success(material, "用户资料获取成功！");
         }
@@ -60,8 +56,6 @@ public class UserProfileController {
     public Object queryCommunityInfo(@PathVariable String id,@RequestParam String page) {
         CommunityInfo communityInfo = userProfileService.findCommunityInfo(Long.parseLong(id),page);
         if (communityInfo != null) {
-
-
             return ResultUtils.success(communityInfo, "用户所在社区信息获取成功！");
         }
         return ResultUtils.error("用户所在社区信息获取失败！");

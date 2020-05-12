@@ -1,6 +1,5 @@
-package com.example.csgs.bean;
+package com.example.csgs.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

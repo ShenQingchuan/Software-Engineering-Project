@@ -1,42 +1,15 @@
 package com.example.csgs.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "user")
 public class UserEntity implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-
-    @Column(nullable = false, unique = true)
-    String userID;
-
-    @Column(nullable=false,name="userType",columnDefinition="int default 0")
-    Integer userType;
-
-    @Column(nullable = false)
-    @JsonIgnore
-    String userPassword;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "userProfile", referencedColumnName = "id")
-    public UserProfile userProfile;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
-    @JoinColumn(name = "pwdProtection", referencedColumnName = "id")
-    public PwdProEntity pwdProEntity;
-
-
+    private Long id;
+    private String userID;
+    private String userPassword;
+    private int userType;
+    private PwdProEntity pwdProId;
+    private UserProfile profileId;
 }

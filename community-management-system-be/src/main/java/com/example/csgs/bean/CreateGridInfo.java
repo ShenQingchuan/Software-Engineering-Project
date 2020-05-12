@@ -5,13 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-//@AllArgsConstructor
-//@NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreateGridInfo {
     private AreaList areaList;
     private String userID;
 
-    //必须要这个无参构造函数
-    public CreateGridInfo() {
-    }
+//    //必须要这个无参构造函数
+//    public CreateGridInfo() {
+//    }
 }

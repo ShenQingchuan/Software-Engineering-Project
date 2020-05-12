@@ -10,8 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PageQuery<T> {
-    private int curPage;
-    private int totalPage;
-    private int totalSize;
+    private long curPage;
+    private long totalPage;
+    private long totalSize;
     private List<T> dataList;
 }
