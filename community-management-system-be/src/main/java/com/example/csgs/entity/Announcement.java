@@ -1,5 +1,6 @@
-package com.example.csgs.bean;
+package com.example.csgs.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,5 +15,6 @@ public class Announcement {
     private String titleName;
     private String content;
     private String creator;
-    private String creatTime;
+    @JsonFormat(pattern = "yyyy年MM月dd日 HH:mm", timezone = "GMT+8")
+    private Date createTime;
 }

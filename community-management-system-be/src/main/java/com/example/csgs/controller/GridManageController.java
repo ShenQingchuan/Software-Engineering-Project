@@ -1,22 +1,34 @@
 package com.example.csgs.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.csgs.bean.Announcement;
 import com.example.csgs.bean.AreaList;
-import com.example.csgs.bean.Journal;
 import com.example.csgs.bean.PageQuery;
+import com.example.csgs.entity.Announcement;
+import com.example.csgs.entity.Journal;
+import com.example.csgs.mapper.AnnouncementMapper;
+import com.example.csgs.mapper.JournalMapper;
+import com.example.csgs.mapper.JournalTypeMapper;
 import com.example.csgs.service.GridManageService;
 import com.example.csgs.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/grid")
 @Slf4j
 public class GridManageController {
-    @Autowired
-    GridManageService gridManageService;
+    final GridManageService gridManageService;
+    final JournalMapper journalMapper;
+    final AnnouncementMapper announcementMapper;
+    final JournalTypeMapper journalTypeMapper;
+    public GridManageController(GridManageService gridManageService, JournalMapper journalMapper, AnnouncementMapper announcementMapper, JournalTypeMapper journalTypeMapper) {
+        this.gridManageService = gridManageService;
+        this.journalMapper = journalMapper;
+        this.announcementMapper = announcementMapper;
+        this.journalTypeMapper = journalTypeMapper;
+    }
 
     /**
      * 发布公告接口
@@ -38,7 +50,7 @@ public class GridManageController {
      */
     @DeleteMapping("/deleteAnnouncement/{id}")
     public Object deleteAnnouncement(@PathVariable String id) {
-        if (gridManageService.deleteAnnouncement(Long.parseLong(id))) {
+        if (announcementMapper.deleteAnnouncement(Long.parseLong(id)) > 0) {
             return ResultUtils.success("公告删除成功！");
         }
         return ResultUtils.error("公告删除失败！");
@@ -50,7 +62,7 @@ public class GridManageController {
      */
     @DeleteMapping("/deleteJournal/{id}")
     public Object deleteJournal(@PathVariable String id) {
-        if (gridManageService.deleteJournal(Long.parseLong(id))) {
+        if (journalMapper.deleteJournal(Long.parseLong(id)) > 0) {
             return ResultUtils.success("日志删除成功！");
         }
         return ResultUtils.error("日志删除失败！");
@@ -63,7 +75,7 @@ public class GridManageController {
     @GetMapping("/getAnnouncementList/{id}")
     public Object getAnnouncementList(@PathVariable String id, @RequestParam String page) {
         PageQuery<Announcement> pageQuery = gridManageService.getAnnouncementList(Long.parseLong(id), page);
-        if (pageQuery != null) {
+        if (pageQuery != null && pageQuery.getDataList() != null) {
             return ResultUtils.success(pageQuery, "返回公告信息列表成功！");
         }
         return ResultUtils.success("返回公告信息列表失败！");
@@ -92,7 +104,7 @@ public class GridManageController {
     @GetMapping("/getJournalList/{id}")
     public Object getJournalList(@PathVariable String id, @RequestParam String page) {
         PageQuery<Journal> pageQuery = gridManageService.getJournalList(Long.parseLong(id), page);
-        if (pageQuery != null) {
+        if (pageQuery != null && pageQuery.getDataList() != null) {
             return ResultUtils.success(pageQuery, "返回日志信息列表成功！");
         }
         return ResultUtils.success("返回日志信息列表失败！");
@@ -104,8 +116,8 @@ public class GridManageController {
      */
     @GetMapping("/getJournalContent/{id}")
     public Object getJournalContent(@PathVariable String id) {
-        String journalContent = gridManageService.getJournalContent(Long.parseLong(id));
-        if ((!journalContent.equals(""))) {
+        String journalContent = journalMapper.findContentById(Long.parseLong(id));
+        if (journalContent != null) {
             return ResultUtils.success(journalContent, "返回日志内容成功！");
         }
         return ResultUtils.success("返回日志内容失败！");
@@ -122,7 +134,8 @@ public class GridManageController {
         String userID = jsonObject.getString("userID");
         String district = jsonObject.getString("district");
         String community = jsonObject.getString("community");
-        if (gridManageService.addResidentUser(userID, district,community)) {
+        String password = jsonObject.getString("password");
+        if (gridManageService.addResidentUser(userID, district,community,password)) {
             return ResultUtils.success("新增居民用户成功！");
         }
         return ResultUtils.success("新增居民用户失败！");
@@ -138,5 +151,17 @@ public class GridManageController {
             return ResultUtils.success(manageAreaList,"获取网格员管理区域信息成功！");
         }
         return ResultUtils.error("获取网格员管理区域信息失败！");
+    }
+
+    /**
+     * 场景：当网格员在发送日志的时候，先需要得到所有的日志类型，展示在界面上进行选择
+     */
+    @GetMapping("/getJournalTypeName")
+    public Object getJournalType(){
+        List<String> allTypeName = journalTypeMapper.findAllTypeName();
+        if (!allTypeName.isEmpty()) {
+            return ResultUtils.success(allTypeName,"获取日志类型名成功！");
+        }
+        return ResultUtils.error("获取日志类型名失败");
     }
 }

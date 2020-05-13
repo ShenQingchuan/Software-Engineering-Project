@@ -1,25 +1,28 @@
-package com.example.csgs.service.Impl;
+package com.example.csgs.service.impl;
 
 import com.example.csgs.bean.CommunityInfo;
-import com.example.csgs.bean.DistrictInfo;
-import com.example.csgs.dao.CommunityInfoDao;
-import com.example.csgs.dao.DistrictDao;
 import com.example.csgs.entity.CommunityInfoEntity;
 import com.example.csgs.entity.DistrictEntity;
+import com.example.csgs.entity.DistrictInfo;
+import com.example.csgs.mapper.CommunityInfoMapper;
+import com.example.csgs.mapper.DistrictMapper;
 import com.example.csgs.service.LeaderViewService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
 public class LeaderViewServiceImpl implements LeaderViewService {
-    @Autowired
-    DistrictDao districtDao;
-    @Autowired
-    CommunityInfoDao communityInfoDao;
+    final DistrictMapper districtMapper;
+    final CommunityInfoMapper communityInfoMapper;
+
+    public LeaderViewServiceImpl(DistrictMapper districtMapper, CommunityInfoMapper communityInfoMapper) {
+        this.districtMapper = districtMapper;
+        this.communityInfoMapper = communityInfoMapper;
+    }
 
     /**
      * 场景：此时，领导想要看的的整体各项数据（以区为单位展示数据信息内容）
@@ -27,14 +30,14 @@ public class LeaderViewServiceImpl implements LeaderViewService {
      */
     @Override
     public List<DistrictInfo> getDistrictRSHList() {
-        Iterable<DistrictEntity> districtEntities = districtDao.findAll();
+        List<DistrictEntity> districtEntities = districtMapper.findAllDistrict();
         List<DistrictInfo> districtInfoList = new ArrayList<>();
 
         for (DistrictEntity districtEntity : districtEntities) {
             List<CommunityInfoEntity> communityInfoEntities =
-                    communityInfoDao.findByDistrictName_toCommunity(districtEntity.getDistrictName());
+                    communityInfoMapper.findByDistrictID(districtEntity.getId());
             if (!communityInfoEntities.isEmpty()) {
-                int allNumResidents = 0,allNumParkingSpaces = 0,allNumHouses = 0;
+                int allNumResidents = 0, allNumParkingSpaces = 0, allNumHouses = 0;
 
                 for (CommunityInfoEntity communityInfoEntity : communityInfoEntities) {
                     Long numResidents = communityInfoEntity.getNumResidents();
@@ -59,10 +62,10 @@ public class LeaderViewServiceImpl implements LeaderViewService {
      */
     @Override
     public List<CommunityInfo> getCommunityRPHList(Long id) {
-        Optional<DistrictEntity> districtEntity = districtDao.findById(id);
-        if (districtEntity.isPresent()) {
+        DistrictEntity districtEntity = districtMapper.findById(id);
+        if (districtEntity != null) {
             List<CommunityInfoEntity> communityInfoEntities =
-                    communityInfoDao.findByDistrictName_toCommunity(districtEntity.get().getDistrictName());
+                    communityInfoMapper.findByDistrictID(districtEntity.getId());
             List<CommunityInfo> communityInfoList = new ArrayList<>();
             if (!communityInfoEntities.isEmpty()) {
                 for (CommunityInfoEntity communityInfoEntity : communityInfoEntities) {

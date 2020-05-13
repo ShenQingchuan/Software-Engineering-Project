@@ -10,9 +10,9 @@ public class JwtUtils {
 
     private static final String SUBJECT = "csgs_space";//签名发行者
 
-    private static final String APPSECRET = "csgsSpace2020";//签名
+    private static final String SIGNATURE = "csgsSpace2020";//签名
 
-    public static final Integer TOKEN_EXPIRE_TIME = 3600; //过期时间
+    public static final Integer TOKEN_EXPIRE_TIME = 2; //token过期时间
 
     /**
      * 生成token
@@ -25,7 +25,7 @@ public class JwtUtils {
                     .claim("userType", userEntity.getUserType())
                     .claim("id", userEntity.getId())
                     .setIssuedAt(new Date())//发行日期
-                    .signWith(SignatureAlgorithm.HS256, APPSECRET).compact();//签名
+                    .signWith(SignatureAlgorithm.HS256, SIGNATURE).compact();//签名
         } else {
             token = "";
         }

@@ -1,43 +1,43 @@
-package com.example.csgs.service.Impl;
+package com.example.csgs.service.impl;
 
 import com.example.csgs.bean.LoginState;
-import com.example.csgs.dao.UserDao;
 import com.example.csgs.entity.UserEntity;
+import com.example.csgs.mapper.UserMapper;
 import com.example.csgs.service.UserSignService;
 import com.example.csgs.utils.JwtUtils;
 import com.example.csgs.utils.RedisUtils;
 import com.example.csgs.utils.SHA256Util;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Slf4j
 @Service
 public class UserSignServiceImpl implements UserSignService {
-    @Autowired
-    UserDao userDAO;
-    @Autowired
-    RedisUtils redisUtils;
+    final UserMapper userMapper;
+    final RedisUtils redisUtils;
+
+    public UserSignServiceImpl(UserMapper userMapper, RedisUtils redisUtils) {
+        this.userMapper = userMapper;
+        this.redisUtils = redisUtils;
+    }
 
     @Override
     public Map<Integer, String> sign(String userID, String password, HttpServletResponse response) {
-        Optional<UserEntity> userEntitySrc = userDAO.findOneByUserID(userID);
+        UserEntity userEntitySrc = userMapper.findOneByUserID(userID);
         Map<Integer, String> list = new HashMap<>();
-        if (userEntitySrc.isPresent()) { // 判断用户是否存在
-            String sha256String = SHA256Util.getSHA256String(DigestUtils.md5DigestAsHex(password.getBytes()));
-            if (sha256String.equals(userEntitySrc.get().getUserPassword())) { // 校验密码是否一致
+        if (userEntitySrc != null) { // 判断用户是否存在
+            String sha256String = SHA256Util.getSHA256String(password);
+            if (sha256String.equals(userEntitySrc.getUserPassword())) { // 校验密码是否一致
 //            if (password.equals(userEntitySrc.get().getUserPassword())) { // 校验密码是否一致
-                String token = JwtUtils.genJsonWebToken(userEntitySrc.get()); // 得到 Token
+                String token = JwtUtils.genJsonWebToken(userEntitySrc); // 得到 Token
                 // 登录成功后 把token放到Redis Key 存 token ，value 存用户userType
-                redisUtils.set(token, userEntitySrc.get().getUserID(), JwtUtils.TOKEN_EXPIRE_TIME);
+                redisUtils.set(token, userEntitySrc.getUserID(), JwtUtils.TOKEN_EXPIRE_TIME);
                 //登陆成功后 把token和真实姓名返回
                 Cookie tokenCookie = new Cookie("csgs_token", token);
                 response.addCookie(tokenCookie);
@@ -46,7 +46,7 @@ public class UserSignServiceImpl implements UserSignService {
             }
             list.put(LoginState.STATE_FAIL, "0");
         } else {
-            list.put(LoginState.STATE_UNREGISTER, "1");
+            list.put(LoginState.STATE_UNExist, "1");
         }
         return list;
     }

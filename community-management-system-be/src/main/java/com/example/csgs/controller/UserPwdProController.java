@@ -1,18 +1,16 @@
 package com.example.csgs.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.csgs.dao.UserDao;
 import com.example.csgs.entity.UserEntity;
+import com.example.csgs.mapper.UserMapper;
 import com.example.csgs.service.UserPwdProService;
 import com.example.csgs.utils.ResultUtils;
 import com.example.csgs.utils.SHA256Util;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/pwdPro")
@@ -20,11 +18,11 @@ import java.util.Optional;
 public class UserPwdProController {
 
     final UserPwdProService userPwdProService;
-    final UserDao userDao;
+    final UserMapper userMapper;
 
-    public UserPwdProController(UserPwdProService userPwdProService, UserDao userDao) {
+    public UserPwdProController(UserPwdProService userPwdProService, UserMapper userMapper) {
         this.userPwdProService = userPwdProService;
-        this.userDao = userDao;
+        this.userMapper = userMapper;
     }
 
     /**
@@ -56,19 +54,18 @@ public class UserPwdProController {
      * 场景：在回答正确密保问题后，进入修改密码界面，提交修改后的密码
      */
     @PutMapping("/modifyPwd/{id}")
-    public Object updatePwd(@RequestBody String newPassword, @PathVariable String id) {
-        String decryptPassword = DigestUtils.md5DigestAsHex(newPassword.getBytes());
-        String sha256String = SHA256Util.getSHA256String(decryptPassword);
-
-        Optional<UserEntity> targetUser = userDao.findById(Long.parseLong(id));
-        if (targetUser.isPresent()) {
-            if (!targetUser.get().getUserPassword().equals(sha256String)) {
+    public Object updatePwd(@RequestBody JSONObject jsonObject, @PathVariable String id) {
+        String sha256String = SHA256Util.getSHA256String(jsonObject.getString("newPassword"));
+//        202cb962ac59075b964b07152d234b70
+        UserEntity targetUser = userMapper.findById(Long.parseLong(id));
+        if (targetUser != null) {
+            if (targetUser.getUserPassword().equals(sha256String)) {
                 return ResultUtils.error("密码修改失败,该密码与原始密码相同！！");
+            }else if (userMapper.modifyPassword(sha256String, Long.parseLong(id)) > 0) {
+                return ResultUtils.success("密码修改成功！");
             }
         }
-
-        userPwdProService.modifyPwd(sha256String, Long.parseLong(id));
-        return ResultUtils.success("密码修改成功！");
+        return ResultUtils.error("密码修改失败！");
     }
 
     /**

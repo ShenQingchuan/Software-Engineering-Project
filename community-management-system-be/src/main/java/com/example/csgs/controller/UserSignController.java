@@ -5,7 +5,6 @@ import com.example.csgs.bean.LoginState;
 import com.example.csgs.service.UserSignService;
 import com.example.csgs.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,8 +17,11 @@ import java.util.Set;
 @RequestMapping("/sign")
 @Slf4j
 public class UserSignController {
-    @Autowired
-    UserSignService userSignService;
+    final UserSignService userSignService;
+
+    public UserSignController(UserSignService userSignService) {
+        this.userSignService = userSignService;
+    }
 
     /**
      * 登录接口
@@ -42,7 +44,7 @@ public class UserSignController {
                     return ResultUtils.success(map, "登录成功"); // 登录成功
                 case LoginState.STATE_FAIL:
                     return ResultUtils.error("密码错误，请重新输入");
-                case LoginState.STATE_UNREGISTER:
+                case LoginState.STATE_UNExist:
                     return ResultUtils.error("该账号不存在");
             }
         }
@@ -57,6 +59,6 @@ public class UserSignController {
         if (userSignService.signOut(request)) {
             return ResultUtils.success("退出登录完成！");
         }
-        return ResultUtils.error("退出登录失败！");
+        return ResultUtils.success("退出登录失败！");
     }
 }

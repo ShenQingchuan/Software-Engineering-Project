@@ -2,22 +2,21 @@ package com.example.csgs.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.csgs.bean.PageQuery;
-
-import com.example.csgs.bean.User;
-import com.example.csgs.entity.UserEntity;
+import com.example.csgs.entity.User;
 import com.example.csgs.service.GridQueryService;
 import com.example.csgs.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/query")
 @Slf4j
 public class GridQueryController {
-    @Autowired
-    GridQueryService gridQueryService;
+    final GridQueryService gridQueryService;
+
+    public GridQueryController(GridQueryService gridQueryService) {
+        this.gridQueryService = gridQueryService;
+    }
 
     /**
      * 通过网格员id查询居民用户信息列表
@@ -44,18 +43,11 @@ public class GridQueryController {
         String userName = jsonObject.getString("userName");
         String community = jsonObject.getString("community");
 
-        Object result = gridQueryService.multipleConditions(userID, userName, community, Long.parseLong(id), page);
-        if (result instanceof User) {
-            User user = (User) result;
-            return ResultUtils.success(user, "居民用户信息获取成功");
-        } else if (result instanceof PageQuery) {
-            PageQuery<User> pageQuery = (PageQuery<User>) result;
-            return ResultUtils.success(pageQuery, "居民用户信息获取成功！");
-        } else if (result instanceof Integer) {
-            return ResultUtils.error("你没有该查询权限！");
-        } else {
-            return ResultUtils.error("居民用户信息获取失败！");
+        PageQuery<User> userPageQuery = gridQueryService.multipleConditions(userID, userName, community, Long.parseLong(id), page);
+        if (userPageQuery != null) {
+            return ResultUtils.success(userPageQuery, "居民用户信息获取成功");
         }
+        return ResultUtils.error("居民用户信息获取失败！");
     }
 
     /**

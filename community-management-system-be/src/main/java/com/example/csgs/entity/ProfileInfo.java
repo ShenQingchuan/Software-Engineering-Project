@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProfile implements Serializable{
+public class ProfileInfo implements Serializable{
     private Long id;
     private String userName;            //用户真实姓名
     private String telPhone;            //用户电话号码
@@ -22,6 +22,6 @@ public class UserProfile implements Serializable{
     private String occupation;          //职业
     private String email;               //用户邮箱
     private String politicCountenance;  //用户政治面貌
-    private CommunityInfoEntity communityId;  //用户所属网格
+    private OfGrid ofGrid;
 
 }

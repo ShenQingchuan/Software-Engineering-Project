@@ -5,7 +5,9 @@ import com.example.csgs.utils.JwtUtils;
 import com.example.csgs.utils.RedisUtils;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -17,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,12 +44,21 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
         this.redisUtils = redisUtils;
     }
 
+    //跨域配置
+    @Override
+    protected void addCorsMappings(CorsRegistry registry) {
+        super.addCorsMappings(registry);
+        registry.addMapping("/**")
+                .allowedHeaders("*")
+                .allowedMethods("POST","GET","DELETE","PUT")
+                .allowedOrigins("*");
+    }
+
     /**
      * 注入Bean 让 Spring 扫描 SecurityInterceptor
      * 不然过滤器不起作用
      */
-
-//    @Bean
+    @Bean
     public SecurityInterceptor getSecurityInterceptor() {
         return new SecurityInterceptor();
     }

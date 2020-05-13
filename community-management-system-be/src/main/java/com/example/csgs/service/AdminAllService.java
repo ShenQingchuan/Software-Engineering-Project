@@ -1,10 +1,10 @@
 package com.example.csgs.service;
 
-import com.alibaba.fastjson.JSONObject;
-import com.example.csgs.bean.*;
-import com.example.csgs.entity.UserProfile;
+import com.example.csgs.bean.AreaList;
+import com.example.csgs.bean.CreateGridInfo;
+import com.example.csgs.bean.GridPersonalInfo;
+import com.example.csgs.bean.PageQuery;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 public interface AdminAllService {
@@ -19,7 +19,5 @@ public interface AdminAllService {
 
     boolean deleteOneGrid(Long id);
 
-    boolean modifyGrid(AreaList areaList,Long id);
-
-    UserProfile getGridMaterial(String userID);
+    boolean modifyGrid(AreaList areaList, Long id);
 }
