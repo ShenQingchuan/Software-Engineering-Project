@@ -14,6 +14,7 @@ import addOfficer from "../views/subviews/addOfficer";
 import OfficerAddUser from "../views/subviews/OfficerAddUser";
 import statistics from "../views/subviews/statistics";
 import officerManage from "../views/subviews/officerManage";
+import Cookies from "js-cookie";
 
 Vue.use(VueRouter);
 
@@ -157,12 +158,17 @@ const router = new VueRouter({
 
 // 重写标签页标题：
 router.beforeEach((to, from, next) => {
+  console.log(`${from.path} -> ${to.path}`);
   if (to.meta.title) {
     document.title = to.meta.title;
   }
-  if (to.path !== "/sign" && window.localStorage.logined !== "1") {
-    next({ path: "/sign" });
-    Vue.prototype.$message.warning("检测到您还未登录,请登录后操作！");
+  if (to.path === "/sign" && Cookies.get("csgs_token") !== undefined) {
+    Vue.prototype.$message.warning("您已经登录啦！");
+  }
+  if (to.path !== "/sign" && Cookies.get("csgs_token") === undefined) {
+    next({
+      path: "/sign"
+    });
   }
   next();
 });

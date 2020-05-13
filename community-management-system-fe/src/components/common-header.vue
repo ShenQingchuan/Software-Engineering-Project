@@ -12,7 +12,9 @@
             修改密码
           </div>
         </el-dropdown-item>
-        <el-dropdown-item>退出登录</el-dropdown-item>
+        <el-dropdown-item>
+          <div @click="logout">退出登录</div>
+        </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
 
@@ -35,6 +37,8 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+
 export default {
   name: "common-header",
   data() {
@@ -42,6 +46,14 @@ export default {
       notificationCount: 5,
       username: "Tom"
     };
+  },
+  methods: {
+    logout() {
+      console.log("退出登录");
+      Cookies.remove("csgs_token");
+      this.$router.push("/sign");
+      this.$message.success("退出登录成功!");
+    }
   }
 };
 </script>

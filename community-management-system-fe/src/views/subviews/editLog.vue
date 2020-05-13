@@ -61,6 +61,12 @@ export default {
       this.$message.warning("暂未调试接口");
       // TODO: 连调测试上传日志  /grid/releaseAnnouncement/{id}
       // https://easydoc.xyz/p/43159074/MAhLR20e
+
+      if (this.editor.type === "新建") {
+        // ...
+      } else {
+        // ...
+      }
     }
   }
 };

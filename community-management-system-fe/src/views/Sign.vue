@@ -73,8 +73,15 @@
 </template>
 
 <script>
+import md5 from "md5";
+import Cookies from "js-cookie";
+import { mapState } from "vuex";
+
 export default {
   name: "page-sign",
+  computed: {
+    ...mapState(["userInfo"])
+  },
   data() {
     return {
       signInform: {
@@ -94,12 +101,38 @@ export default {
       }
       return true;
     },
-    signIn() {
-      // TODO: 登录功能
+    async signIn() {
       if (this.validateLogin()) {
-        this.$message.warning("暂未实现登录！");
-        this.$router.push("/dashboard");
+        try {
+          const res = await this.$axios.post("/sign/signIn", {
+            userID: this.signInform.userId,
+            password: md5(this.signInform.password)
+          });
+          const { data } = res;
+          if (data.resultCode === "0") {
+            this.$message.error(`登录失败！${data.msg}`);
+          } else {
+            Cookies.set("csgs_token", data.data.token);
+            const info = Object.assign({}, this.userInfo, {
+              sfzId: this.signInform.userId
+            });
+            console.log(info);
+            this.$store.commit("setUserInfo", {
+              info
+            });
+          }
+        } catch (err) {
+          this.$message.error(String(err));
+        }
+        await this.$router.push("/dashboard");
       }
+    }
+  },
+  mounted() {
+    if (Cookies.get("csgs_token") !== undefined) {
+      this.$router.push("/dashboard");
+    } else {
+      this.$message.warning("检测到您还未登录,请登录后操作！");
     }
   }
 };

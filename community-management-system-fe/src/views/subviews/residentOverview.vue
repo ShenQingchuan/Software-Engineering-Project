@@ -116,9 +116,19 @@
 
 <script>
 import announcementList from "../../components/announcementList";
+import { mapState } from "vuex";
 export default {
   name: "residentOverview",
+  async mounted() {
+    const res = await this.$axios.get(
+      `/profile/CommunityInfo/${this.userInfo.id}?page=1`
+    );
+    console.log(res);
+  },
   components: { announcementList },
+  computed: {
+    ...mapState(["userInfo"])
+  },
   data() {
     return {
       communityName: "蓝光金悦天骄",

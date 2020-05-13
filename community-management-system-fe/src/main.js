@@ -64,8 +64,17 @@ import axios from "axios";
 Vue.component("v-chart", ECharts);
 Vue.use(mavonEditor);
 
+import Cookies from "js-cookie";
+
 // 配置 axios
 axios.defaults.baseURL = "http://112.126.85.20:9090/";
+axios.interceptors.request.use(config => {
+  // 设置统一的请求头
+  if (Cookies.get("csgs_token")) {
+    config.headers.csgs_token = Cookies.get("csgs_token");
+  }
+  return config;
+});
 
 Vue.prototype.$axios = axios;
 
