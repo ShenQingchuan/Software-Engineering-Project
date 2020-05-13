@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.csgs.mapper.AnnouncementMapper">
+    <cache
+            eviction="FIFO"
+            flushInterval="60000"
+            size="512"
+            readOnly="true"/>
+
+    <select id="findAnnouncementByCreator" resultType="Announcement">
+        select a.id id, content, title_name, p.user_name creator, create_time
+        from announcement a,
+             user u,
+             user_profile p
+        where a.creator = #{id}
+          and u.id = a.creator
+          and p.id = u.profile_id
+    </select>
+
+    <insert id="addOneAnnouncement">
+        insert into announcement(content, title_name, creator, create_time)
+        VALUES (#{content}, #{titleName}, #{creator}, #{createTime})
+    </insert>
+
+    <delete id="deleteAnnouncement">
+        delete
+        from announcement
+        where id = #{id}
+    </delete>
+
+</mapper>

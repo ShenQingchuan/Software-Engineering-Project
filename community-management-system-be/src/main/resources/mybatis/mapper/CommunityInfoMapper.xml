@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.csgs.mapper.CommunityInfoMapper">
+    <cache
+            eviction="FIFO"
+            flushInterval="60000"
+            size="512"
+            readOnly="true"/>
+
+    <select id="findById" resultType="CommunityInfoEntity">
+        select *
+        from community_info
+        where id = #{id}
+    </select>
+
+    <select id="findByOfGrid" resultType="CommunityInfoEntity">
+        select *
+        from community_info c
+                 join district d
+                      on c.district_id = d.id and d.district_name = #{district}
+                          and c.community_name = #{community}
+    </select>
+
+    <select id="findCommunityNameById" resultType="string">
+        select community_name
+        from grid g,
+             community_info c
+        where g.id = c.grid_id
+          and g.id = #{id};
+    </select>
+
+    <select id="findCommunityByDistrictId" resultType="string">
+        select community_name
+        from community_info c,
+             district d
+        where c.district_id = d.id
+          and d.id = #{id}
+          and grid_id IS NULL;
+    </select>
+
+    <select id="findCommunityByDistrictName" resultType="CommunityInfoEntity">
+        select c.id id, community_name, num_houses, num_parking_spaces, num_residents, district_id, grid_id
+        from district d,
+             community_info c
+        where d.id = c.district_id
+          and district_name = #{district};
+    </select>
+
+    <select id="findCommunityNameByGridId" resultType="string">
+        select community_name
+        from grid g,
+             community_info c
+        where g.id = c.grid_id
+          and grid_id = #{gridId};
+    </select>
+
+    <update id="setGridIdIsNull">
+        update community_info
+        set grid_id = null
+        where id = #{id}
+    </update>
+
+    <update id="updateGridId">
+        update community_info
+        set grid_id = #{gridId}
+        where id = #{id}
+    </update>
+
+    <select id="findCommunityIdByGridId" resultType="long">
+        select c.id
+        from community_info c,
+             grid g
+        where c.grid_id = g.id
+          and g.id = #{id}
+    </select>
+
+    <select id="findByDistrictID" resultType="CommunityInfoEntity">
+        select c.id id, community_name, num_houses, num_parking_spaces, num_residents, grid_id, district_id
+        from community_info c,
+             district d
+        where c.district_id = d.id
+          and d.id = #{id};
+    </select>
+</mapper>

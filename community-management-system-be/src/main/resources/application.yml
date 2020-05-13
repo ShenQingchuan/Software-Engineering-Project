@@ -1,0 +1,59 @@
+server:
+  port: 9090
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database: mysql
+    show-sql: false
+    open-in-view: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+#      IP:112.126.85.20 localhost
+  datasource:
+    url: jdbc:mysql://112.126.85.20:5306/csgs?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    password: ENC(O40eD31qV+xE/o7QHDT+TQ==)
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+
+#      filter:stat,wall,log4j
+      max-pool-prepared-statement-per-connection-size: 20
+      use-global-data-source-stat: true
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  redis:
+    host: 112.126.85.20
+    port: 6379
+    timeout: 10000
+    database: 0
+jasypt:
+  encryptor:
+    password: love
+mybatis:
+  type-aliases-package: com.example.csgs.entity
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.log4j.Log4jImpl
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+

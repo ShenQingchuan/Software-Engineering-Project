@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.csgs.mapper.PwdProMapper">
+    <cache
+            eviction="FIFO"
+            flushInterval="60000"
+            size="512"
+            readOnly="true"/>
+
+    <select id="findPwdProQueById" parameterType="long" resultType="PwdProEntity">
+        select p.question_one, p.question_two
+        from user u,
+             pwd_protection p
+        where u.id = #{id}
+          and u.id = p.id
+    </select>
+
+    <select id="findPwdProAnsById" parameterType="long" resultType="PwdProEntity">
+        select p.answer_one, p.answer_two
+        from user u,
+             pwd_protection p
+        where u.id = #{id}
+          and u.id = p.id
+    </select>
+
+    <select id="findPwdProById" parameterType="long" resultType="PwdProEntity">
+        select p.id, p.answer_one, p.answer_two, p.question_one, p.question_two
+        from user u,
+             pwd_protection p
+        where u.id = #{id}
+          and u.id = p.id
+    </select>
+
+    <update id="updatePwdPro" parameterType="hashmap">
+        update pwd_protection
+        set question_one=#{questionOne},
+            question_two=#{questionTwo},
+            answer_one=#{answerOne},
+            answer_two=#{answerTwo}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete
+        from pwd_protection
+        where id = #{uid}
+    </delete>
+
+    <insert id="addPwdPro">
+        insert into pwd_protection(answer_one, answer_two, question_one, question_two)
+        values ('', '', '', '');
+    </insert>
+</mapper>

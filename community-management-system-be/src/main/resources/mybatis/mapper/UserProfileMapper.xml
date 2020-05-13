@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.csgs.mapper.ProfileMapper">
+    <cache
+            eviction="FIFO"
+            flushInterval="60000"
+            size="512"
+            readOnly="true"/>
+
+    <select id="findById" resultType="UserProfile">
+        select *
+        from user_profile p
+        where p.id = #{id}
+    </select>
+
+    <select id="findGridIdIsExist" resultType="_int">
+        select count(grid_id)
+        from user_profile p,
+             community_info c
+        where p.id = #{id}
+          and p.community_id = c.id
+    </select>
+
+    <select id="findResidentRPH" resultMap="ResidentRPH">
+        select community_name, num_houses, num_parking_spaces, num_residents
+        from user_profile p,
+             community_info c
+        where p.id = #{id}
+          and p.community_id = c.id
+    </select>
+    <resultMap id="ResidentRPH" type="CommunityInfoEntity">
+        <result property="communityName" column="community_name"/>
+        <result property="numHouses" column="num_houses"/>
+        <result property="numParkingSpaces" column="num_parking_spaces"/>
+        <result property="numResidents" column="num_residents"/>
+    </resultMap>
+
+    <select id="findUserIdByProfileId" resultMap="CommunityInfo">
+        select community_name, num_houses, num_parking_spaces, num_residents, u.id uid
+        from user_profile p,
+             community_info c,
+             grid g,
+             user u
+        where p.id = #{id}
+          and p.community_id = c.id
+          and c.grid_id = g.id
+          and g.user_id = u.id
+    </select>
+    <resultMap id="CommunityInfo" type="CommunityInfoEntity">
+        <result property="communityName" column="community_name"/>
+        <result property="numHouses" column="num_houses"/>
+        <result property="numParkingSpaces" column="num_parking_spaces"/>
+        <result property="numResidents" column="num_residents"/>
+        <association property="gridId" javaType="GridEntity">
+            <association property="userId" javaType="UserEntity">
+                <id property="id" column="uid"/>
+            </association>
+        </association>
+    </resultMap>
+
+    <update id="updateProfile" parameterType="hashmap">
+        update user_profile
+        <set>
+            <if test="avatarUrl != null">
+                avatar_url = #{avatarUrl},
+            </if>
+            <if test="bloodType != null">
+                blood_type = #{bloodType},
+            </if>
+            <if test="degreeOfEducation != null">
+                degree_of_education = #{degreeOfEducation},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="nation != null">
+                nation = #{nation},
+            </if>
+            <if test="occupation != null">
+                occupation = #{occupation},
+            </if>
+            <if test="politicCountenance != null">
+                politic_countenance = #{politicCountenance},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="stature != null">
+                stature = #{stature},
+            </if>
+            <if test="telPhone != null">
+                tel_phone = #{telPhone},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName},
+            </if>
+            <if test="communityId != null">
+                community_id = #{communityId}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="getMaterial" resultMap="UserProfileInfo2">
+        select p.id pid,
+               avatar_url,
+               blood_type,
+               degree_of_education,
+               email,
+               nation,
+               occupation,
+               politic_countenance,
+               sex,
+               stature,
+               tel_phone,
+               user_name,
+               community_name,
+               district_name
+        from user_profile p,
+             community_info c,
+             district d
+        where p.id = #{id}
+          and p.community_id = c.id
+          and d.id = c.district_id
+    </select>
+    <resultMap id="UserProfileInfo2" type="ProfileInfo">
+        <id property="id" column="pid"/>
+        <result property="avatarUrl" column="avatar_url"/>
+        <result property="bloodType" column="blood_type"/>
+        <result property="degreeOfEducation" column="degree_of_education"/>
+        <result property="email" column="email"/>
+        <result property="nation" column="nation"/>
+        <result property="occupation" column="occupation"/>
+        <result property="politicCountenance" column="politic_countenance"/>
+        <result property="sex" column="sex"/>
+        <result property="stature" column="stature"/>
+        <result property="telPhone" column="tel_phone"/>
+        <result property="userName" column="user_name"/>
+        <association property="ofGrid" javaType="OfGrid">
+            <result property="communityName" column="community_name"/>
+            <result property="districtName" column="district_name"/>
+        </association>
+    </resultMap>
+
+    <select id="findDistrictById" resultType="DistrictEntity">
+        select district_name, d.id id
+        from user_profile p,
+             community_info c,
+             district d
+        where p.id = #{id}
+          and p.community_id = c.id
+          and c.district_id = d.id
+    </select>
+
+    <select id="findProfileByDistrict" resultType="User">
+        select u.id id, userid, user_name, tel_phone, district_name, community_name
+        from district d,
+             community_info c,
+             user_profile p,
+             user u
+        where district_name = #{district}
+          and d.id = c.district_id
+          and c.id = p.community_id
+          and u.profile_id = p.id
+    </select>
+
+    <delete id="deleteById">
+        delete
+        from user_profile
+        where id = #{id}
+    </delete>
+
+    <insert id="addUserProfile">
+        insert into user_profile(community_id)
+        VALUES (#{communityId})
+    </insert>
+
+</mapper>
