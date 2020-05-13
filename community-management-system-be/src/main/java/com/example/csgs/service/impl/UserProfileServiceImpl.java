@@ -42,13 +42,15 @@ public class UserProfileServiceImpl implements UserProfileService {
     /**
      * 修改资料接口
      * 场景：用户进入资料编辑界面，对可修改的信息进行修改
+     *
+     * @param id 将要修改资料用户在user表中的id，同样也可以是userProfile表中的id（一对一的关系）
      */
     @Override
     public boolean updateMaterial(JSONObject jsonObject, Long id) {
         UserProfile userProfile = profileMapper.findById(id);
         if (userProfile != null) {
             HashMap<String, Object> map = new HashMap<>();
-            addDataToMap(map,jsonObject,id);
+            addDataToMap(map, jsonObject, id);
 
             if (jsonObject.containsKey("ofGrid")) {
                 JSONObject ofGridObject = jsonObject.getJSONObject("ofGrid");
@@ -68,7 +70,11 @@ public class UserProfileServiceImpl implements UserProfileService {
         return false;
     }
 
-    private void addDataToMap(HashMap<String, Object> map, JSONObject jsonObject,Long id) {
+    /**
+     * 从Json串中提取资料信息添加到Map中
+     *
+     */
+    private void addDataToMap(HashMap<String, Object> map, JSONObject jsonObject, Long id) {
         map.put("id", id);
         map.put("occupation", jsonObject.getString("occupation"));
         map.put("bloodType", jsonObject.getString("bloodType"));
@@ -86,25 +92,36 @@ public class UserProfileServiceImpl implements UserProfileService {
      * 场景：居民用户登陆，居民首页呈现自己所住小区名、房屋数量、停车位数量、居民数量
      * 和网格员向本小区发送的公告信息
      * 注意：当前id是居民用户的id
+     * @param id   在user表中某一居民的id
      */
     @Override
-    public CommunityInfo findCommunityInfo(Long id, String page) {
-        int pageSize = 10;
-        if (profileMapper.findGridIdIsExist(id) > 0) {
-            CommunityInfoEntity communityInfoEntity = profileMapper.findCommunityInfoProfileId(id);
-            String communityName = communityInfoEntity.getCommunityName();
-            Long numHouses = communityInfoEntity.getNumHouses();
-            Long numResidents = communityInfoEntity.getNumResidents();
-            Long numParkingSpaces = communityInfoEntity.getNumParkingSpaces();
-            Long userId = communityInfoEntity.getGridId().getUserId().getId();
+    public CommunityInfo findResidentRPH(Long id) {
+        CommunityInfoEntity communityInfoEntity = profileMapper.findResidentRPH(id);
+        String communityName = communityInfoEntity.getCommunityName();
+        Long numHouses = communityInfoEntity.getNumHouses();
+        Long numResidents = communityInfoEntity.getNumResidents();
+        Long numParkingSpaces = communityInfoEntity.getNumParkingSpaces();
+        return new CommunityInfo(communityName, numHouses, numResidents, numParkingSpaces);
+    }
 
+    /**
+     * 场景：在居民首页中获取自身所在网格区域的公告信息
+     * @param id 在user表中某一居民的id
+     * @param page 当前请求页数
+     */
+    @Override
+    public PageQuery<Announcement> getAnnouncementOfGrid(Long id,String page) {
+        int pageSize = 10;
+        if (profileMapper.findGridIdIsExist(id) > 0) {//判断该用户所在小区现在是否有网格员管理
+            CommunityInfoEntity communityInfoEntity = profileMapper.findUserIdByProfileId(id);
+            Long gid = communityInfoEntity.getGridId().getUserId().getId();
             Page<Announcement> pageAble = PageHelper.startPage(Integer.parseInt(page), pageSize);
             PageHelper.orderBy("id ASC");//按id升序排列
-            List<Announcement> announcementList = announcementMapper.findAnnouncementByCreator(userId);
-            PageQuery<Announcement> pageInfo = CalculatePageUtils.getPageInfo(Integer.parseInt(page),pageSize, pageAble, announcementList);
-
-            return new CommunityInfo(communityName,numHouses,numResidents,numParkingSpaces,pageInfo);
+            List<Announcement> announcementList = announcementMapper.findAnnouncementByCreator(gid);
+            return CalculatePageUtils.
+                    getPageInfo(Integer.parseInt(page), pageSize, pageAble, announcementList);
         }
         return null;
     }
+
 }

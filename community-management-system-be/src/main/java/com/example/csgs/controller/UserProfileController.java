@@ -2,12 +2,16 @@ package com.example.csgs.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.csgs.bean.CommunityInfo;
+import com.example.csgs.bean.PageQuery;
+import com.example.csgs.entity.Announcement;
 import com.example.csgs.entity.ProfileInfo;
 import com.example.csgs.mapper.ProfileMapper;
 import com.example.csgs.service.UserProfileService;
 import com.example.csgs.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/profile")
@@ -52,13 +56,24 @@ public class UserProfileController {
      * 和网格员向本小区发送的公告信息
      * 注意：当前id是居民用户的id
      */
-    @GetMapping("/CommunityInfo/{id}")
-    public Object queryCommunityInfo(@PathVariable String id,@RequestParam String page) {
-        CommunityInfo communityInfo = userProfileService.findCommunityInfo(Long.parseLong(id),page);
+    @GetMapping("/ResidentRPH/{id}")
+    public Object queryCommunityInfo(@PathVariable String id) {
+        CommunityInfo communityInfo = userProfileService.findResidentRPH(Long.parseLong(id));
         if (communityInfo != null) {
-            return ResultUtils.success(communityInfo, "用户所在社区信息获取成功！");
+            return ResultUtils.success(communityInfo, "用户所在社区RPH信息获取成功！");
         }
-        return ResultUtils.error("用户所在社区信息获取失败！");
+        return ResultUtils.error("用户所在社区RPH信息获取失败！");
     }
 
+    /**
+     * 居民用户获取自己所为网格中网格员所发布的公告信息
+     */
+    @GetMapping("/getAnnouncementOfGrid/{id}")
+    public Object getAnnouncementOfGrid(@PathVariable String id,@RequestParam String page){
+        PageQuery<Announcement> announcementList = userProfileService.getAnnouncementOfGrid(Long.parseLong(id),page);
+        if (announcementList != null) {
+            return ResultUtils.success(announcementList, "获取用户所在网格公告信息成功！");
+        }
+        return ResultUtils.error("该用户所在小区未发布任何公告！");
+    }
 }

@@ -40,6 +40,8 @@ public class AdminAllServiceImpl implements AdminAllService {
     /**
      * 场景：系统管理员新增网格员，首先要获取区域数据信息，然后在其中选择区域分配网格员
      * 重点：这里我们返回的区域是，还没有被划分的区域，如果某一区域已经被分配，那么不返回该区域信息
+     * @param userID 身份证号
+     * @return 某一区下的区域信息
      */
     @Override
     public AreaList getAreaList(String userID) {
@@ -57,6 +59,7 @@ public class AdminAllServiceImpl implements AdminAllService {
 
     /**
      * 场景：系统管理员在修改网格员管理区域之前，首先要获取所有未被分配管理的区域数据信息，然后在其中选择区域分配给网格员
+     * @return 所有区的AreaList信息
      */
     @Override
     public List<AreaList> getAllAreaList() {
@@ -74,6 +77,8 @@ public class AdminAllServiceImpl implements AdminAllService {
     /**
      * 新增网格员接口
      * 同时系统管理员为网格员分配管理区域
+     * @param createGridInfo 含有区域信息和用户身份证号
+     * @return 布尔类型
      */
     @Override
     public boolean addGrid(CreateGridInfo createGridInfo) {
@@ -98,6 +103,8 @@ public class AdminAllServiceImpl implements AdminAllService {
 
     /**
      * 返回当前系统管理员添加的网格员数据列表
+     * @param page 当前请求页数
+     * @return 当前页的GridPersonalInfo集合信息和分页信息
      */
     @Override
     public PageQuery<GridPersonalInfo> getAllGrids(String page) {
@@ -123,10 +130,10 @@ public class AdminAllServiceImpl implements AdminAllService {
     }
 
     /**
-     * 场景：在系统管理员获取到网格员数据信息列表之后，可以进行两项操作：
-     * 选择修改任意网格员管理区域、是否删除该网格员（user表中任然存在，只是grid表中不存在了）
-     * 功能：该接口进行管理区域修改
-     * id是gird表中的id
+     * 场景：在系统管理员获取到网格员数据信息列表之后，选择修改任意网格员管理区域
+     * @param areaList 区域信息
+     * @param id grid表中id
+     * @return 布尔类型
      */
     @Override
     public boolean modifyGrid(AreaList areaList, Long id) {
@@ -147,6 +154,8 @@ public class AdminAllServiceImpl implements AdminAllService {
 
     /**
      * 功能：删除某一网格员（user表中任然存在，只是grid表中不存在了）
+     * @param id grid表中的id
+     * @return 布尔类型
      */
     @Override
     public boolean deleteOneGrid(Long id) {
@@ -168,6 +177,8 @@ public class AdminAllServiceImpl implements AdminAllService {
      * 功能：分配网格员管理区域(使用在管理区域修改、新增网格员功能接口中)
      * 注意点：现实中可能出现这种情况，在不同区之间，可能存在着相同的小区名，
      * 所以我们在分配管理区域时，事先一定要确定district，然后再进行比对、分配。
+     * @param communityArray 某一区下的小区名（多个）
+     * @param gridEntity 网格员实例
      */
     public void modifyGridIdOfCommunity(String[] communityArray, GridEntity gridEntity) {
         List<String> list = Arrays.asList(communityArray);

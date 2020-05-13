@@ -24,6 +24,12 @@ public class UserPwdProServiceImpl implements UserPwdProService {
         this.pwdProMapper = pwdProMapper;
     }
 
+    /**
+     * 从List集合中提取密保放到HashMap中
+     * @param id 修改密保用户id
+     * @param map 装载容器
+     * @param list 传递密保数据集合
+     */
     private void addPwdPro(Long id,HashMap<String, Object> map, List<String> list) {
         map.put("id",id);
         map.put("questionOne",list.get(0));
@@ -35,6 +41,8 @@ public class UserPwdProServiceImpl implements UserPwdProService {
     /**
      * 此密保设置，同时也是密保修改接口，而且只要这个人存在，那么他所对应的PwdProEntity就存在，
      * 所以不存在插入一个密保的说法
+     * @param id user表中用户id
+     * @param list 密保信息集合
      */
     @Override
     public boolean setPwdPro(Long id, List<String> list) {
@@ -47,6 +55,10 @@ public class UserPwdProServiceImpl implements UserPwdProService {
         return false;
     }
 
+    /**
+     * 返回用户密保问题
+     * @param id user表中用户id
+     */
     @Override
     public List<String> returnPwdProQue(Long id) {
         List<String> list = new ArrayList<>();
@@ -59,6 +71,11 @@ public class UserPwdProServiceImpl implements UserPwdProService {
         return null;
     }
 
+    /**
+     * 判断用户填写的密保问题答案是否与数据库一致
+     * @param id user表中用户id
+     * @param list 用户密保问题答案集合
+     */
     @Override
     public boolean comparePwdProAns(Long id, List<String> list) {
         PwdProEntity pwdProAnsById = pwdProMapper.findPwdProAnsById(id);

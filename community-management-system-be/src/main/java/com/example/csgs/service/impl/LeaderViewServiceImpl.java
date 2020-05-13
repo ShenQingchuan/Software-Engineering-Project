@@ -59,6 +59,7 @@ public class LeaderViewServiceImpl implements LeaderViewService {
     /**
      * 场景：此时，领导查看的数据形式为：选择某一区对车位数、居民数、住宅数可视化数据查看
      * 所以从前端接受到内容主要是“在District表中区所对应的id号”
+     * @param id district表中的区的id
      */
     @Override
     public List<CommunityInfo> getCommunityRPHList(Long id) {

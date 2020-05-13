@@ -56,7 +56,7 @@ public class UserPwdProController {
     @PutMapping("/modifyPwd/{id}")
     public Object updatePwd(@RequestBody JSONObject jsonObject, @PathVariable String id) {
         String sha256String = SHA256Util.getSHA256String(jsonObject.getString("newPassword"));
-//        202cb962ac59075b964b07152d234b70
+
         UserEntity targetUser = userMapper.findById(Long.parseLong(id));
         if (targetUser != null) {
             if (targetUser.getUserPassword().equals(sha256String)) {

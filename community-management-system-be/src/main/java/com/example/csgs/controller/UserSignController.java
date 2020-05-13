@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.csgs.bean.LoginState;
 import com.example.csgs.service.UserSignService;
 import com.example.csgs.utils.ResultUtils;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/sign")
-@Slf4j
+@Log4j
 public class UserSignController {
     final UserSignService userSignService;
 
@@ -43,8 +44,10 @@ public class UserSignController {
                     map.put("token", integerStringMap.get(integer));
                     return ResultUtils.success(map, "登录成功"); // 登录成功
                 case LoginState.STATE_FAIL:
+                    log.info("用户 <" + userID + "> 密码错误!");
                     return ResultUtils.error("密码错误，请重新输入");
                 case LoginState.STATE_UNExist:
+                    log.info("账号 <" + userID + "> 不存在!");
                     return ResultUtils.error("该账号不存在");
             }
         }
