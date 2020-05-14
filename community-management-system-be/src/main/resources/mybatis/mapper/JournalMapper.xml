@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.csgs.mapper.JournalMapper">
+    <cache
+            eviction="FIFO"
+            flushInterval="60000"
+            size="512"
+            readOnly="true"/>
+
+    <insert id="addOneJournal">
+        insert into journal(content, title_name, creator_id, create_time, type_id)
+        VALUES (#{content}, #{titleName}, #{creator}, #{createTime}, #{typeId})
+    </insert>
+
+    <select id="findJournalByCreator" resultType="Journal">
+        select j.id id, title_name, p.user_name creator, create_time, type_name
+        from journal j,
+             user u,
+             user_profile p,
+             journal_type t
+        where j.creator_id = #{id}
+          and u.id = j.creator_id
+          and p.id = u.profile_id
+          and t.id = j.type_id
+    </select>
+
+    <select id="findContentById" resultType="string">
+        select content
+        from journal
+        where id = #{id};
+    </select>
+
+    <delete id="deleteJournal">
+        delete
+        from journal
+        where id = #{id}
+    </delete>
+</mapper>

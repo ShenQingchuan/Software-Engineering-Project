@@ -70,7 +70,7 @@ public class RedisUtils {
      * @return
      */
     public Long getExpire(String key) {
-        return redisUtils.redisTemplate.getExpire(key, TimeUnit.SECONDS);
+        return redisUtils.redisTemplate.getExpire(key, TimeUnit.DAYS);
     }
 
     /**
@@ -91,6 +91,6 @@ public class RedisUtils {
      * @return
      */
     public Boolean expire(String key, long time) {
-        return redisUtils.redisTemplate.expire(key, time, TimeUnit.SECONDS);
+        return redisUtils.redisTemplate.expire(key, time, TimeUnit.DAYS);
     }
 }

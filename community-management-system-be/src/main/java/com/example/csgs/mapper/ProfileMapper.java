@@ -17,7 +17,9 @@ public interface ProfileMapper{
 
     int findGridIdIsExist(Long id);
 
-    CommunityInfoEntity findCommunityInfoProfileId(Long id);
+    CommunityInfoEntity findResidentRPH(Long id);
+
+    CommunityInfoEntity findUserIdByProfileId(Long id);
 
     DistrictEntity findDistrictById(Long id);
 

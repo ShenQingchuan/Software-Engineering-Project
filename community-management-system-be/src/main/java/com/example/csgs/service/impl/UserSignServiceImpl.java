@@ -7,6 +7,8 @@ import com.example.csgs.service.UserSignService;
 import com.example.csgs.utils.JwtUtils;
 import com.example.csgs.utils.RedisUtils;
 import com.example.csgs.utils.SHA256Util;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -27,17 +29,23 @@ public class UserSignServiceImpl implements UserSignService {
         this.redisUtils = redisUtils;
     }
 
+    /**
+     * 用户登陆
+     *
+     * @param userID   用户身份证号
+     * @param password 登陆密码（已经经过前端加密）
+     * @param response 携带返回后端生成的Cookie
+     */
     @Override
     public Map<Integer, String> sign(String userID, String password, HttpServletResponse response) {
-        UserEntity userEntitySrc = userMapper.findOneByUserID(userID);
+        UserEntity userEntity = userMapper.findOneByUserID(userID);
         Map<Integer, String> list = new HashMap<>();
-        if (userEntitySrc != null) { // 判断用户是否存在
+        if (userEntity != null) { // 判断用户是否存在
             String sha256String = SHA256Util.getSHA256String(password);
-            if (sha256String.equals(userEntitySrc.getUserPassword())) { // 校验密码是否一致
-//            if (password.equals(userEntitySrc.get().getUserPassword())) { // 校验密码是否一致
-                String token = JwtUtils.genJsonWebToken(userEntitySrc); // 得到 Token
+            if (sha256String.equals(userEntity.getUserPassword())) { // 校验密码是否一致
+                String token = JwtUtils.genJsonWebToken(userEntity); // 得到 Token
                 // 登录成功后 把token放到Redis Key 存 token ，value 存用户userType
-                redisUtils.set(token, userEntitySrc.getUserID(), JwtUtils.TOKEN_EXPIRE_TIME);
+                redisUtils.set(token, userEntity.getUserID(), JwtUtils.TOKEN_EXPIRE_TIME);
                 //登陆成功后 把token和真实姓名返回
                 Cookie tokenCookie = new Cookie("csgs_token", token);
                 response.addCookie(tokenCookie);
@@ -51,6 +59,10 @@ public class UserSignServiceImpl implements UserSignService {
         return list;
     }
 
+    /**
+     * 退出登陆
+     * @param request 携带Cookie至后端，清除redis缓存的token
+     */
     @Override
     public boolean signOut(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();

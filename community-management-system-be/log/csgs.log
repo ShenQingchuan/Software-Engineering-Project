@@ -1,0 +1,10 @@
+[DEBUG][2020/05/13][org.apache.ibatis.logging.LogFactory]Logging initialized using 'class org.apache.ibatis.logging.log4j.Log4jImpl' adapter.
+[DEBUG][2020/05/13][org.mybatis.spring.SqlSessionFactoryBean]Parsed mapper file: 'file [F:\软件工程课程设计\git仓库\community-management-system-be\target\classes\mybatis\mapper\AnnouncementMapper.xml]'
+[DEBUG][2020/05/13][org.mybatis.spring.SqlSessionFactoryBean]Parsed mapper file: 'file [F:\软件工程课程设计\git仓库\community-management-system-be\target\classes\mybatis\mapper\CommunityInfoMapper.xml]'
+[DEBUG][2020/05/13][org.mybatis.spring.SqlSessionFactoryBean]Parsed mapper file: 'file [F:\软件工程课程设计\git仓库\community-management-system-be\target\classes\mybatis\mapper\DistrictMapper.xml]'
+[DEBUG][2020/05/13][org.mybatis.spring.SqlSessionFactoryBean]Parsed mapper file: 'file [F:\软件工程课程设计\git仓库\community-management-system-be\target\classes\mybatis\mapper\GridMapper.xml]'
+[DEBUG][2020/05/13][org.mybatis.spring.SqlSessionFactoryBean]Parsed mapper file: 'file [F:\软件工程课程设计\git仓库\community-management-system-be\target\classes\mybatis\mapper\JournalMapper.xml]'
+[DEBUG][2020/05/13][org.mybatis.spring.SqlSessionFactoryBean]Parsed mapper file: 'file [F:\软件工程课程设计\git仓库\community-management-system-be\target\classes\mybatis\mapper\JournalTypeMapper.xml]'
+[DEBUG][2020/05/13][org.mybatis.spring.SqlSessionFactoryBean]Parsed mapper file: 'file [F:\软件工程课程设计\git仓库\community-management-system-be\target\classes\mybatis\mapper\PwdProMapper.xml]'
+[DEBUG][2020/05/13][org.mybatis.spring.SqlSessionFactoryBean]Parsed mapper file: 'file [F:\软件工程课程设计\git仓库\community-management-system-be\target\classes\mybatis\mapper\UserMapper.xml]'
+[DEBUG][2020/05/13][org.mybatis.spring.SqlSessionFactoryBean]Parsed mapper file: 'file [F:\软件工程课程设计\git仓库\community-management-system-be\target\classes\mybatis\mapper\UserProfileMapper.xml]'

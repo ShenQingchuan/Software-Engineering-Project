@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.csgs.mapper.JournalTypeMapper">
+    <cache
+            eviction="FIFO"
+            flushInterval="60000"
+            size="512"
+            readOnly="true"/>
+
+    <select id="findByTypeName" resultType="long">
+        select id
+        from journal_type
+        where type_name = #{typeName}
+    </select>
+
+    <select id="findAllTypeName" resultType="string">
+        select type_name
+        from journal_type;
+    </select>
+</mapper>

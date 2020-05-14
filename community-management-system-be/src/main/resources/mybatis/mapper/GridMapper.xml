@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.csgs.mapper.GridMapper">
+    <cache
+            eviction="FIFO"
+            flushInterval="60000"
+            size="512"
+            readOnly="true"/>
+
+    <select id="findDistrictNameByUId" resultType="GridEntity">
+        select *
+        from grid
+        where user_id = #{id};
+    </select>
+
+    <select id="findByDistrictNameId" resultType="GridEntity">
+        select g.id id, district_name, user_id
+        from grid g,
+             user u
+        where district_name = #{district}
+          and user_id = u.id
+          and user_id = #{id};
+    </select>
+
+    <insert id="addOneGrid">
+        insert into grid(district_name, user_id)
+        values (#{districtName}, #{id})
+    </insert>
+
+    <select id="findAll" resultMap="GridEntityInfo">
+        select g.id id, district_name, u.id uid
+        from grid g,
+             user u
+        where g.user_id = u.id
+    </select>
+    <resultMap id="GridEntityInfo" type="GridEntity">
+        <id property="id" column="id"/>
+        <result property="districtName" column="district_name"/>
+        <association property="userId" javaType="UserEntity">
+            <id property="id" column="uid"/>
+            <result property="userID" column="userid"/>
+        </association>
+    </resultMap>
+
+    <select id="findById" resultMap="GridEntityInfo">
+        select g.id id, district_name, u.id uid, userid
+        from grid g,
+             user u
+        where g.user_id = u.id
+          and g.id = #{id}
+    </select>
+
+    <delete id="deleteGrid">
+        delete
+        from grid
+        where id = #{id}
+    </delete>
+
+</mapper>

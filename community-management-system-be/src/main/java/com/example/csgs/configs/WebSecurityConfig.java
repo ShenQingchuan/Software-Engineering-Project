@@ -4,9 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.csgs.utils.JwtUtils;
 import com.example.csgs.utils.RedisUtils;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -50,8 +54,23 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
         super.addCorsMappings(registry);
         registry.addMapping("/**")
                 .allowedHeaders("*")
-                .allowedMethods("POST","GET","DELETE","PUT")
-                .allowedOrigins("*");
+                .allowedMethods("POST", "GET", "DELETE", "PUT")
+                .allowedOrigins("*")
+                .allowCredentials(true) //带上cookie信息
+                .maxAge(3600);
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin("*");
+        config.addAllowedMethod("*");
+        config.addAllowedHeader("*");
+        config.setAllowCredentials(true);
+        config.addExposedHeader("csgs_token");
+        UrlBasedCorsConfigurationSource configSource = new UrlBasedCorsConfigurationSource();
+        configSource.registerCorsConfiguration("/**", config);
+        return new CorsFilter(configSource);
     }
 
     /**
@@ -66,6 +85,7 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
     /**
      * 配置自定义拦截拦截器
      */
+    @Override
     public void addInterceptors(InterceptorRegistry registry) {
         InterceptorRegistration addInterceptor = registry.addInterceptor(getSecurityInterceptor());
 
@@ -100,15 +120,23 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
                 for (Cookie c : cookies) {
                     if (c.getName().equals("csgs_token")) { //找到 Token Cookie
                         if (redisUtils.hasKey(c.getValue())) {
-                            redisUtils.expire(c.getValue(), JwtUtils.TOKEN_EXPIRE_TIME); //如果 Token 存在 重新刷新过期时间 并放行
-                            return true;
+                            Claims claims = JwtUtils.parserToken(c.getValue());//解析token
+                            if (claims != null) {
+                                String userTypes = String.valueOf(claims.get("userType"));
+                                String ids = String.valueOf(claims.get("id"));
+                                /**
+                                 * 根据获取的userTypes和id、接口路径名来做是否允许改用户访问这个接口
+                                 */
+                                redisUtils.expire(c.getValue(), JwtUtils.TOKEN_EXPIRE_TIME); //如果 Token 存在重新刷新过期时间并放行
+                                return true;
+                            }
                         } else {
                             interceptorRes.put("msg", "token 不正确!");
                             ow.write(interceptorRes.toJSONString());//要返回的信息
                             ow.flush();//冲刷出流，将所有缓冲的数据发送到目的地
                             ow.close();//关闭流
-                            return false;
                         }
+                        return false;
                     }
                 }
             }
@@ -121,5 +149,4 @@ public class WebSecurityConfig extends WebMvcConfigurationSupport {
             return false;//拦截
         }
     }
-
 }
