@@ -2,7 +2,7 @@
   <div class="flex-box flex-col jy-center subpage-resident-overview">
     <!-- 小区名称 -->
     <div class="community-title">
-      所属小区：<span>{{ communityName }}</span>
+      所属小区：<span>{{ community }}</span>
     </div>
     <!-- 数据纵览卡片组 -->
     <div class="flex-box jy-center overview-card-group">
@@ -44,7 +44,7 @@
           </svg>
           <br />
           本小区住宅总数：
-          <span class="population-count">{{ houseCount }}</span>
+          <span class="population-count">{{ numHouses }}</span>
         </el-card>
       </div>
       <div class="flex-box overview-card">
@@ -75,7 +75,7 @@
           </svg>
           <br />
           本小区居民数量：
-          <span class="population-count">{{ residentCount }}</span>
+          <span class="population-count">{{ numParkingSpaces }}</span>
         </el-card>
       </div>
       <div class="flex-box overview-card">
@@ -105,7 +105,7 @@
             ></path>
           </svg>
           <br />
-          本小区停车位数量：<span class="car-count">{{ parkingCount }}</span>
+          本小区停车位数量：<span class="car-count">{{ numResidents }}</span>
         </el-card>
       </div>
     </div>
@@ -121,9 +121,12 @@ export default {
   name: "residentOverview",
   async mounted() {
     const res = await this.$axios.get(
-      `/profile/CommunityInfo/${this.userInfo.id}?page=1`
+      `/resident/ResidentRPH/${this.userInfo.id}`
     );
     console.log(res);
+    if (res.data.resultCode !== "200") {
+      this.$message.error(String(res.data.msg));
+    }
   },
   components: { announcementList },
   computed: {
@@ -131,10 +134,10 @@ export default {
   },
   data() {
     return {
-      communityName: "蓝光金悦天骄",
-      houseCount: 1630,
-      residentCount: 3133,
-      parkingCount: 160
+      community: "春风十里",
+      numHouses: 501,
+      numParkingSpaces: 401,
+      numResidents: 1001
     };
   }
 };

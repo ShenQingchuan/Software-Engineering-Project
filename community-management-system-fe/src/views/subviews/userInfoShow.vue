@@ -6,7 +6,7 @@
     <!--主要居住信息-->
     <div class="flex-box as-start basic-info">
       <div class="flex-box flex-col avatar-box">
-        <el-upload class="upload-demo" action="">
+        <el-upload :http-request="uploadAvatar" class="upload-demo" action="">
           <img
             v-if="userInfo.avatarUrl"
             :src="userInfo.avatarUrl"
@@ -82,12 +82,19 @@
     </div>
 
     <!--动作按钮-->
-    <div class="info-actions">
+    <div class="info-actions flex-box">
       <el-button
+        class="lr-gap"
         type="warning"
         plain
         @click="() => $router.push('/dashboard/userInfoUpdate')"
         >修改资料
+      </el-button>
+      <el-button
+        type="primary"
+        plain
+        @click="() => $router.push('/dashboard/setPasswordProtect')"
+        >设置密保
       </el-button>
     </div>
   </div>
@@ -96,6 +103,7 @@
 <script>
 // import userInfoMock from "../../mock/userInfoShow";
 import { mapState } from "vuex";
+import { aliStore } from "../../utils/alioss";
 
 export default {
   name: "userInfoShow",
@@ -106,6 +114,40 @@ export default {
     ...mapState(["userInfo"]),
     ofGrid() {
       return `${this.userInfo.ofGrid.districtName} / ${this.userInfo.ofGrid.communityName}`;
+    }
+  },
+  methods: {
+    async uploadAvatar({ file }) {
+      // <2> 获取文件名后缀（.jpg）
+      let suffix = file.name.substr(file.name.lastIndexOf("."));
+
+      // <3> 拼接一个随机名（157302468994737672324903.jpg）
+      const random = file.uid + (Math.random() * 1000000).toFixed(0) + suffix;
+
+      // <4> 拼接处存到阿里oss的完整文件名
+      let fileName = "csgs/avatar/" + random;
+
+      // <5> 存入到阿里云oss上
+      // eslint-disable-next-line no-unused-vars
+      try {
+        const { res, url } = await aliStore.put(fileName, file);
+        if (res.status === 200) this.$message.success("上传成功");
+        const newInfo = Object.assign({}, this.userInfo, { avatarUrl: url });
+        this.$store.commit("setUserInfo", { info: newInfo });
+
+        // 提交用户资料修改
+        const modifiedRes = await this.$axios.post(
+          `/profile/modify/${this.userInfo.id}`,
+          {
+            avatarUrl: url
+          }
+        );
+        if (modifiedRes.data.resultCode === "200") {
+          if (res.status === 200) this.$message.success("修改资料成功");
+        }
+      } catch (err) {
+        this.$message.error(String(err));
+      }
     }
   }
 };

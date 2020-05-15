@@ -54,14 +54,18 @@ export default {
       console.log("> Dashboard View Mounted. ");
       const jwtData = jwt.decode(Cookies.get("csgs_token"));
       if (jwtData) {
+        console.log(jwtData);
         const { id, userType } = jwtData;
         this.$store.commit("setUserInfo", {
           info: Object.assign({}, this.userInfo, {
             id,
-            userType
+            userType,
+            sfzId: localStorage.getItem("csgs_sfzId")
           })
         });
         const res = await this.$axios.get(`/profile/getProfile/${id}`);
+        // const res = await this.$axios.get(`/admin/getAllAreaList`);
+        console.log(res);
         if (res.data.resultCode === "200") {
           // 成功获取到用户资料
           const fullInfo = Object.assign({}, this.userInfo, res.data.data);
@@ -79,7 +83,7 @@ export default {
         }
       }
     } catch (err) {
-      console.err(err);
+      console.error(err);
       this.$message.error(String(err));
     }
   }

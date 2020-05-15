@@ -8,47 +8,45 @@
     >
       <i class="el-icon-arrow-left"></i>
     </div>
-    <el-form :model="updateForm" class="user-info-update-form">
+    <el-form
+      v-if="updateForm.id"
+      :model="updateForm"
+      class="user-info-update-form"
+    >
       <el-form-item class="form-item" label-width="100px">
+        <template v-slot:label><span class="form-label">姓名：</span></template>
+        <el-input
+          class="form-inputer"
+          v-model="updateForm.userName"
+          placeholder="请输入姓名"
+        ></el-input>
+      </el-form-item>
+      <el-form-item
+        v-if="showGridInputer"
+        class="form-item"
+        label-width="100px"
+      >
         <template v-slot:label
           ><span class="form-label">所属网格：</span></template
         >
-        <el-select
-          class="form-selector"
-          v-model="updateForm.grid.area"
-          placeholder="请选择小区"
-        >
-          <el-option
-            v-for="item in gridSelector"
-            :key="item.area"
-            :label="item.area"
-            :value="item.area"
-          >
-          </el-option>
-        </el-select>
-        <el-select
-          class="form-selector"
-          v-model="updateForm.grid.community"
-          placeholder="请选择小区"
-        >
-          <el-option
-            v-for="item in getGridCommunity(updateForm.grid.area)"
-            :key="item"
-            :label="item"
-            :value="item"
-          >
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item class="form-item" label-width="100px">
-        <template v-slot:label><span class="form-label">姓名：</span></template>
-        <el-input class="form-inputer" v-model="updateForm.userName"></el-input>
+        <div class="flex-box">
+          <el-input
+            class="form-inputer"
+            v-model="updateForm.ofGrid.districtName"
+            placeholder="请输入小区名称"
+          ></el-input>
+          <el-input
+            class="form-inputer lr-gap"
+            v-model="updateForm.ofGrid.communityName"
+            placeholder="请输入片区名称"
+          ></el-input>
+        </div>
       </el-form-item>
       <el-form-item class="form-item" label-width="100px">
         <template v-slot:label
           ><span class="form-label">身份证号：</span></template
         >
-        <el-input class="form-inputer" v-model="updateForm.userId"></el-input>
+        <el-input class="form-inputer" v-model="updateForm.sfzId"></el-input>
       </el-form-item>
       <el-form-item class="form-item" label-width="100px">
         <template v-slot:label><span class="form-label">性别：</span></template>
@@ -57,15 +55,9 @@
           v-model="updateForm.sex"
           placeholder="请选择性别"
         >
-          <el-option label="男" value="1"> </el-option>
-          <el-option label="女" value="0"> </el-option>
+          <el-option label="男" :value="1"> </el-option>
+          <el-option label="女" :value="0"> </el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item class="form-item" label-width="100px">
-        <template v-slot:label
-          ><span class="form-label">曾用名：</span></template
-        >
-        <el-input class="form-inputer" v-model="updateForm.usedName"></el-input>
       </el-form-item>
       <el-form-item class="form-item" label-width="100px">
         <template v-slot:label><span class="form-label">民族：</span></template>
@@ -92,10 +84,10 @@
           @change="turnToRareBloodType"
           v-show="!showRareBloodTypeInputer"
         >
-          <el-option label="A型" value="A"> </el-option>
-          <el-option label="B型" value="B"> </el-option>
-          <el-option label="O型" value="O"> </el-option>
-          <el-option label="AB型" value="AB"> </el-option>
+          <el-option value="A"> </el-option>
+          <el-option value="B"> </el-option>
+          <el-option value="O"> </el-option>
+          <el-option value="AB"> </el-option>
           <el-option label="其他稀有血型" value="其他稀有血型"> </el-option>
         </el-select>
         <el-input
@@ -111,7 +103,7 @@
         >
         <el-select
           class="form-selector"
-          v-model="updateForm.politics"
+          v-model="updateForm.politicCountenance"
           placeholder="请选择政治面貌"
         >
           <el-option label="中共党员" value="中共党员"> </el-option>
@@ -130,15 +122,23 @@
       </el-form-item>
       <el-form-item class="form-item" label-width="100px">
         <template v-slot:label
+          ><span class="form-label">文化程度：</span></template
+        >
+        <el-input
+          class="form-inputer"
+          v-model="updateForm.degreeOfEducation"
+        ></el-input>
+      </el-form-item>
+      <el-form-item class="form-item" label-width="100px">
+        <template v-slot:label
           ><span class="form-label">联系手机：</span></template
         >
-        <el-input class="form-inputer" v-model="updateForm.phone"></el-input>
+        <el-input class="form-inputer" v-model="updateForm.telPhone"></el-input>
       </el-form-item>
       <el-form-item class="form-item" label-width="100px">
         <template v-slot:label><span class="form-label">邮箱：</span></template>
         <el-input class="form-inputer" v-model="updateForm.email"></el-input>
       </el-form-item>
-      s
     </el-form>
 
     <!--动作按钮-->
@@ -152,8 +152,10 @@
 
 <script>
 import ChinaNations from "@/assets/data/china-nations";
-import userInfoMock from "../../mock/userInfoShow";
-import gridSelectorMock from "../../mock/gridSelector";
+import { mapState } from "vuex";
+import resErrorHandler from "../../utils/resErrorHandler";
+// import userInfoMock from "../../mock/userInfoShow";
+// import gridSelectorMock from "../../mock/gridSelector";
 
 export default {
   name: "userInfoUpdate",
@@ -162,21 +164,60 @@ export default {
       ChinaNations,
       showRareBloodTypeInputer: false,
 
-      gridSelector: gridSelectorMock,
-      updateForm: userInfoMock
+      updateForm: {},
+      showGridInputer: false
     };
   },
+  computed: {
+    ...mapState(["userInfo"])
+  },
+  mounted() {
+    this.updateForm = this.userInfo;
+    this.showGridInputer = true;
+  },
   methods: {
-    getGridCommunity(area) {
-      if (area === "") return [];
-      return this.gridSelector.find(e => e.area === area).community;
-    },
     turnToRareBloodType(val) {
       this.showRareBloodTypeInputer = val === "其他稀有血型";
       this.updateForm.bloodType = "";
     },
-    submitUpdateInfo() {
-      this.$message.warning("暂未开始联调..."); // TODO: 修改资料 联调
+    async submitUpdateInfo() {
+      const {
+        userName,
+        avatarUrl,
+        sex,
+        telPhone,
+        ofGrid,
+        nation,
+        degreeOfEducation,
+        bloodType,
+        occupation,
+        email,
+        politicCountenance
+      } = this.updateForm;
+      try {
+        const res = await this.$axios.post(
+          `/profile/modify/${this.userInfo.id}`,
+          {
+            userName,
+            avatarUrl,
+            sex,
+            telPhone,
+            ofGrid,
+            nation,
+            degreeOfEducation,
+            bloodType,
+            occupation,
+            email,
+            politicCountenance
+          }
+        );
+        resErrorHandler(this, res);
+        if (res.data.resultCode === "200") {
+          this.$message.success("修改资料成功");
+        }
+      } catch (err) {
+        this.$message.error(String(err));
+      }
     }
   }
 };

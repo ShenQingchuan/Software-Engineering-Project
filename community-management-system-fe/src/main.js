@@ -68,6 +68,7 @@ import Cookies from "js-cookie";
 
 // 配置 axios
 axios.defaults.baseURL = "http://112.126.85.20:9090/";
+axios.defaults.withCredentials = false;
 axios.interceptors.request.use(config => {
   // 设置统一的请求头
   if (Cookies.get("csgs_token")) {

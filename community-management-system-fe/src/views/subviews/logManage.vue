@@ -44,6 +44,8 @@
 
 <script>
 import logMock from "@/mock/logs";
+import resErrorHandler from "@/utils/resErrorHandler";
+
 import { mapState } from "vuex";
 
 export default {
@@ -53,17 +55,21 @@ export default {
   },
   async mounted() {
     try {
+      this.loadingTable = false;
       const res = await this.$axios.get(
         `/grid/getJournalList/${this.userInfo.id}?page=1`
       );
+      resErrorHandler(this, res);
       this.logData = res.data.data.dataList;
       this.totalSize = res.data.data.totalSize;
+      this.loadingTable = true;
     } catch (err) {
       this.$message.error(String(err));
     }
   },
   data() {
     return {
+      loadingTable: false,
       logOptions: [
         {
           value: "survey",

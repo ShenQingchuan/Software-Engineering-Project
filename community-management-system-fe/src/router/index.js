@@ -15,6 +15,7 @@ import OfficerAddUser from "../views/subviews/OfficerAddUser";
 import statistics from "../views/subviews/statistics";
 import officerManage from "../views/subviews/officerManage";
 import Cookies from "js-cookie";
+import setPasswordProtect from "../views/subviews/setPasswordProtect";
 
 Vue.use(VueRouter);
 
@@ -137,6 +138,14 @@ const routes = [
         component: statistics,
         meta: {
           title: buildTitle("数据视图")
+        }
+      },
+      {
+        path: "/dashboard/setPasswordProtect",
+        name: "/dashboard/setPasswordProtect",
+        component: setPasswordProtect,
+        meta: {
+          title: buildTitle("设置密保")
         }
       }
     ]

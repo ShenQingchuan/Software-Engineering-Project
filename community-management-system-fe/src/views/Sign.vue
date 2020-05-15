@@ -113,10 +113,11 @@ export default {
             this.$message.error(`登录失败！${data.msg}`);
           } else {
             Cookies.set("csgs_token", data.data.token);
-            const info = Object.assign({}, this.userInfo, {
+            const info = {
+              ...this.userInfo,
               sfzId: this.signInform.userId
-            });
-            console.log(info);
+            };
+            localStorage.setItem("csgs_sfzId", this.signInform.userId);
             this.$store.commit("setUserInfo", {
               info
             });
