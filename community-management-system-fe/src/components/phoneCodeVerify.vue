@@ -35,13 +35,7 @@
 const phoneRegex = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
 const codeRegex = /(\d){6}/;
 
-import AV from "leancloud-storage";
-
-AV.init({
-  appId: "2ljhc8aJt8UgjvbjHc2u8qrL-gzGzoHsz",
-  appKey: "nGckV9BcpYFTReNi4BPBemAQ",
-  serverURL: "https://2ljhc8aj.lc-cn-n1-shared.com"
-});
+import AV from "@/utils/LeanCloudMessage";
 
 export default {
   name: "phoneCodeVerify",
@@ -90,7 +84,6 @@ export default {
           this.$message.error("表单出错！");
           return false;
         } else {
-          // 模拟 异步请求
           try {
             const res = await AV.Cloud.verifySmsCode(
               this.form.code,
