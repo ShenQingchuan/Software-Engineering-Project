@@ -15,22 +15,13 @@
     </div>
     <div class="flex-box log-table-container">
       <el-table class="log-table" :data="logData">
-        <el-table-column fixed label="日志标题" prop="content">
+        <el-table-column fixed label="日志标题" prop="titleName">
           <template slot-scope="scope">
-            <b>{{ scope.row.title }}</b>
+            <b>{{ scope.row.titleName }}</b>
           </template>
         </el-table-column>
-        <el-table-column fixed label="日志类型" prop="creatorName">
-        </el-table-column>
-        <el-table-column fixed label="日志创建时间" prop="createTime">
-          <template slot-scope="scope">
-            {{
-              $moment(new Date(scope.row.createTime * 1000))
-                .locale("zh-cn")
-                .format("lll")
-            }}
-          </template>
-        </el-table-column>
+        <el-table-column fixed label="日志类型" prop="typeName" />
+        <el-table-column fixed label="日志创建时间" prop="createTime" />
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
             <el-button @click="() => {}" size="small" type="text"
@@ -44,8 +35,8 @@
       </el-table>
     </div>
     <div class="flex-box pagination">
-      共 {{ logCount }} 条记录
-      <el-pagination :total="logCount" layout="prev, pager, next">
+      共 {{ totalSize }} 条记录
+      <el-pagination :total="totalSize" layout="prev, pager, next">
       </el-pagination>
     </div>
   </div>
@@ -53,11 +44,32 @@
 
 <script>
 import logMock from "@/mock/logs";
+import resErrorHandler from "@/utils/resErrorHandler";
+
+import { mapState } from "vuex";
 
 export default {
   name: "logManage",
+  computed: {
+    ...mapState(["userInfo"])
+  },
+  async mounted() {
+    try {
+      this.loadingTable = false;
+      const res = await this.$axios.get(
+        `/grid/getJournalList/${this.userInfo.id}?page=1`
+      );
+      resErrorHandler(this, res);
+      this.logData = res.data.data.dataList;
+      this.totalSize = res.data.data.totalSize;
+      this.loadingTable = true;
+    } catch (err) {
+      this.$message.error(String(err));
+    }
+  },
   data() {
     return {
+      loadingTable: false,
       logOptions: [
         {
           value: "survey",
@@ -80,7 +92,7 @@ export default {
         dateRange: "",
         logType: ""
       },
-      logCount: 61,
+      totalSize: 0,
       logData: logMock
     };
   },

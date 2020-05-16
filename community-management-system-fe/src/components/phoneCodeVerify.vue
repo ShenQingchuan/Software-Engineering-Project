@@ -33,7 +33,9 @@
 
 <script>
 const phoneRegex = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
-const codeRegex = /(\w){6}/;
+const codeRegex = /(\d){6}/;
+
+import AV from "@/utils/LeanCloudMessage";
 
 export default {
   name: "phoneCodeVerify",
@@ -69,28 +71,31 @@ export default {
   },
   methods: {
     phoneFail(value) {
-      return value === "" && !phoneRegex.test(value);
+      return value === "" || !phoneRegex.test(value);
     },
     codeFail(value) {
-      return value === "" && !codeRegex.test(value);
+      return value === "" || !codeRegex.test(value);
     },
     finishVerifyStep() {
       this.phoneCodeVerifyLoading = true;
-      this.$refs.phoneCodeVerifyForm.validate(valid => {
+      this.$refs.phoneCodeVerifyForm.validate(async valid => {
         if (!valid) {
           this.phoneCodeVerifyLoading = false;
           this.$message.error("表单出错！");
           return false;
         } else {
-          // 模拟 异步请求
-          new Promise(y => {
-            setTimeout(() => {
-              this.phoneCodeVerifyLoading = false;
-              this.$message.success("验证码验证成功！");
-              this.$emit("forward", true);
-              y();
-            }, 1000);
-          });
+          try {
+            const res = await AV.Cloud.verifySmsCode(
+              this.form.code,
+              this.form.phone
+            );
+            console.log(res);
+            this.phoneCodeVerifyLoading = false;
+            this.$message.success("验证码验证成功！");
+            this.$emit("forward", true);
+          } catch (err) {
+            this.$message.error(String(err));
+          }
         }
       });
     },
@@ -98,6 +103,21 @@ export default {
       if (this.phoneFail(this.form.phone)) {
         this.$message.warning("请检查您的手机号填写！");
         return;
+      }
+
+      const phone = this.form.phone;
+      try {
+        const res = await AV.Cloud.requestSmsCode({
+          mobilePhoneNumber: phone,
+          name: "社区治理信息助手",
+          op: "修改密保",
+          ttl: 10 // 验证码有效时间为 10 分钟
+        });
+        console.log(res);
+        this.$message.success("短信发送成功！");
+      } catch (err) {
+        console.error(err);
+        this.$message.error("短信发送失败！");
       }
 
       this.gapTime = 60;

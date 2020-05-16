@@ -61,6 +61,7 @@
 
 <script>
 import officerManageSearchResultMock from "../../mock/officerManageSearchResult";
+import resErrorHandler from "../../utils/resErrorHandler";
 
 export default {
   name: "officerManage",
@@ -75,12 +76,28 @@ export default {
     };
   },
   methods: {
-    submitUserQuery() {
-      // TODO: 先查询某用户基本资料 /admin/getGridProfile ，先不展示可选的小区列表，要等管理员确认无误点击按钮后再请求 /getAreaList
-      // https://easydoc.xyz/doc/43159074/MAhLR20e/ocY9snMg
+    async submitUserQuery() {
+      // 先查询某用户基本资料 /admin/getGridProfile ，先不展示可选的小区列表，要等管理员确认无误点击按钮后再请求 /getAreaList
+      const userRes = await this.$axios.get(
+        `/admin/getGridProfile?userID=${this.uid}`
+      );
+      resErrorHandler(this, userRes);
+      if (userRes.data.resultCode === "200") {
+        this.$message.success("成功查询到该用户资料！");
+        console.log(userRes.data);
+      }
     },
-    getOptionsList() {
-      // TODO: 获取 可选的小区列表 https://easydoc.xyz/doc/43159074/MAhLR20e/b7E6okvI
+    async getOptionsList() {
+      // TODO: 获取 可选的小区列表
+      const res = await this.$axios.get(
+        `/admin/getAreaList?userID=${this.uid}`
+      );
+      resErrorHandler(this, res);
+      if (res.data.resultCode === "200") {
+        this.$message.success("获取该用户对应区域成功");
+        console.log(res);
+      }
+
       this.showOptionsList = true;
     }
   }

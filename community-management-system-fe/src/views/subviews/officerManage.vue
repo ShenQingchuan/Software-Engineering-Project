@@ -1,6 +1,6 @@
 <template>
   <div class="subpage-officer-manage">
-    <el-table :data="officerTableData">
+    <el-table :data="officerList">
       <el-table-column fixed label="姓名" prop="userName"></el-table-column>
       <el-table-column fixed label="联系方式" prop="telPhone"></el-table-column>
       <el-table-column fixed label="管理区域">
@@ -72,7 +72,7 @@ export default {
   data() {
     return {
       officerCount: 88,
-      officerTableData: officerManageTableDataMock,
+      officerList: officerManageTableDataMock,
 
       showEditCard: false,
       gotOptions: {},

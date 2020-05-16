@@ -40,7 +40,9 @@
               <a>信息纵览</a>
             </el-menu-item>
             <el-menu-item
-              @click="() => $router.push('/dashboard/userInfoShow/' + uid)"
+              @click="
+                () => $router.push('/dashboard/userInfoShow/' + userInfo.id)
+              "
               index="1-2"
             >
               <i class="el-icon-set-up" />
@@ -111,10 +113,12 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "common-aside",
-  mounted() {
-    this.uid = localStorage.getItem("uid");
+  computed: {
+    ...mapState(["userInfo"])
   },
   data() {
     return {

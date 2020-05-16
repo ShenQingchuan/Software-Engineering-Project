@@ -13,11 +13,11 @@
         >新增公告</el-button
       >
     </div>
-    <div class="flex-box announcement-table-container">
+    <div v-loading="loadingTable" class="flex-box announcement-table-container">
       <el-table :data="announcementData">
         <el-table-column fixed label="公告标题" prop="title" width="300">
           <template slot-scope="scope">
-            <b>{{ scope.row.title }}</b>
+            <b>{{ scope.row.titleName }}</b>
           </template>
         </el-table-column>
         <el-table-column fixed label="公告内容" prop="content" width="600">
@@ -31,13 +31,6 @@
           prop="createTime"
           width="200"
         >
-          <template slot-scope="scope">
-            {{
-              $moment(new Date(scope.row.createTime * 1000))
-                .locale("zh-cn")
-                .format("lll")
-            }}
-          </template>
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="150">
           <template slot-scope="scope">
@@ -49,8 +42,8 @@
       </el-table>
     </div>
     <div class="flex-box pagination">
-      共 {{ announcementCount }} 条记录
-      <el-pagination :total="announcementCount" layout="prev, pager, next">
+      共 {{ totalSize }} 条记录
+      <el-pagination :total="totalSize" layout="prev, pager, next">
       </el-pagination>
     </div>
   </div>
@@ -58,11 +51,17 @@
 
 <script>
 import announcementMock from "@/mock/announcement";
+import { mapState } from "vuex";
+import resErrorHandler from "../../utils/resErrorHandler";
 
 export default {
   name: "announcementManage",
+  computed: {
+    ...mapState(["userInfo"])
+  },
   data() {
     return {
+      loadingTable: false,
       logOptions: [
         {
           value: "system",
@@ -81,18 +80,30 @@ export default {
         dateRange: "",
         logType: ""
       },
-      announcementCount: 61,
+      totalPage: 0,
+      totalSize: 0,
       announcementData: announcementMock
     };
   },
   methods: {
-    handleDelete(row) {
-      // TODO: 实现删除日志 /grid/deleteJournal/{id}
-      // https://easydoc.xyz/p/43159074/MAhLR20e
-
+    async handleDelete(row) {
       this.$message.warning("TODO: 实现删除日志");
       this.announcementData.splice(row, 1);
     }
+  },
+  async mounted() {
+    this.loadingTable = true;
+    const res = await this.$axios.get(
+      `/grid/getAnnouncementList/${this.userInfo.id}?page=1`
+    );
+    console.log(res);
+    resErrorHandler(this, res);
+    if (res.data.resultCode === "200") {
+      this.announcementData = res.data.data.dataList;
+      this.totalSize = res.data.data.totalSize;
+      this.totalPage = res.data.data.totalPage;
+    }
+    this.loadingTable = false;
   }
 };
 </script>

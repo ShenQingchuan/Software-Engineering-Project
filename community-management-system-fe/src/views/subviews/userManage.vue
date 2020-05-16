@@ -32,15 +32,16 @@
       >导出用户数据表
     </el-button>
     <el-table class="user-manage-data-table" :data="userManageTableData" border>
-      <el-table-column fixed prop="area" label="归属地区" width="200">
+      <el-table-column fixed prop="districtName" label="归属地区" width="200">
       </el-table-column>
-      <el-table-column prop="community" label="归属小区" width="200">
+      <el-table-column prop="communityName" label="归属小区" width="200">
       </el-table-column>
-      <el-table-column prop="userId" label="用户ID" width="200">
+      <el-table-column prop="userID" label="用户ID" width="200">
       </el-table-column>
       <el-table-column prop="userName" label="姓名" width="200">
       </el-table-column>
-      <el-table-column prop="phone" label="手机" width="200"> </el-table-column>
+      <el-table-column prop="telPhone" label="手机" width="200">
+      </el-table-column>
       <el-table-column fixed="right" label="操作">
         <template slot-scope="scope">
           <el-button @click="handleClick(scope.row)" type="text" size="small"
@@ -50,18 +51,31 @@
       </el-table-column>
     </el-table>
     <div class="user-manage-pagination flex-box pagination">
-      共 {{ userRecordCount }} 条记录
-      <el-pagination :total="totalCount" layout="prev, pager, next">
+      共 {{ totalSize }} 条记录
+      <el-pagination :total="totalSize" layout="prev, pager, next">
       </el-pagination>
     </div>
   </div>
 </template>
 
 <script>
-import userManageTableDataMock from "@/mock/userManageTableData";
+// import userManageTableDataMock from "@/mock/userManageTableData";
+import { mapState } from "vuex";
 
 export default {
   name: "userManage",
+  async mounted() {
+    const res = await this.$axios.get(
+      // /{id}
+      `/query/allUserOfGrid/${this.userInfo.id}?page=1`
+    );
+    console.log(res);
+    this.userManageTableData = res.data.data.dataList;
+    this.totalSize = res.data.data.totalSize;
+  },
+  computed: {
+    ...mapState(["userInfo"])
+  },
   data() {
     return {
       activeTab: "stuff",
@@ -72,8 +86,8 @@ export default {
         userName: ""
       },
       userRecordCount: 65,
-      totalCount: 70,
-      userManageTableData: userManageTableDataMock
+      totalSize: 70,
+      userManageTableData: []
     };
   },
   methods: {
