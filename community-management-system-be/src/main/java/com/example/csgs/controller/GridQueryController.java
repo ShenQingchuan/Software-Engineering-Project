@@ -5,12 +5,13 @@ import com.example.csgs.bean.PageQuery;
 import com.example.csgs.entity.User;
 import com.example.csgs.service.GridQueryService;
 import com.example.csgs.utils.ResultUtils;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/query")
-@Slf4j
+@Log4j
 public class GridQueryController {
     final GridQueryService gridQueryService;
 

@@ -11,6 +11,7 @@ import com.example.csgs.service.GridQueryService;
 import com.example.csgs.utils.CalculatePageUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@Slf4j
+@Log4j
 @Service
 public class GridQueryServiceImpl implements GridQueryService {
     final UserMapper userMapper;

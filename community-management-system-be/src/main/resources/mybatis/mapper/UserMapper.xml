@@ -72,4 +72,11 @@
         set user_type = '0'
         where userid = #{userID}
     </update>
+
+    <select id="queryUserByName" resultType="UserSign">
+        select userid, user_password, user_type
+        from user
+        where id = #{id}
+    </select>
+
 </mapper>

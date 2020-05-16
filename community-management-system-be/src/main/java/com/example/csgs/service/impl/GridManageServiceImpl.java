@@ -9,6 +9,7 @@ import com.example.csgs.utils.CalculatePageUtils;
 import com.example.csgs.utils.SHA256Util;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-@Slf4j
+@Log4j
 @Service
 public class GridManageServiceImpl implements GridManageService {
     final UserMapper userMapper;

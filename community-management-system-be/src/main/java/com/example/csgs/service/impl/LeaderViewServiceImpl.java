@@ -7,13 +7,14 @@ import com.example.csgs.entity.DistrictInfo;
 import com.example.csgs.mapper.CommunityInfoMapper;
 import com.example.csgs.mapper.DistrictMapper;
 import com.example.csgs.service.LeaderViewService;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
+@Log4j
 @Service
 public class LeaderViewServiceImpl implements LeaderViewService {
     final DistrictMapper districtMapper;

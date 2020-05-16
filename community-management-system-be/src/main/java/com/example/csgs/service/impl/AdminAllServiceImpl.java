@@ -10,6 +10,7 @@ import com.example.csgs.service.AdminAllService;
 import com.example.csgs.utils.CalculatePageUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @Service
 @Transactional
-@Slf4j
+@Log4j
 public class AdminAllServiceImpl implements AdminAllService {
     final UserMapper userMapper;
     final ProfileMapper profileMapper;

@@ -9,6 +9,7 @@ import com.example.csgs.utils.RedisUtils;
 import com.example.csgs.utils.SHA256Util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
+@Log4j
 @Service
 public class UserSignServiceImpl implements UserSignService {
     final UserMapper userMapper;

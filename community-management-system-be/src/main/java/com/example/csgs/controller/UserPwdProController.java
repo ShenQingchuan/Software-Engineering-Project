@@ -6,6 +6,7 @@ import com.example.csgs.mapper.UserMapper;
 import com.example.csgs.service.UserPwdProService;
 import com.example.csgs.utils.ResultUtils;
 import com.example.csgs.utils.SHA256Util;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pwdPro")
-@Slf4j
+@Log4j
 public class UserPwdProController {
 
     final UserPwdProService userPwdProService;

@@ -4,6 +4,7 @@ package com.example.csgs.mapper;
 import com.example.csgs.entity.User;
 import com.example.csgs.entity.UserEntity;
 import com.example.csgs.entity.UserProfile;
+import com.example.csgs.entity.UserSign;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.stereotype.Repository;
 
@@ -31,4 +32,6 @@ public interface UserMapper {
     void setGrid(@Param("UserID") String UserID);
 
     void cancelGrid(@Param("UserID") String UserID);
+
+    UserSign queryUserByName(@Param("id") Long id);
 }
