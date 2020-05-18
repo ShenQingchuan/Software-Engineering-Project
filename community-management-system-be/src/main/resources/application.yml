@@ -1,13 +1,6 @@
 server:
   port: 9090
 spring:
-  jpa:
-    hibernate:
-      ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    database: mysql
-    show-sql: false
-    open-in-view: false
   servlet:
     multipart:
       max-file-size: 10MB

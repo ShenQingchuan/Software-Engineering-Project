@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.csgs.mapper.PermissionMapper" >
+    <resultMap id="PermissonResultMap" type="com.example.csgs.entity.PermissionEntity">
+        <id property="id"  column="id"/>
+        <result property="permissionName" column="permission_name"/>
+        <association property="userTypeId" column="user_type_id" />
+    </resultMap>
+    <!--String findUserTypeByPermissionName(String permissionName);-->
+    <select id="findUserTypeByPermissionName" parameterType="String" resultType="int">
+        SELECT up.user_type FROM permission p,user_permission up WHERE p.user_type_id=up.user_type_id AND p.permission_name=#{permissionName};
+    </select>
+
+</mapper>

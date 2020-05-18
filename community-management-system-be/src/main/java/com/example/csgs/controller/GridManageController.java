@@ -10,6 +10,7 @@ import com.example.csgs.mapper.JournalMapper;
 import com.example.csgs.mapper.JournalTypeMapper;
 import com.example.csgs.service.GridManageService;
 import com.example.csgs.utils.ResultUtils;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/grid")
-@Slf4j
+@Log4j
 public class GridManageController {
     final GridManageService gridManageService;
     final JournalMapper journalMapper;
@@ -94,7 +95,7 @@ public class GridManageController {
         if (gridManageService.releaseJournal(titleName, content, type, Long.parseLong(id))) {
             return ResultUtils.success("日志信息新增成功！");
         }
-        return ResultUtils.success("日志信息新增失败！");
+        return ResultUtils.error("日志信息新增失败！");
     }
 
     /**

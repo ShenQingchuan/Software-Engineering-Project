@@ -4,6 +4,7 @@ import com.example.csgs.entity.PwdProEntity;
 import com.example.csgs.mapper.PwdProMapper;
 import com.example.csgs.mapper.UserMapper;
 import com.example.csgs.service.UserPwdProService;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@Slf4j
+@Log4j
 @Service
 @Transactional
 public class UserPwdProServiceImpl implements UserPwdProService {
@@ -48,6 +49,7 @@ public class UserPwdProServiceImpl implements UserPwdProService {
     public boolean setPwdPro(Long id, List<String> list) {
         PwdProEntity pwdProEntity = pwdProMapper.findPwdProById(id);
         HashMap<String, Object> map = new HashMap<>();
+        addPwdPro(id,map,list);
         if (pwdProEntity != null) {
             addPwdPro(id,map,list);
             return pwdProMapper.updatePwdPro(map) > 0;

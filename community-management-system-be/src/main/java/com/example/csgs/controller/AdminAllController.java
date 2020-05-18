@@ -11,6 +11,7 @@ import com.example.csgs.mapper.ProfileMapper;
 import com.example.csgs.mapper.UserMapper;
 import com.example.csgs.service.AdminAllService;
 import com.example.csgs.utils.ResultUtils;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
-@Slf4j
+@Log4j
 public class AdminAllController {
     final AdminAllService adminAllService;
     final UserMapper userMapper;
@@ -35,8 +36,7 @@ public class AdminAllController {
      * 场景：系统管理员添加网格员时，需要查看该居民用户的基本资料信息
      */
     @GetMapping("/getGridProfile")
-    public Object getMaterial(@RequestBody JSONObject jsonObject) {
-        String userID = jsonObject.getString("userID");
+    public Object getMaterial(@RequestParam String userID) {
         UserEntity userEntity = userMapper.findOneByUserID(userID);
         if (userEntity != null && userEntity.getUserType() == 1) {
             log.info("[系统管理员]用户 <" + userID + "> 不是一名网格员!");
@@ -56,8 +56,7 @@ public class AdminAllController {
      * 重点：这里我们返回的区域是还没有被划分的区域，如果某一区域已经被分配，那么不返回该区域信息
      */
     @GetMapping("/getAreaList")
-    public Object getAreaList(@RequestBody JSONObject jsonObject) {
-        String userID = jsonObject.getString("userID");
+    public Object getAreaList(@RequestParam String userID) {
         AreaList areaList = adminAllService.getAreaList(userID);
         if (areaList != null) {
             log.info("[系统管理员]用户 <" + userID + "> 获取"+ areaList.getDistrictName() +"所在区域数据信息获取Success！");

@@ -8,6 +8,7 @@ import com.example.csgs.entity.ProfileInfo;
 import com.example.csgs.mapper.ProfileMapper;
 import com.example.csgs.service.UserProfileService;
 import com.example.csgs.utils.ResultUtils;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/profile")
-@Slf4j
+@Log4j
 public class UserProfileController {
     final UserProfileService userProfileService;
     final ProfileMapper profileMapper;
@@ -51,29 +52,4 @@ public class UserProfileController {
         return ResultUtils.error("用户资料获取失败！");
     }
 
-    /**
-     * 场景：居民用户登陆，居民首页呈现自己所住小区名、房屋数量、停车位数量、居民数量
-     * 和网格员向本小区发送的公告信息
-     * 注意：当前id是居民用户的id
-     */
-    @GetMapping("/ResidentRPH/{id}")
-    public Object queryCommunityInfo(@PathVariable String id) {
-        CommunityInfo communityInfo = userProfileService.findResidentRPH(Long.parseLong(id));
-        if (communityInfo != null) {
-            return ResultUtils.success(communityInfo, "用户所在社区RPH信息获取成功！");
-        }
-        return ResultUtils.error("用户所在社区RPH信息获取失败！");
-    }
-
-    /**
-     * 居民用户获取自己所为网格中网格员所发布的公告信息
-     */
-    @GetMapping("/getAnnouncementOfGrid/{id}")
-    public Object getAnnouncementOfGrid(@PathVariable String id,@RequestParam String page){
-        PageQuery<Announcement> announcementList = userProfileService.getAnnouncementOfGrid(Long.parseLong(id),page);
-        if (announcementList != null) {
-            return ResultUtils.success(announcementList, "获取用户所在网格公告信息成功！");
-        }
-        return ResultUtils.error("该用户所在小区未发布任何公告！");
-    }
 }

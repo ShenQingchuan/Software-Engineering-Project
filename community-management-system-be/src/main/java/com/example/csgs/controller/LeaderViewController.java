@@ -6,6 +6,7 @@ import com.example.csgs.entity.DistrictInfo;
 import com.example.csgs.mapper.DistrictMapper;
 import com.example.csgs.service.LeaderViewService;
 import com.example.csgs.utils.ResultUtils;
+import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/leader")
-@Slf4j
+@Log4j
 public class LeaderViewController {
     final DistrictMapper districtMapper;
     final LeaderViewService leaderViewService;

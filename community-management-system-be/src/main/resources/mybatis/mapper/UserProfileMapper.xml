@@ -175,4 +175,6 @@
         VALUES (#{communityId})
     </insert>
 
+
+
 </mapper>
