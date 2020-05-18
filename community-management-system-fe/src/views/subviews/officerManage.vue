@@ -65,7 +65,9 @@
 
 <script>
 import officerManageTableDataMock from "@/mock/officerManageTableData";
-import getOptionsWhileEditingOfficerScopeMock from "@/mock/getOptionsWhileEditingOfficerScope";
+import { mapState } from "vuex";
+import resErrorHandler from "../../utils/resErrorHandler";
+// import getOptionsWhileEditingOfficerScopeMock from "@/mock/getOptionsWhileEditingOfficerScope";
 
 export default {
   name: "officerManage",
@@ -79,17 +81,31 @@ export default {
       editing: {}
     };
   },
+  computed: {
+    ...mapState(["userInfo"])
+  },
   methods: {
     // eslint-disable-next-line no-unused-vars
-    handleEditOfficer(scope) {
+    async handleEditOfficer(scope) {
       this.showEditCard = true;
       this.editing = scope.row;
       this.editing.areaList.communityArray = []; // 清空原管理区域数组
 
-      // TODO: 根据 this.editing.userID（正要编辑的那个网格员的身份证号）去调用 /admin/getAreaList
-      // https://easydoc.xyz/doc/43159074/MAhLR20e/b7E6okvI
-      // 下面是这里暂时假装获得了数据：（选取我们界面上的第一个做演示）
-      this.gotOptions = getOptionsWhileEditingOfficerScopeMock;
+      const res = await this.$axios.get(
+        `/admin/getAreaList?userID=${this.uid}`
+      );
+      resErrorHandler(this, res);
+      if (res.data.resultCode === "200") {
+        this.$message.success("获取该用户对应区域成功");
+        console.log(res.data);
+        if (res.data.data.communityArray.length === 0) {
+          setTimeout(() => {
+            this.$message.warning("已经没有可以分配的小区了！");
+          }, 0);
+          return;
+        }
+        this.gotOptions = res.data.data.communityArray;
+      }
     },
     // eslint-disable-next-line no-unused-vars
     handleDeleteOfficer(scope) {

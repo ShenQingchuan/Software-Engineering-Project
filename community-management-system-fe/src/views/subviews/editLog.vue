@@ -10,10 +10,14 @@
       </div>
       <div class="meta-form-item tb-gap flex-box jy-start">
         <label>日志类型：</label>
-        <el-radio v-model="logType" label="调查走访"></el-radio>
-        <el-radio v-model="logType" label="巡逻治安"></el-radio>
-        <el-radio v-model="logType" label="基础设施养护"></el-radio>
-        <el-radio v-model="logType" label="阶段工作总结"></el-radio>
+        <el-select v-model="logType">
+          <el-option
+            v-for="(t, i) in logTypeOptions"
+            :key="i"
+            :label="t"
+            :value="t"
+          ></el-option>
+        </el-select>
       </div>
     </div>
 
@@ -36,19 +40,28 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import resErrorHandler from "../../utils/resErrorHandler";
+
 export default {
   name: "editAnnouncement",
-  mounted() {
+  async mounted() {
     const path = this.$route.path.split("/").slice(-1)[0];
     console.log(path);
     this.editor.type = path === "addLog" ? "新建" : "编辑";
+
+    const res = await this.$axios.get(`/grid/getJournalTypeName`);
+    resErrorHandler(this, res);
+    if (res.data.resultCode === "200") {
+      this.logTypeOptions = res.data.data;
+    }
   },
   data() {
     return {
+      logTypeOptions: [],
+
       title: "",
       logType: "",
-      logDate: "",
-      logTime: "",
       editor: {
         type: "",
         source: "",
@@ -56,16 +69,36 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapState(["userInfo"])
+  },
   methods: {
-    submitLog() {
-      this.$message.warning("暂未调试接口");
-      // TODO: 连调测试上传日志  /grid/releaseAnnouncement/{id}
-      // https://easydoc.xyz/p/43159074/MAhLR20e
-
+    async submitLog() {
+      if (
+        this.title === "" ||
+        this.logType === "" ||
+        this.editor.source === ""
+      ) {
+        this.$message.error("不允许提交空内容！");
+      }
       if (this.editor.type === "新建") {
-        // ...
-      } else {
-        // ...
+        try {
+          const res = await this.$axios.post(
+            `/grid/releaseJournal/${this.userInfo.id}`,
+            {
+              titleName: this.title,
+              type: this.logType,
+              content: this.editor.render
+            }
+          );
+          resErrorHandler(this, res);
+          if (res.data.resultCode === "200") {
+            this.$message.success("新建日志成功！");
+            await this.$router.push("/dashboard/logManage");
+          }
+        } catch (err) {
+          this.$message.error(String(err));
+        }
       }
     }
   }

@@ -9,7 +9,11 @@
     >
       <el-form-item label="手机号：" prop="phone">
         <div class="flex-box">
-          <el-input placeholder="请输入手机号" v-model="form.phone"></el-input>
+          <el-input
+            placeholder="请输入手机号"
+            disabled
+            :value="userInfo.telPhone"
+          ></el-input>
           <el-button
             @click="sendVerifyCode"
             class="send-code-btn"
@@ -32,6 +36,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 const phoneRegex = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
 const codeRegex = /(\d){6}/;
 
@@ -39,6 +45,9 @@ import AV from "@/utils/LeanCloudMessage";
 
 export default {
   name: "phoneCodeVerify",
+  computed: {
+    ...mapState(["userInfo"])
+  },
   data() {
     const validatePhone = (rule, value, callback) => {
       if (this.phoneFail(value)) {

@@ -117,15 +117,25 @@
 <script>
 import announcementList from "../../components/announcementList";
 import { mapState } from "vuex";
+import resErrorHandler from "../../utils/resErrorHandler";
 export default {
   name: "residentOverview",
   async mounted() {
     const res = await this.$axios.get(
       `/resident/ResidentRPH/${this.userInfo.id}`
     );
-    console.log(res);
-    if (res.data.resultCode !== "200") {
-      this.$message.error(String(res.data.msg));
+    resErrorHandler(this, res);
+    if (res.data.resultCode === "200") {
+      const {
+        community,
+        numHouses,
+        numParkingSpaces,
+        numResidents
+      } = res.data.data;
+      this.community = community;
+      this.numHouses = numHouses;
+      this.numParkingSpaces = numParkingSpaces;
+      this.numResidents = numResidents;
     }
   },
   components: { announcementList },

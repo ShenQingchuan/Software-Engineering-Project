@@ -104,15 +104,19 @@ export default {
     async signIn() {
       if (this.validateLogin()) {
         try {
-          const res = await this.$axios.post("/sign/signIn", {
+          const res = await this.$axios.post("/sign/login", {
             userID: this.signInform.userId,
             password: md5(this.signInform.password)
           });
           const { data } = res;
+          console.log(res);
           if (data.resultCode === "0") {
-            this.$message.error(`登录失败！${data.msg}`);
+            setTimeout(() => {
+              this.$message.error(`登录失败！${data.msg}`);
+            }, 0);
           } else {
-            Cookies.set("csgs_token", data.data.token);
+            Cookies.set("csgs_token", res.data.data.token);
+            Cookies.set("JSESSIONID", res.data.data.sessionID);
             const info = {
               ...this.userInfo,
               sfzId: this.signInform.userId

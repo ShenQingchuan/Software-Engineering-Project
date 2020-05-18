@@ -1,16 +1,16 @@
 <template>
   <div class="comp-secret-verify">
-    <el-form :model="form">
-      <el-form-item :label="`问题一：${question.q1}`" prop="answer1">
+    <el-form v-loading="loadingQuestion" :model="form">
+      <el-form-item :label="`问题一：${question[0]}`" prop="answer1">
         <el-input
           placeholder="请填写问题一的答案"
-          v-model="form.answer1"
+          v-model="form.answerOne"
         ></el-input>
       </el-form-item>
-      <el-form-item :label="`问题二：${question.q2}`" prop="answer2">
+      <el-form-item :label="`问题二：${question[1]}`" prop="answer2">
         <el-input
           placeholder="请填写问题二的答案"
-          v-model="form.answer2"
+          v-model="form.answerTwo"
         ></el-input>
       </el-form-item>
 
@@ -22,23 +22,56 @@
 </template>
 
 <script>
-import SecretVerifyMock from "@/mock/getSecretQuestion";
+import resErrorHandler from "../utils/resErrorHandler";
+import { mapState } from "vuex";
+// import SecretVerifyMock from "@/mock/getSecretQuestion";
 
 export default {
   name: "secretVerify",
+  async mounted() {
+    this.loadingQuestion = true;
+    const res = await this.$axios.get(
+      `/pwdPro/returnPwdProQue/${this.userInfo.id}`
+    );
+    resErrorHandler(this, res);
+    if (res.data.resultCode === "200") {
+      this.question = res.data.data;
+      this.$message.success("获取密保问题成功");
+      this.loadingQuestion = false;
+    }
+  },
   data() {
     return {
-      question: SecretVerifyMock,
+      loadingQuestion: false,
+      question: [],
       form: {
-        answer1: "",
-        answer2: ""
+        answerOne: "",
+        answerTwo: ""
       }
     };
   },
+  computed: {
+    ...mapState(["userInfo"])
+  },
   methods: {
-    async requestForSecret() {},
     async finishSecretVerify() {
-      this.$emit("forward", true);
+      try {
+        const { answerOne, answerTwo } = this.form;
+        const res = await this.$axios.post(
+          `/pwdPro/comparePwdProAns/${this.userInfo.id}`,
+          {
+            answerOne,
+            answerTwo
+          }
+        );
+        resErrorHandler(this, res);
+        if (res.data.resultCode === "200") {
+          this.$message.success("密保验证成功！");
+          this.$emit("forward", true);
+        }
+      } catch (err) {
+        this.$message.error(String(err));
+      }
     }
   }
 };
