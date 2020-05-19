@@ -11,25 +11,22 @@
         <img :src="a.coverUrl" alt="" />
       </div>
       <div class="content-box jy-start flex-box flex-col">
-        <div class="title">{{ a.title }}</div>
-        <div class="content-slice">{{ a.content.slice(0, 140) }} ...</div>
+        <div class="title">{{ a.titleName }}</div>
+        <div class="content-slice" v-html="a.content"></div>
         <div class="flex-box jy-between meta">
-          <span
-            >创建者：{{ a.creatorName }} ｜ 时间：{{
-              $moment(new Date(a.createTime * 1000)).locale()
-            }}</span
-          >
-          <el-button size="mini" type="text">查看原文</el-button>
+          <span>创建者：{{ a.creator }} ｜ 时间：{{ a.createTime }}</span>
         </div>
       </div>
     </div>
 
-    <el-button type="text">加载更多</el-button>
+    <el-button @click="loadMoreAnnouncement" type="text">加载更多</el-button>
   </div>
 </template>
 
 <script>
-import announcementMock from "../mock/announcement";
+import resErrorHandler from "../utils/resErrorHandler";
+import { mapState } from "vuex";
+// import announcementMock from "../mock/announcement";
 
 export default {
   name: "announcementList",
@@ -38,8 +35,45 @@ export default {
   },
   data() {
     return {
-      announcement: announcementMock
+      announcement: [],
+
+      page: 1
     };
+  },
+  computed: {
+    ...mapState(["userInfo"])
+  },
+  async mounted() {
+    try {
+      const res = await this.$axios.get(
+        `/resident/getAnnouncementOfGrid/${this.userInfo.id}?page=${this.page}`
+      );
+      resErrorHandler(this, res);
+      if (res.data.resultCode === "200") {
+        console.log("获取公告成功！");
+        console.log(res.data);
+        this.announcement = res.data.data.dataList;
+      }
+    } catch (err) {
+      this.$message.error(String(err));
+    }
+  },
+  methods: {
+    async loadMoreAnnouncement() {
+      this.page += 1;
+      try {
+        const res = await this.$axios.get(
+          `/resident/getAnnouncementOfGrid/${this.userInfo.id}?page=${this.page}`
+        );
+        console.log(res.data);
+        resErrorHandler(this, res);
+        if (res.data.resultCode === "200") {
+          this.announcement = [...this.announcement, ...res.data.data.dataList];
+        }
+      } catch (err) {
+        this.$message.error(String(err));
+      }
+    }
   }
 };
 </script>

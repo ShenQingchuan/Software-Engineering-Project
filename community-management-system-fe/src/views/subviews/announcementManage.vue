@@ -15,14 +15,14 @@
     </div>
     <div v-loading="loadingTable" class="flex-box announcement-table-container">
       <el-table :data="announcementData">
-        <el-table-column fixed label="公告标题" prop="title" width="300">
+        <el-table-column fixed label="公告标题" prop="title" width="200">
           <template slot-scope="scope">
             <b>{{ scope.row.titleName }}</b>
           </template>
         </el-table-column>
-        <el-table-column fixed label="公告内容" prop="content" width="600">
+        <el-table-column fixed label="公告内容" prop="content" width="400">
           <template slot-scope="scope">
-            {{ scope.row.content.slice(0, 40) }} ...
+            {{ delHtmlTag(scope.row.content).slice(0, 40) }} ...
           </template>
         </el-table-column>
         <el-table-column
@@ -89,6 +89,9 @@ export default {
     async handleDelete(row) {
       this.$message.warning("TODO: 实现删除日志");
       this.announcementData.splice(row, 1);
+    },
+    delHtmlTag(str) {
+      return str.replace(/<[^>]+>/g, "");
     }
   },
   async mounted() {
@@ -115,7 +118,7 @@ export default {
   padding: 20px;
 
   .announcement-table-container {
-    width: 90%;
+    width: 100%;
     margin: 20px auto;
   }
 }

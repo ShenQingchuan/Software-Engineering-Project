@@ -2,13 +2,37 @@
   <div class="subpage-password-protect">
     <el-form ref="form" :model="pswdPro" label-width="100px">
       <el-form-item label="密保问题一：">
-        <el-input v-model="pswdPro.questionOne"></el-input>
+        <el-select
+          class="question-select"
+          :value="pswdPro.questionOne"
+          @change="e => flushQuestionArray(e, 'questionOne')"
+        >
+          <el-option
+            v-for="item in questionArray"
+            :key="item"
+            :label="item"
+            :value="item"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="问题一答案：">
         <el-input v-model="pswdPro.answerOne"></el-input>
       </el-form-item>
       <el-form-item label="密保问题二：">
-        <el-input v-model="pswdPro.questionTwo"></el-input>
+        <el-select
+          class="question-select"
+          :value="pswdPro.questionTwo"
+          @change="e => flushQuestionArray(e, 'questionTwo')"
+        >
+          <el-option
+            v-for="item in questionArray.slice(pswdPro.questionOne)"
+            :key="item"
+            :label="item"
+            :value="item"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="问题二答案：">
         <el-input v-model="pswdPro.answerTwo"></el-input>
@@ -38,6 +62,13 @@ export default {
   },
   data() {
     return {
+      questionArray: [
+        "你的母亲叫什么名字？",
+        "你的父亲叫什么名字？",
+        "你的高中全称是什么？",
+        "你的大学全称是什么？",
+        "你的宠物叫什么名字？"
+      ],
       pswdPro: {
         questionOne: "",
         answerOne: "",
@@ -65,6 +96,16 @@ export default {
       } catch (err) {
         this.$message.error(String(err));
       }
+    },
+    flushQuestionArray(e, key) {
+      if (
+        this.pswdPro[key] &&
+        !this.questionArray.includes(this.pswdPro[key])
+      ) {
+        this.questionArray.unshift(this.pswdPro[key]);
+      }
+      this.pswdPro[key] = e;
+      this.questionArray.splice(this.questionArray.indexOf(e), 1);
     }
   }
 };
@@ -74,5 +115,9 @@ export default {
 .subpage-password-protect {
   padding: 20px;
   font-weight: bold;
+
+  .question-select {
+    width: 100%;
+  }
 }
 </style>

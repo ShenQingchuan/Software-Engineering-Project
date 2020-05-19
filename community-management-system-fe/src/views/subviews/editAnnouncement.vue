@@ -8,13 +8,11 @@
         <label>标题：</label>
         <el-input v-model="title" placeholder="请输入标题"></el-input>
       </div>
-      <div class="meta-form-item tb-gap flex-box jy-start">
-        <el-checkbox v-model="fixedTop">是否置顶</el-checkbox>
-      </div>
     </div>
 
     <!--编辑器-->
     <mavon-editor
+      :ishljs="true"
       class="editor tb-gap"
       v-model="editor.source"
       @change="
@@ -34,6 +32,9 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import resErrorHandler from "../../utils/resErrorHandler";
+
 export default {
   name: "editAnnouncement",
   mounted() {
@@ -45,7 +46,6 @@ export default {
   data() {
     return {
       title: "",
-      fixedTop: "",
       editor: {
         type: "",
         source: "",
@@ -53,11 +53,32 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapState(["userInfo"])
+  },
   methods: {
-    submitAnnouncement() {
-      this.$message.warning("暂未调试接口");
-      // TODO: 连调测试上传公告 /grid/releaseAnnouncement/{id}
-      // https://easydoc.xyz/p/43159074/MAhLR20e
+    async submitAnnouncement() {
+      if (this.editor.source.length === 0 || this.title.length === 0) {
+        this.$message.error("不能提交空内容！");
+        return;
+      }
+
+      try {
+        const res = await this.$axios.post(
+          `/grid/releaseAnnouncement/${this.userInfo.id}`,
+          {
+            titleName: this.title,
+            content: this.editor.render
+          }
+        );
+        resErrorHandler(this, res);
+        if (res.data.resultCode === "200") {
+          this.$message.success("新建公告成功！");
+          await this.$router.push("/dashboard/announcementManage");
+        }
+      } catch (err) {
+        this.$message.error(String(err));
+      }
     }
   }
 };

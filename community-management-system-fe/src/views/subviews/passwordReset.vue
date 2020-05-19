@@ -8,7 +8,7 @@
       finish-status="success"
       simple
     >
-      <el-step class="steps-tip-item" title="进行安全验证"></el-step>
+      <el-step class="steps-tip-item" title="安全验证"></el-step>
       <el-step class="steps-tip-item" title="修改密码"></el-step>
       <el-step class="steps-tip-item" title="修改成功"></el-step>
     </el-steps>
@@ -26,12 +26,12 @@
     <!-- 各步骤对应操作 -->
     <secret-verify
       @forward="stepForward"
-      v-show="verifyType === '密保验证' && step === 0"
+      v-if="verifyType === '密保验证' && step === 0"
     ></secret-verify>
     <!-- 手机验证表单组件 -->
     <phone-code-verify
       @forward="stepForward"
-      v-show="verifyType === '手机验证' && step === 0"
+      v-if="verifyType === '手机验证' && step === 0"
     />
     <!-- 最后显示成功 -->
     <div class="finished-view tb-gap flex-box flex-col" v-show="step === 2">

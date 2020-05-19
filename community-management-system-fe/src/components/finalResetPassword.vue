@@ -16,6 +16,9 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+import resErrorHandler from "../utils/resErrorHandler";
+
 export default {
   name: "finalResetPassword",
   data() {
@@ -37,13 +40,24 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapState(["userInfo"])
+  },
   methods: {
-    confirmChangePassword() {
+    async confirmChangePassword() {
       if (this.form.newPassword !== this.form.reNewPassword) {
         this.$message.error("两次密码不一致");
+        return;
       }
 
-      this.$emit("forward", true);
+      const res = await this.$axios.put(`/pwdPro/modifyPwd/${this.user.id}`, {
+        newPassword: this.form.newPassword
+      });
+      resErrorHandler(this, res);
+      if (res.data.resultCode === "200") {
+        this.$message.success("修改密码成功");
+        this.$emit("forward", true);
+      }
     }
   }
 };

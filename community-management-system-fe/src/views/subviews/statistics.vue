@@ -1,14 +1,9 @@
 <template>
-  <el-tabs
-    v-loading="loadingChart"
-    v-model="activeName"
-    @tab-click="handleTabClick"
-  >
+  <el-tabs v-loading="loadingChart" v-model="activeName">
     <el-tab-pane label="各片区总体" name="first">
       <div class="all-district flex-box flex-col jy-center">
         <v-chart
           v-if="allDistrictCharShow"
-          autoresize
           class="main-chart"
           :options="allDistrictChartOptions"
         ></v-chart>
@@ -49,16 +44,17 @@
             @change="getChartDataAndSetChartOptions"
           >
             <el-option
-              v-for="(e, i) in allDistrict"
-              :key="i"
-              :value="e"
-              :label="e"
+              v-for="e in allDistrict"
+              :key="e.id"
+              :value="e.districtName"
+              :label="e.districtName"
             ></el-option>
           </el-select>
         </div>
         <v-chart
           v-if="selectedDistrict !== ''"
           class="main-chart"
+          autoresize
           :options="singleChartOptions"
         ></v-chart>
         <div class="tb-gap sort-options flex-box jy-center">
@@ -87,19 +83,21 @@
 </template>
 
 <script>
-import chartDataMock from "@/mock/charts";
-import chartForAllMock from "@/mock/chartsForAll";
-import allDistrictNameMock from "@/mock/getAllDistrict";
+import { mapState } from "vuex";
+import resErrorHandler from "../../utils/resErrorHandler";
+// import chartForAllMock from "@/mock/chartsForAll";
+// import chartDataMock from "@/mock/charts";
+// import allDistrictNameMock from "@/mock/getAllDistrict";
 
 export default {
   name: "statistics",
   data() {
     return {
-      allDistrict: allDistrictNameMock,
+      allDistrict: [],
       selectedDistrict: "",
 
       // Tab
-      activeName: "second",
+      activeName: "first",
 
       loadingChart: false,
       allDistrictCharShow: false,
@@ -143,32 +141,66 @@ export default {
       }
     };
   },
+  computed: {
+    ...mapState(["userInfo"])
+  },
+  async mounted() {
+    try {
+      const res = await this.$axios.get("/leader/getAllDistrictName");
+      resErrorHandler(this, res);
+      if (res.data.resultCode === "200") {
+        this.allDistrict = res.data.data;
+      }
+
+      this.loadingChart = true;
+      const rphRes = await this.$axios.get("/leader/getDistrictRPHList");
+      console.log(rphRes);
+      resErrorHandler(this, rphRes);
+      if (rphRes.data.resultCode === "200") {
+        this.allDistrictChartOptions.dataset.source = rphRes.data.data.map(
+          e => ({
+            片区: e.district,
+            住房: e.numHouses,
+            车位: e.numParkingSpaces,
+            人口: e.numResidents
+          })
+        );
+        this.loadingChart = false;
+        this.allDistrictCharShow = true;
+      }
+    } catch (err) {
+      this.$message.error(String(err));
+    }
+  },
   methods: {
     sortDataSourceBy(arr, key) {
       arr.sort((a, b) => a[key] - b[key]);
     },
-    getChartDataAndSetChartOptions() {
+    async getChartDataAndSetChartOptions(e) {
+      let selectedDistrictID;
+      this.allDistrict.forEach(item => {
+        if (item.districtName === e) {
+          selectedDistrictID = item.id;
+        }
+      });
       this.loadingChart = true;
-      setTimeout(() => {
-        this.singleChartOptions.dataset.source = chartDataMock; // TODO: 这一句后面真实请求时删掉，其他不变
-        this.loadingChart = false;
-      }, 1000);
 
-      // TODO: 此处是每当 select 组件选择的值变化时，就请求 chart 数据
-      // https://easydoc.xyz/p/43159074/MAhLR20e
-    },
-    handleTabClick(tab) {
-      if (tab.label === "各片区总体") {
-        this.loadingChart = true;
-        setTimeout(() => {
-          this.allDistrictChartOptions.dataset.source = chartForAllMock;
+      try {
+        const res = await this.$axios.get(
+          `/leader/getCommunityRPHList/${selectedDistrictID}`
+        );
+        resErrorHandler(this, res);
+        if (res.data.resultCode === "200") {
+          this.singleChartOptions.dataset.source = res.data.data.map(e => ({
+            小区名称: e.community,
+            住房: e.numHouses,
+            车位: e.numParkingSpaces,
+            人口: e.numResidents
+          }));
           this.loadingChart = false;
-          this.allDistrictCharShow = true;
-          // TODO：获取所有片区对总体数据图
-        }, 1000);
-      } else {
-        this.allDistrictCharShow = false;
-        this.allDistrictChartOptions.dataset.source = [];
+        }
+      } catch (err) {
+        this.$message.error(String(err));
       }
     }
   }
