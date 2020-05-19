@@ -77,7 +77,7 @@ export default {
           if (userType < 2) {
             // 是居民 or 网格员
             await this.$router.push("/dashboard/residentOverview");
-          } else if (userType === 2) {
+          } else if (userType >= 2) {
             await this.$router.push("/dashboard/statistics");
           }
         }

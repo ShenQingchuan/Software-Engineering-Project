@@ -4,8 +4,8 @@
       <el-form-item label="密保问题一：">
         <el-select
           class="question-select"
-          v-model="pswdPro.questionOne"
-          @change="e => flushQuestionArray"
+          :value="pswdPro.questionOne"
+          @change="e => flushQuestionArray(e, 'questionOne')"
         >
           <el-option
             v-for="item in questionArray"
@@ -22,8 +22,8 @@
       <el-form-item label="密保问题二：">
         <el-select
           class="question-select"
-          v-model="pswdPro.questionTwo"
-          @change="e => flushQuestionArray"
+          :value="pswdPro.questionTwo"
+          @change="e => flushQuestionArray(e, 'questionTwo')"
         >
           <el-option
             v-for="item in questionArray.slice(pswdPro.questionOne)"
@@ -97,7 +97,14 @@ export default {
         this.$message.error(String(err));
       }
     },
-    flushQuestionArray(e) {
+    flushQuestionArray(e, key) {
+      if (
+        this.pswdPro[key] &&
+        !this.questionArray.includes(this.pswdPro[key])
+      ) {
+        this.questionArray.unshift(this.pswdPro[key]);
+      }
+      this.pswdPro[key] = e;
       this.questionArray.splice(this.questionArray.indexOf(e), 1);
     }
   }

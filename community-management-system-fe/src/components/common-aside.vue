@@ -30,7 +30,9 @@
             ><i class="el-icon-s-operation" />操作菜单
           </template>
           <!--居民用户操作组-->
-          <el-menu-item-group v-if="[0, 1].indexOf(userInfo.userType) !== -1">
+          <el-menu-item-group
+            v-if="[0, 1, 2].indexOf(userInfo.userType) !== -1"
+          >
             <template slot="title">基本功能组：</template>
             <el-menu-item
               @click="() => $router.push('/dashboard/residentOverview')"
@@ -89,7 +91,7 @@
           </el-menu-item-group>
 
           <!--  系统管理员操作组-->
-          <el-menu-item-group>
+          <el-menu-item-group v-if="userInfo.userType === 3">
             <template slot="title">系统管理员功能组：</template>
             <el-menu-item
               @click="() => $router.push('/dashboard/addOfficer')"
