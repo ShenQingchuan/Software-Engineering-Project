@@ -7,10 +7,7 @@ import com.example.csgs.service.UserSignService;
 import com.example.csgs.utils.JwtUtils;
 import com.example.csgs.utils.RedisUtils;
 import com.example.csgs.utils.SHA256Util;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
@@ -41,7 +38,7 @@ public class UserSignServiceImpl implements UserSignService {
     public Map<Integer, String> sign(String userID, String password, HttpServletResponse response) {
         UserEntity userEntity = userMapper.findOneByUserID(userID);
         Map<Integer, String> list = new HashMap<>();
-        if (userEntity != null) { // 判断用户是否存在
+        if (userEntity != null) { // 判断用户是否存在x
             String sha256String = SHA256Util.getSHA256String(password);
             if (sha256String.equals(userEntity.getUserPassword())) { // 校验密码是否一致
                 String token = JwtUtils.genJsonWebToken(userEntity); // 得到 Token

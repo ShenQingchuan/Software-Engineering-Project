@@ -11,7 +11,6 @@ import com.example.csgs.mapper.JournalTypeMapper;
 import com.example.csgs.service.GridManageService;
 import com.example.csgs.utils.ResultUtils;
 import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -79,6 +78,9 @@ public class GridManageController {
         if (pageQuery != null && pageQuery.getDataList() != null) {
             return ResultUtils.success(pageQuery, "返回公告信息列表成功！");
         }
+        if (Integer.parseInt(page) > 1) {
+            return ResultUtils.error(" 已无更多公告！");
+        }
         return ResultUtils.success("返回公告信息列表失败！");
     }
 
@@ -107,6 +109,9 @@ public class GridManageController {
         PageQuery<Journal> pageQuery = gridManageService.getJournalList(Long.parseLong(id), page);
         if (pageQuery != null && pageQuery.getDataList() != null) {
             return ResultUtils.success(pageQuery, "返回日志信息列表成功！");
+        }
+        if (Integer.parseInt(page) > 1) {
+            return ResultUtils.error(" 已无更多日志！");
         }
         return ResultUtils.success("返回日志信息列表失败！");
     }

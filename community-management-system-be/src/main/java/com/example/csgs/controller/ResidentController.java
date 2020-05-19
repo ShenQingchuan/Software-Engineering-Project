@@ -1,22 +1,12 @@
 package com.example.csgs.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.example.csgs.bean.CommunityInfo;
-import com.example.csgs.bean.LoginState;
 import com.example.csgs.bean.PageQuery;
 import com.example.csgs.entity.Announcement;
 import com.example.csgs.service.ResidentService;
-import com.example.csgs.service.UserSignService;
 import com.example.csgs.utils.ResultUtils;
 import lombok.extern.log4j.Log4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/resident")
@@ -46,10 +36,13 @@ public class ResidentController {
      * 居民用户获取自己所处网格中网格员所发布的公告信息
      */
     @GetMapping("/getAnnouncementOfGrid/{id}")
-    public Object getAnnouncementOfGrid(@PathVariable String id,@RequestParam String page){
-        PageQuery<Announcement> announcementList = residentService.getAnnouncementOfGrid(Long.parseLong(id),page);
+    public Object getAnnouncementOfGrid(@PathVariable String id, @RequestParam String page) {
+        PageQuery<Announcement> announcementList = residentService.getAnnouncementOfGrid(Long.parseLong(id), page);
         if (announcementList != null) {
             return ResultUtils.success(announcementList, "获取用户所在网格公告信息成功！");
+        }
+        if (Integer.parseInt(page) > 1) {
+            return ResultUtils.error(" 已无更多公告！");
         }
         return ResultUtils.error("该用户所在小区未发布任何公告！");
     }
