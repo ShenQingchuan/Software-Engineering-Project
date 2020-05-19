@@ -79,7 +79,7 @@ public class RedisUtils {
      * @param key
      * @return
      */
-    public Boolean hasKey(String key) {
+    public static Boolean hasKey(String key) {
         return redisUtils.redisTemplate.hasKey(key);
     }
 

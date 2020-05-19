@@ -29,23 +29,16 @@ public class UserRealm extends AuthorizingRealm {
         Subject subject = SecurityUtils.getSubject();
         UserEntity currentUser = (UserEntity) subject.getPrincipal();
         switch (currentUser.getUserType()) {
-            case 0:
-                log.info("[居民]进行授权");
-                authority.add("resident");
-                break;
             case 1:
                 log.info("[网格员]进行授权");
                 authority.add("grid");
-                authority.add("resident");
                 break;
             case 2:
                 log.info("[领导]进行授权");
-                authority.add("resident");
                 authority.add("leader");
                 break;
             case 3:
                 log.info("[系统管理员]进行授权");
-                authority.add("resident");
                 authority.add("leader");
                 authority.add("admin");
                 break;
@@ -60,7 +53,7 @@ public class UserRealm extends AuthorizingRealm {
         UsernamePasswordToken userToken = (UsernamePasswordToken) token;
         UserEntity userEntity = userMapper.findOneByUserID(userToken.getUsername());
         if (userEntity != null) {
-            log.info(userEntity.getUserID() + "进行认证");
+            log.info("userID<"+ userEntity.getUserID() + ">进行认证");
             return new SimpleAuthenticationInfo(userEntity, userEntity.getUserPassword(), "");
         }
         return null;

@@ -5,10 +5,10 @@ import com.example.csgs.mapper.PwdProMapper;
 import com.example.csgs.mapper.UserMapper;
 import com.example.csgs.service.UserPwdProService;
 import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,13 +17,10 @@ import java.util.List;
 @Service
 @Transactional
 public class UserPwdProServiceImpl implements UserPwdProService {
-    final UserMapper userMapper;
-    final PwdProMapper pwdProMapper;
-
-    public UserPwdProServiceImpl(UserMapper userMapper, PwdProMapper pwdProMapper) {
-        this.userMapper = userMapper;
-        this.pwdProMapper = pwdProMapper;
-    }
+    @Resource
+    UserMapper userMapper;
+    @Resource
+    PwdProMapper pwdProMapper;
 
     /**
      * 从List集合中提取密保放到HashMap中

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.csgs.mapper.UserMapper">
-<!--    <cache-->
-<!--            eviction="FIFO"-->
-<!--            flushInterval="60000"-->
-<!--            size="512"-->
-<!--            readOnly="true"/>-->
+    <cache eviction="FIFO"
+           flushInterval="60000"
+           size="512"
+           readOnly="true"/>
 
     <select id="findById" resultType="UserEntity">
         select *
@@ -13,7 +12,7 @@
         where id = #{id}
     </select>
 
-    <select id="findOneByUserID" parameterType="String" resultType="UserEntity">
+    <select id="findOneByUserID"  resultType="UserEntity">
         select *
         from user u
         where userid = #{userID}
@@ -48,8 +47,8 @@
             and user_name = #{userName}
         </if>
     </select>
-    <!--    使用userName != null,表示map中存在key为userName的键值对，反之不存在这样的键值对-->
-    <!--    如果是userName != '',表示map中存在key为userName的键值对，并且value为空-->
+    <!--    使用userName = null,表示不存在这样的键值对-->
+    <!--    如果是userName = '',表示map中存在key为userName的键值对，并且value为空-->
     <update id="modifyPassword">
         update user
         set user.user_password=#{newPassword}

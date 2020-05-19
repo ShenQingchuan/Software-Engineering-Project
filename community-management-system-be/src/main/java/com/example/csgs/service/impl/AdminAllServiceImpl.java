@@ -1,9 +1,9 @@
 package com.example.csgs.service.impl;
 
-import com.example.csgs.bean.AreaList;
-import com.example.csgs.bean.CreateGridInfo;
-import com.example.csgs.bean.GridPersonalInfo;
-import com.example.csgs.bean.PageQuery;
+import com.example.csgs.entity.AreaList;
+import com.example.csgs.entity.CreateGridInfo;
+import com.example.csgs.entity.GridPersonalInfo;
+import com.example.csgs.entity.PageQuery;
 import com.example.csgs.entity.*;
 import com.example.csgs.mapper.*;
 import com.example.csgs.service.AdminAllService;
@@ -11,10 +11,10 @@ import com.example.csgs.utils.CalculatePageUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,20 +23,16 @@ import java.util.List;
 @Transactional
 @Log4j
 public class AdminAllServiceImpl implements AdminAllService {
-    final UserMapper userMapper;
-    final ProfileMapper profileMapper;
-    final CommunityInfoMapper communityInfoMapper;
-    final DistrictMapper districtMapper;
-    final GridMapper gridMapper;
-
-    public AdminAllServiceImpl(UserMapper userMapper, ProfileMapper profileMapper,
-                               CommunityInfoMapper communityInfoMapper, DistrictMapper districtMapper, GridMapper gridMapper) {
-        this.userMapper = userMapper;
-        this.profileMapper = profileMapper;
-        this.communityInfoMapper = communityInfoMapper;
-        this.districtMapper = districtMapper;
-        this.gridMapper = gridMapper;
-    }
+    @Resource
+    UserMapper userMapper;
+    @Resource
+    ProfileMapper profileMapper;
+    @Resource
+    CommunityInfoMapper communityInfoMapper;
+    @Resource
+    DistrictMapper districtMapper;
+    @Resource
+    GridMapper gridMapper;
 
     /**
      * 场景：系统管理员新增网格员，首先要获取区域数据信息，然后在其中选择区域分配网格员
@@ -47,9 +43,8 @@ public class AdminAllServiceImpl implements AdminAllService {
     @Override
     public AreaList getAreaList(String userID) {
         UserEntity userEntity = userMapper.findOneByUserID(userID);
-        //在添加网格员之前，如果这位用户已经是网格员了，就不能再进行一下操作
-        //所以我们通过判断用户userType的方法，事先进行一个身份信息判断
-        if (userEntity != null && userEntity.getUserType() != 1) {
+
+        if (userEntity != null) {
             DistrictEntity districtEntity = profileMapper.findDistrictById(userEntity.getId());
             List<String> communityNameList = communityInfoMapper.findCommunityByDistrictId(districtEntity.getId());
             String[] districtNameArray = communityNameList.toArray(new String[0]);
@@ -124,7 +119,8 @@ public class AdminAllServiceImpl implements AdminAllService {
             UserProfile userProfile = profileMapper.findById(gridEntity.getUserId().getId());
             //此刻返回的id是grid表中网格员的id
             GridPersonalInfo gridPersonalInfo = new GridPersonalInfo(
-                    gridEntity.getId(), userProfile.getUserName(), userProfile.getTelPhone(), areaList);
+                    gridEntity.getUserId().getId(), userProfile.getUserName(),
+                    gridEntity.getUserId().getUserID(), userProfile.getTelPhone(), areaList);
             gridPersonalInfoList.add(gridPersonalInfo);
         }
         return CalculatePageUtils.getPageInfo(Integer.parseInt(page), pageSize, pageAble, gridPersonalInfoList);

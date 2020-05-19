@@ -1,12 +1,8 @@
 package com.example.csgs.service;
 
-import com.example.csgs.bean.CommunityInfo;
-import com.example.csgs.bean.PageQuery;
+import com.example.csgs.entity.CommunityInfo;
+import com.example.csgs.entity.PageQuery;
 import com.example.csgs.entity.Announcement;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 public interface ResidentService {
     /**

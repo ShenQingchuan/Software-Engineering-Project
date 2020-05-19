@@ -1,39 +1,27 @@
 package com.example.csgs.service.impl;
 
-import com.example.csgs.bean.CommunityInfo;
-import com.example.csgs.bean.LoginState;
-import com.example.csgs.bean.PageQuery;
+import com.example.csgs.entity.CommunityInfo;
+import com.example.csgs.entity.PageQuery;
 import com.example.csgs.entity.Announcement;
 import com.example.csgs.entity.CommunityInfoEntity;
-import com.example.csgs.entity.UserEntity;
 import com.example.csgs.mapper.AnnouncementMapper;
 import com.example.csgs.mapper.ProfileMapper;
-import com.example.csgs.mapper.UserMapper;
 import com.example.csgs.service.ResidentService;
-import com.example.csgs.service.UserSignService;
 import com.example.csgs.utils.CalculatePageUtils;
-import com.example.csgs.utils.JwtUtils;
-import com.example.csgs.utils.RedisUtils;
-import com.example.csgs.utils.SHA256Util;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.log4j.Log4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
+import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 @Log4j
 @Service
 public class ResidentServiceImpl implements ResidentService {
-    @Autowired
+    @Resource
     ProfileMapper profileMapper;
-    @Autowired
+    @Resource
     AnnouncementMapper announcementMapper;
     /**
      * 场景：居民用户登陆，居民首页呈现自己所住小区名、房屋数量、停车位数量、居民数量

@@ -1,6 +1,6 @@
 package com.example.csgs.service;
 
-import com.example.csgs.bean.PageQuery;
+import com.example.csgs.entity.PageQuery;
 import com.example.csgs.entity.User;
 
 public interface GridQueryService {
@@ -27,8 +27,8 @@ public interface GridQueryService {
 
     /**
      * 网格员删除居民用户
-     * @param uid 所要删除用户在user表中的id
+     * @param id 所要删除用户在user表中的id
      */
-    boolean deleteUser(Long uid);
+    boolean deleteUser(Long id);
 
 }

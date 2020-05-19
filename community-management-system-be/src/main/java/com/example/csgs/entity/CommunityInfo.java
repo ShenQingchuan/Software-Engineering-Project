@@ -1,7 +1,5 @@
-package com.example.csgs.bean;
+package com.example.csgs.entity;
 
-import com.example.csgs.entity.Announcement;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +12,5 @@ public class CommunityInfo {
     private Long numHouses;
     private Long numResidents;
     private Long numParkingSpaces;
-//    @JsonInclude(JsonInclude.Include.NON_NULL)
-//    private PageQuery<Announcement> announcementList;
 
 }

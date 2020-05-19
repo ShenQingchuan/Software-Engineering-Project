@@ -1,9 +1,9 @@
 package com.example.csgs.service;
 
-import com.example.csgs.bean.AreaList;
-import com.example.csgs.bean.CreateGridInfo;
-import com.example.csgs.bean.GridPersonalInfo;
-import com.example.csgs.bean.PageQuery;
+import com.example.csgs.entity.AreaList;
+import com.example.csgs.entity.CreateGridInfo;
+import com.example.csgs.entity.GridPersonalInfo;
+import com.example.csgs.entity.PageQuery;
 
 import java.util.List;
 

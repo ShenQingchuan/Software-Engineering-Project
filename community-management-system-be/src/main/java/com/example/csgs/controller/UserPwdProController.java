@@ -4,12 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.csgs.entity.UserEntity;
 import com.example.csgs.mapper.UserMapper;
 import com.example.csgs.service.UserPwdProService;
+import com.example.csgs.utils.IsInteger;
 import com.example.csgs.utils.ResultUtils;
 import com.example.csgs.utils.SHA256Util;
 import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,21 +18,19 @@ import java.util.List;
 @RequestMapping("/pwdPro")
 @Log4j
 public class UserPwdProController {
-
-    final UserPwdProService userPwdProService;
-    final UserMapper userMapper;
-
-    public UserPwdProController(UserPwdProService userPwdProService, UserMapper userMapper) {
-        this.userPwdProService = userPwdProService;
-        this.userMapper = userMapper;
-    }
+    @Resource
+    UserPwdProService userPwdProService;
+    @Resource
+    UserMapper userMapper;
 
     /**
      * 设置密保接口
      */
     @PutMapping("/setUpPwdPro/{id}")
     public Object updatePwdPro(@RequestBody JSONObject jsonObject, @PathVariable String id) {
-
+        if (!IsInteger.isInteger(id)) {
+            return ResultUtils.error("拒绝访问！请修改请求信息......");
+        }
         Long uid = Long.parseLong(id);
         String questionOne = jsonObject.getString("questionOne");
         String questionTwo = jsonObject.getString("questionTwo");
@@ -45,8 +44,10 @@ public class UserPwdProController {
         list.add(answerTwo);
 
         if (userPwdProService.setPwdPro(uid, list)) {
+            log.info("用户<"+ id +">设置密保成功！");
             return ResultUtils.success("密保设置成功");
         }
+        log.info("用户<"+ id +">设置密保失败！");
         return ResultUtils.error("密保设置失败！");
     }
 
@@ -56,16 +57,22 @@ public class UserPwdProController {
      */
     @PutMapping("/modifyPwd/{id}")
     public Object updatePwd(@RequestBody JSONObject jsonObject, @PathVariable String id) {
-        String sha256String = SHA256Util.getSHA256String(jsonObject.getString("newPassword"));
+        if (!IsInteger.isInteger(id)) {
+            return ResultUtils.error("拒绝访问！请修改请求信息......");
+        }
 
+        String sha256String = SHA256Util.getSHA256String(jsonObject.getString("newPassword"));
         UserEntity targetUser = userMapper.findById(Long.parseLong(id));
         if (targetUser != null) {
             if (targetUser.getUserPassword().equals(sha256String)) {
-                return ResultUtils.error("密码修改失败,该密码与原始密码相同！！");
+                log.info("用户<"+ id +">密码修改失败,该密码与原始密码相同！");
+                return ResultUtils.error("密码修改失败,该密码与原始密码相同！");
             }else if (userMapper.modifyPassword(sha256String, Long.parseLong(id)) > 0) {
+                log.info("用户<"+ id +">密码修改成功！");
                 return ResultUtils.success("密码修改成功！");
             }
         }
+        log.info("用户<"+ id +">密码修改失败！");
         return ResultUtils.error("密码修改失败！");
     }
 
@@ -74,13 +81,16 @@ public class UserPwdProController {
      */
     @GetMapping("/returnPwdProQue/{id}")
     public Object returnPwdPro(@PathVariable String id) {
+        if (!IsInteger.isInteger(id)) {
+            return ResultUtils.error("拒绝访问！请修改请求信息......");
+        }
 
-        Long uid = Long.parseLong(id);
-
-        List<String> list = userPwdProService.returnPwdProQue(uid);
+        List<String> list = userPwdProService.returnPwdProQue(Long.parseLong(id));
         if (list != null) {
+            log.info("用户<"+ id +">获取密保问题成功！");
             return ResultUtils.success(list, "获取密保问题成功");
         }
+        log.info("用户<"+ id +">获取密保问题失败！");
         return ResultUtils.error("获取密保问题失败！");
     }
 
@@ -89,8 +99,9 @@ public class UserPwdProController {
      */
     @PostMapping("/comparePwdProAns/{id}")
     public Object comparePwdPro(@RequestBody JSONObject jsonObject, @PathVariable String id) {
-
-        Long uid = Long.parseLong(id);
+        if (!IsInteger.isInteger(id)) {
+            return ResultUtils.error("拒绝访问！请修改请求信息......");
+        }
 
         String answerOne = jsonObject.getString("answerOne");
         String answerTwo = jsonObject.getString("answerTwo");
@@ -99,9 +110,11 @@ public class UserPwdProController {
         list.add(answerOne);
         list.add(answerTwo);
 
-        if (userPwdProService.comparePwdProAns(uid, list)) {
+        if (userPwdProService.comparePwdProAns(Long.parseLong(id), list)) {
+            log.info("用户<"+ id +">回答密保问题成功！");
             return ResultUtils.success("回答密保成功");
         }
+        log.info("用户<"+ id +">回答密保问题失败！");
         return ResultUtils.error("回答密保失败！");
     }
 

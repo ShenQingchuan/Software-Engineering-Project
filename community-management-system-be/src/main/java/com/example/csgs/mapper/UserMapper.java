@@ -3,8 +3,6 @@ package com.example.csgs.mapper;
 
 import com.example.csgs.entity.User;
 import com.example.csgs.entity.UserEntity;
-import com.example.csgs.entity.UserProfile;
-import com.example.csgs.entity.UserSign;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.stereotype.Repository;
 
@@ -16,8 +14,6 @@ public interface UserMapper {
     UserEntity findById(@Param("id") Long id);
 
     UserEntity findOneByUserID(@Param("userID") String userID);
-
-    UserEntity findByUserProfile(UserProfile userProfile);
 
     int modifyPassword(@Param("newPassword") String newPassword, @Param("id") Long id);
 
@@ -33,5 +29,4 @@ public interface UserMapper {
 
     void cancelGrid(@Param("UserID") String UserID);
 
-    UserSign queryUserByName(@Param("id") Long id);
 }

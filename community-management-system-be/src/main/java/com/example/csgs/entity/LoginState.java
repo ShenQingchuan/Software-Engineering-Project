@@ -1,4 +1,4 @@
-package com.example.csgs.bean;
+package com.example.csgs.entity;
 
 public class LoginState {
     public static final int STATE_SUCCESS = 1;

@@ -1,6 +1,6 @@
 package com.example.csgs.service.impl;
 
-import com.example.csgs.bean.PageQuery;
+import com.example.csgs.entity.PageQuery;
 import com.example.csgs.entity.DistrictEntity;
 import com.example.csgs.entity.User;
 import com.example.csgs.entity.UserEntity;
@@ -12,9 +12,9 @@ import com.example.csgs.utils.CalculatePageUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,19 +22,16 @@ import java.util.List;
 @Log4j
 @Service
 public class GridQueryServiceImpl implements GridQueryService {
-    final UserMapper userMapper;
-    final ProfileMapper profileMapper;
-    final PwdProMapper pwdProMapper;
+    @Resource
+    UserMapper userMapper;
+    @Resource
+    ProfileMapper profileMapper;
+    @Resource
+    PwdProMapper pwdProMapper;
 
     private final int pageSize = 10;
     private Page<User> pageable = new Page<>(1,1);
     private List<User> userList = new ArrayList<>();
-
-    public GridQueryServiceImpl(UserMapper userMapper, ProfileMapper profileMapper, PwdProMapper pwdProMapper) {
-        this.userMapper = userMapper;
-        this.profileMapper = profileMapper;
-        this.pwdProMapper = pwdProMapper;
-    }
 
     /**
      * 通过网格员id查询居民用户信息列表
@@ -92,13 +89,13 @@ public class GridQueryServiceImpl implements GridQueryService {
 
     /**
      * 网格员删除居民用户
-     * @param uid 所要删除用户在user表中的id
+     * @param id 所要删除用户在user表中的id
      */
     @Override
-    public boolean deleteUser(Long uid) {
-        UserEntity userResident = userMapper.findById(uid);
+    public boolean deleteUser(Long id) {
+        UserEntity userResident = userMapper.findById(id);
         if (userResident != null && userResident.getUserType() == 0) {
-            return profileMapper.deleteById(uid) > 0 && pwdProMapper.deleteById(uid) > 0;
+            return profileMapper.deleteById(id) > 0 && pwdProMapper.deleteById(id) > 0;
         }
         return false;
     }

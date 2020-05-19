@@ -1,11 +1,6 @@
 package com.example.csgs.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.csgs.bean.CommunityInfo;
-import com.example.csgs.bean.PageQuery;
-import com.example.csgs.entity.Announcement;
-
-import java.util.List;
 
 public interface UserProfileService {
     /**

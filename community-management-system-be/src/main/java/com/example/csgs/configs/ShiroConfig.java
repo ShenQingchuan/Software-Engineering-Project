@@ -19,7 +19,6 @@ import java.util.LinkedHashMap;
 @Configuration
 @Log4j
 public class ShiroConfig {
-
     @Bean
     public ShiroFilterFactoryBean shiroFilterFactoryBean() {
         ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
@@ -38,8 +37,9 @@ public class ShiroConfig {
         filterMap.put("/query/**", "perms[grid]");
         filterMap.put("/leader/**", "perms[leader]");
         filterMap.put("/admin/**", "perms[admin]");
-        filterMap.put("/resident/**", "perms[resident]");
-
+        filterMap.put("/resident/**", "authc");
+        filterMap.put("/profile/**","authc");
+        filterMap.put("/pwdPro/**","authc");
         bean.setFilterChainDefinitionMap(filterMap);
         return bean;
     }
@@ -61,11 +61,13 @@ public class ShiroConfig {
         return new UserRealm();
     }
 
+    //sessionId管理
     @Bean
     public SessionManager sessionManager() {
         return new CustomSessionManager();
     }
 
+    //跨域
     @Bean
     public FilterRegistrationBean<Filter> corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
