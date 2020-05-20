@@ -107,9 +107,6 @@ import { aliStore } from "../../utils/alioss";
 
 export default {
   name: "userInfoShow",
-  data() {
-    return {};
-  },
   computed: {
     ...mapState(["userInfo"]),
     ofGrid() {

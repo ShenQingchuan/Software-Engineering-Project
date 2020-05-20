@@ -24,11 +24,8 @@
         <el-table-column fixed label="日志创建时间" prop="createTime" />
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
-            <el-button @click="() => {}" size="small" type="text"
-              >查看
-            </el-button>
             <el-button @click="handleEdit(scope.row)" size="small" type="text"
-              >编辑
+              >查看内容
             </el-button>
           </template>
         </el-table-column>
@@ -39,11 +36,28 @@
       <el-pagination :total="totalSize" layout="prev, pager, next">
       </el-pagination>
     </div>
+
+    <el-dialog
+      title="提示"
+      :visible.sync="showContentDialog.isShow"
+      width="30%"
+      center
+    >
+      <span slot="title"
+        ><b>日志：{{ showContentDialog.title }}</b></span
+      >
+      <p v-html="showContentDialog.content"></p>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="closeShowContentDialog"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import logMock from "@/mock/logs";
+// import logMock from "@/mock/logs";
 import resErrorHandler from "@/utils/resErrorHandler";
 
 import { mapState } from "vuex";
@@ -55,14 +69,16 @@ export default {
   },
   async mounted() {
     try {
-      this.loadingTable = false;
+      this.loadingTable = true;
       const res = await this.$axios.get(
         `/grid/getJournalList/${this.userInfo.id}?page=1`
       );
       resErrorHandler(this, res);
-      this.logData = res.data.data.dataList;
-      this.totalSize = res.data.data.totalSize;
-      this.loadingTable = true;
+      if (res.data.data && res.data.data.dataList.length > 0) {
+        this.logData = res.data.data.dataList;
+        this.totalSize = res.data.data.totalSize;
+      }
+      this.loadingTable = false;
     } catch (err) {
       this.$message.error(String(err));
     }
@@ -70,35 +86,40 @@ export default {
   data() {
     return {
       loadingTable: false,
-      logOptions: [
-        {
-          value: "survey",
-          label: "调查走访"
-        },
-        {
-          value: "patrol",
-          label: "巡逻治安"
-        },
-        {
-          value: "logistical",
-          label: "基础设施养护"
-        },
-        {
-          value: "summary",
-          label: "阶段工作总结"
-        }
-      ],
       queryForm: {
         dateRange: "",
         logType: ""
       },
       totalSize: 0,
-      logData: logMock
+      logData: [],
+      showContentDialog: {
+        isShow: false,
+        title: "",
+        content: ""
+      }
     };
   },
   methods: {
-    handleEdit(row) {
-      console.log(row);
+    async handleEdit(row) {
+      try {
+        const log = await this.$axios.get(`/grid/getJournalContent/${row.id}`);
+        resErrorHandler(this, log);
+        if (log.data.resultCode === "200") {
+          this.$message.success("获取日志详情成功！");
+          this.showContentDialog.title = row.titleName;
+          this.showContentDialog.content = log.data.data;
+          this.showContentDialog.isShow = true;
+        }
+      } catch (err) {
+        this.$message.error(String(err));
+      }
+    },
+    closeShowContentDialog() {
+      this.showContentDialog = {
+        isShow: false,
+        title: "",
+        content: ""
+      };
     }
   }
 };

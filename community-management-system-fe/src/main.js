@@ -7,6 +7,7 @@ import {
   Button,
   Badge,
   Radio,
+  Dialog,
   RadioGroup,
   Menu,
   Checkbox,
@@ -20,6 +21,7 @@ import {
   DropdownMenu,
   Icon,
   Header,
+  Popconfirm,
   Main,
   Footer,
   Form,
@@ -94,6 +96,7 @@ Vue.use(Button)
   .use(DropdownItem)
   .use(Dropdown)
   .use(Icon)
+  .use(Dialog)
   .use(Aside)
   .use(Container)
   .use(Header)
@@ -111,6 +114,7 @@ Vue.use(Button)
   .use(Pagination)
   .use(FormItem)
   .use(Input)
+  .use(Popconfirm)
   .use(CheckboxGroup)
   .use(Table)
   .use(TableColumn)

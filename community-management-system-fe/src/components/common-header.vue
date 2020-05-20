@@ -12,35 +12,23 @@
             修改密码
           </div>
         </el-dropdown-item>
-        <el-dropdown-item>
-          <div @click="logout">退出登录</div>
-        </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
 
     <!--其他操作按钮-->
     <ul class="actions">
-      <li>
-        <el-badge
-          :hidden="notificationCount === 0"
-          :max="99"
-          :value="notificationCount"
-          class="badge"
-        >
-          <i class="el-icon-bell"></i>
-        </el-badge>
-      </li>
-      <li><i class="el-icon-setting"></i></li>
-      <li><i class="el-icon-switch-button"></i></li>
+      <li @click="logout"><i class="el-icon-switch-button"></i></li>
     </ul>
   </div>
 </template>
 
 <script>
 import Cookies from "js-cookie";
+import logout from "@/mixins/logout";
 
 export default {
   name: "common-header",
+  mixins: [logout],
   data() {
     return {
       notificationCount: 5,

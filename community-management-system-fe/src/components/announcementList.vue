@@ -80,7 +80,7 @@ export default {
 
 <style lang="scss" scoped>
 .comp-announcement {
-  width: 100%;
+  width: 50%;
   box-sizing: border-box;
 
   .announcement-header {
@@ -119,7 +119,7 @@ export default {
     border: 1px solid rgba(0, 0, 0, 0.09);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
     box-sizing: border-box;
-    width: 80%;
+    width: 50%;
     padding: 20px;
     margin: 5px 0;
 

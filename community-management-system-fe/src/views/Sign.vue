@@ -104,7 +104,7 @@ export default {
     async signIn() {
       if (this.validateLogin()) {
         try {
-          const res = await this.$axios.post("/sign/login", {
+          const res = await this.$axios.post("/sign/signIn", {
             userID: this.signInform.userId,
             password: md5(this.signInform.password)
           });

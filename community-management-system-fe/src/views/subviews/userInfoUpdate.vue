@@ -4,7 +4,7 @@
     <div class="user-info-header">修改信息</div>
     <div
       class="flex-col flex-col user-info-go-back"
-      @click="() => $router.push('/dashboard/userInfoShow')"
+      @click="() => $router.push(`/dashboard/userInfoShow/${userInfo.id}`)"
     >
       <i class="el-icon-arrow-left"></i>
     </div>
@@ -124,10 +124,17 @@
         <template v-slot:label
           ><span class="form-label">文化程度：</span></template
         >
-        <el-input
-          class="form-inputer"
-          v-model="updateForm.degreeOfEducation"
-        ></el-input>
+        <el-select v-model="updateForm.degreeOfEducation" class="form-inputer">
+          <el-option value="小学" />
+          <el-option value="初中" />
+          <el-option value="高中" />
+          <el-option value="中专" />
+          <el-option value="大专" />
+          <el-option value="本科" />
+          <el-option value="硕士" />
+          <el-option value="博士" />
+          <el-option value="博士后" />
+        </el-select>
       </el-form-item>
       <el-form-item class="form-item" label-width="100px">
         <template v-slot:label
@@ -187,8 +194,10 @@ export default {
   },
   methods: {
     turnToRareBloodType(val) {
-      this.showRareBloodTypeInputer = val === "其他稀有血型";
-      this.updateForm.bloodType = "";
+      if (val === "其他稀有血型") {
+        this.showRareBloodTypeInputer = true;
+        this.updateForm.bloodType = "";
+      }
     },
     async submitUpdateInfo() {
       const {

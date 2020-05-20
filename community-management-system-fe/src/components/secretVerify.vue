@@ -57,6 +57,11 @@ export default {
     async finishSecretVerify() {
       try {
         const { answerOne, answerTwo } = this.form;
+        if (answerOne.length === 0 || answerTwo.length === 0) {
+          this.$message.error("您有答案没有填写！");
+          return;
+        }
+
         const res = await this.$axios.post(
           `/pwdPro/comparePwdProAns/${this.userInfo.id}`,
           {

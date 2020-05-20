@@ -2,7 +2,7 @@
   <div class="subpage-officer-manage tb-gap flex flex-col">
     <div class="search-form flex-box">
       <label>要搜索的用户：</label>
-      <el-input v-model="uid" placeholder="请输入用户 ID" />
+      <el-input v-model="userID" placeholder="请输入用户 ID" />
       <el-button
         @click="submitUserQuery"
         class="query-submit"
@@ -13,7 +13,7 @@
     </div>
 
     <el-card
-      v-if="searchUserResult && searchUserResult.userName"
+      v-if="searchUserResult.userName !== undefined"
       class="info-card text-align-left tb-gap flex-wrap"
       shadow="hover"
     >
@@ -68,7 +68,9 @@
     </div>
 
     <div v-if="step === 2" class="tb-gap">
-      <el-button type="primary" plain>确认赋予网格员权限</el-button>
+      <el-button @click="submitAddOfficer" type="primary" plain
+        >确认赋予网格员权限</el-button
+      >
     </div>
   </div>
 </template>
@@ -81,7 +83,7 @@ export default {
   name: "officerManage",
   data() {
     return {
-      uid: "",
+      userID: "",
       selectCommunity: [],
       searchUserResult: {},
       step: 0,
@@ -92,9 +94,13 @@ export default {
   },
   methods: {
     async submitUserQuery() {
+      if (!/\d{18}/.test(this.userID)) {
+        this.$message.error("身份证输入格式出错！");
+        return;
+      }
       // 先查询某用户基本资料 /admin/getGridProfile ，先不展示可选的小区列表，要等管理员确认无误点击按钮后再请求 /getAreaList
       const userRes = await this.$axios.get(
-        `/admin/getGridProfile?userID=${this.uid}`
+        `/admin/getGridProfile?userID=${this.userID}`
       );
       resErrorHandler(this, userRes);
       if (userRes.data.resultCode === "200") {
@@ -104,9 +110,8 @@ export default {
       }
     },
     async getOptionsList() {
-      // TODO: 获取 可选的小区列表
       const res = await this.$axios.get(
-        `/admin/getAreaList?userID=${this.uid}`
+        `/admin/getAreaList?userID=${this.userID}`
       );
       resErrorHandler(this, res);
       if (res.data.resultCode === "200") {
@@ -121,6 +126,27 @@ export default {
       }
 
       this.showOptionsList = true;
+      this.communityOptionsList = res.data.data;
+      this.step++;
+    },
+    async submitAddOfficer() {
+      try {
+        const { userID, selectCommunity } = this;
+        const res = await this.$axios.post(`/admin/addGrid`, {
+          userID,
+          areaList: {
+            districtName: this.communityOptionsList.districtName,
+            communityArray: selectCommunity
+          }
+        });
+        resErrorHandler(this, res);
+        if (res.data.resultCode === "200") {
+          this.$message.success("添加网格员成功！");
+          await this.$router.push("/dashboard/officerManage");
+        }
+      } catch (err) {
+        this.$message.error(String(err));
+      }
     }
   }
 };

@@ -37,11 +37,9 @@
 
 <script>
 import { mapState } from "vuex";
-
-const phoneRegex = /^(?:(?:\+|00)86)?1[3-9]\d{9}$/;
-const codeRegex = /(\d){6}/;
-
 import AV from "@/utils/LeanCloudMessage";
+
+const codeRegex = /(\d){6}/;
 
 export default {
   name: "phoneCodeVerify",
@@ -49,13 +47,6 @@ export default {
     ...mapState(["userInfo"])
   },
   data() {
-    const validatePhone = (rule, value, callback) => {
-      if (this.phoneFail(value)) {
-        callback(new Error("手机号码格式不正确！"));
-      } else {
-        callback();
-      }
-    };
     const validateCode = (rule, value, callback) => {
       if (this.codeFail(value)) {
         callback(new Error("验证码格式不正确！"));
@@ -66,11 +57,9 @@ export default {
 
     return {
       form: {
-        phone: "",
         code: ""
       },
       rules: {
-        phone: [{ validator: validatePhone, trigger: "blur" }],
         code: [{ validator: validateCode, trigger: "blur" }]
       },
       gapTime: 0,
@@ -79,9 +68,6 @@ export default {
     };
   },
   methods: {
-    phoneFail(value) {
-      return value === "" || !phoneRegex.test(value);
-    },
     codeFail(value) {
       return value === "" || !codeRegex.test(value);
     },
@@ -96,7 +82,7 @@ export default {
           try {
             const res = await AV.Cloud.verifySmsCode(
               this.form.code,
-              this.form.phone
+              this.userInfo.telPhone
             );
             console.log(res);
             this.phoneCodeVerifyLoading = false;
@@ -109,15 +95,9 @@ export default {
       });
     },
     async sendVerifyCode() {
-      if (this.phoneFail(this.form.phone)) {
-        this.$message.warning("请检查您的手机号填写！");
-        return;
-      }
-
-      const phone = this.form.phone;
       try {
         const res = await AV.Cloud.requestSmsCode({
-          mobilePhoneNumber: phone,
+          mobilePhoneNumber: this.userInfo.telPhone,
           name: "社区治理信息助手",
           op: "修改密保",
           ttl: 10 // 验证码有效时间为 10 分钟
