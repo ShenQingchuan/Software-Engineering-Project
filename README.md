@@ -31,7 +31,7 @@
 
    * 不再是傻乎乎每次新建项目都在pom.xml文件里添加阿里云镜像
 
-   * 学会从External Libraries中了解所加入的项目依赖（管理对冲突的依赖）
+   * 学会从External Libraries中了解所加入的项目依赖（管理冲突的依赖）
 
    * URL中PathVariable类型（数字、字母、符号）判断对数据库安全操作十分重要
 
@@ -98,7 +98,7 @@
 
 5. ### Docker
 
-   * 从手动上传jar包构建镜像到docker-plugin一键搞定，这期间我到底经历了什么
+   * 从手动上传jar包构建镜像到docker-plugin一键搞定，这期间我到底经历了什么？
 
    * 将容器中的log映射到Host：-v /web_log:/log
 

@@ -74,7 +74,7 @@
               index="2-3"
             >
               <i class="el-icon-notebook-1" />
-              日志管理
+              我的日志
             </el-menu-item>
           </el-menu-item-group>
 

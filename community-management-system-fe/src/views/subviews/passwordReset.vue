@@ -20,7 +20,11 @@
       v-model="verifyType"
     >
       <el-option label="密保验证" value="密保验证"></el-option>
-      <el-option label="手机验证" value="手机验证"></el-option>
+      <el-option
+        v-if="userInfo.telPhone && userInfo.telPhone !== ''"
+        label="手机验证"
+        value="手机验证"
+      ></el-option>
     </el-select>
 
     <!-- 各步骤对应操作 -->
@@ -53,10 +57,14 @@
 import PhoneCodeVerify from "../../components/phoneCodeVerify";
 import finalResetPassword from "../../components/finalResetPassword";
 import SecretVerify from "../../components/secretVerify";
+import { mapState } from "vuex";
 
 export default {
   name: "passwordReset",
   components: { SecretVerify, finalResetPassword, PhoneCodeVerify },
+  computed: {
+    ...mapState(["userInfo"])
+  },
   data() {
     return {
       verifyType: "",

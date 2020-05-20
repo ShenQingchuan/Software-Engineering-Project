@@ -80,6 +80,7 @@ export default {
         this.editor.source === ""
       ) {
         this.$message.error("不允许提交空内容！");
+        return;
       }
       if (this.editor.type === "新建") {
         try {

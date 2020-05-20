@@ -9,7 +9,7 @@
       </el-form-item>
       <el-form-item label="用户ID: ">
         <el-input
-          v-model="userManageQueryForm.userId"
+          v-model="userManageQueryForm.userID"
           placeholder="请输入用户ID"
         ></el-input>
       </el-form-item>
@@ -20,7 +20,9 @@
         ></el-input>
       </el-form-item>
     </el-form>
-    <el-button icon="el-icon-search" plain type="primary">查询</el-button>
+    <el-button @click="queryUser" icon="el-icon-search" plain type="primary"
+      >查询</el-button
+    >
     <el-button
       @click="() => $router.push('/dashboard/officerAddUser')"
       icon="el-icon-plus"
@@ -28,25 +30,30 @@
       type="success"
       >添加用户</el-button
     >
-    <el-button icon="el-icon-tickets" plain type="primary"
-      >导出用户数据表
-    </el-button>
-    <el-table class="user-manage-data-table" :data="userManageTableData" border>
+    <el-table
+      class="user-manage-data-table"
+      width="1150"
+      :data="userManageTableData"
+      border
+    >
       <el-table-column fixed prop="districtName" label="归属地区" width="200">
       </el-table-column>
       <el-table-column prop="communityName" label="归属小区" width="200">
       </el-table-column>
-      <el-table-column prop="userID" label="用户ID" width="200">
+      <el-table-column prop="userID" label="用户身份证号" width="309">
       </el-table-column>
       <el-table-column prop="userName" label="姓名" width="200">
       </el-table-column>
       <el-table-column prop="telPhone" label="手机" width="200">
       </el-table-column>
-      <el-table-column fixed="right" label="操作">
+      <el-table-column fixed="right" label="操作" width="100">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small"
-            >查看
-          </el-button>
+          <el-button
+            @click="checkUserProfile(scope.row)"
+            type="text"
+            size="small"
+            >查看</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -55,18 +62,57 @@
       <el-pagination :total="totalSize" layout="prev, pager, next">
       </el-pagination>
     </div>
+
+    <el-dialog
+      v-if="showUserInfo.profile.userName !== ''"
+      :visible.sync="showUserInfo.isShow"
+      width="30%"
+    >
+      <b slot="title">{{ `查看用户资料：${showUserInfo.profile.userName}` }}</b>
+      <div class="show-info flex-box flex-col jy-start">
+        <div class="show-info-line flex-box tb-gap">
+          <label><b>姓名：</b></label> {{ showUserInfo.profile["userName"] }}
+        </div>
+        <div class="show-info-line flex-box tb-gap">
+          <label><b>所属网格：</b></label>
+          {{ showUserInfo.profile.ofGrid.districtName }} /
+          {{ showUserInfo.profile.ofGrid.communityName }}
+        </div>
+        <div class="show-info-line flex-box tb-gap">
+          <label><b>民族：</b></label> {{ showUserInfo.profile["nation"] }}
+        </div>
+        <div class="show-info-line flex-box tb-gap">
+          <label><b>手机：</b></label> {{ showUserInfo.profile["telPhone"] }}
+        </div>
+        <div class="show-info-line flex-box tb-gap">
+          <label><b>邮箱：</b></label> {{ showUserInfo.profile["email"] }}
+        </div>
+        <div class="show-info-line flex-box tb-gap">
+          <label><b>血型：</b></label> {{ showUserInfo.profile["bloodType"] }}
+        </div>
+        <div class="show-info-line flex-box tb-gap">
+          <label><b>学历水平：</b></label>
+          {{ showUserInfo.profile["degreeOfEducation"] }}
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="showUserInfo.isShow = false"
+          >关 闭</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 // import userManageTableDataMock from "@/mock/userManageTableData";
 import { mapState } from "vuex";
+import resErrorHandler from "../../utils/resErrorHandler";
 
 export default {
   name: "userManage",
   async mounted() {
     const res = await this.$axios.get(
-      // /{id}
       `/query/allUserOfGrid/${this.userInfo.id}?page=1`
     );
     console.log(res);
@@ -82,17 +128,58 @@ export default {
 
       userManageQueryForm: {
         community: "",
-        userId: "",
+        userID: "",
         userName: ""
       },
       userRecordCount: 65,
       totalSize: 70,
-      userManageTableData: []
+      userManageTableData: [],
+
+      showUserInfo: {
+        isShow: false,
+        profile: {
+          ofGrid: {}
+        }
+      }
     };
   },
   methods: {
-    handleClick(row) {
-      console.log(row);
+    async queryUser() {
+      try {
+        const res = await this.$axios.post(
+          `/query/multipleConditions/${this.userInfo.id}?page=1`,
+          this.userManageQueryForm
+        );
+        resErrorHandler(this, res);
+        if (
+          res.data.resultCode === "200" &&
+          res.data.data &&
+          res.data.data.dataList.length > 0
+        ) {
+          this.$message.success("成功查询到该用户！");
+          this.totalSize = res.data.data.totalSize;
+          this.userManageTableData = res.data.data.dataList;
+        } else {
+          this.$nextTick(() => {
+            this.$message.warning("没有查询到该用户！");
+          });
+        }
+      } catch (err) {
+        this.$message.error(String(err));
+      }
+    },
+    async checkUserProfile(row) {
+      try {
+        const res = await this.$axios.get(`/profile/getProfile/${row.id}`);
+        resErrorHandler(this, res);
+        if (res.data.resultCode === "200") {
+          this.$message.success("成功获取用户资料！");
+          this.showUserInfo.profile = res.data.data;
+          this.showUserInfo.isShow = true;
+        }
+      } catch (err) {
+        this.$message.error(String(err));
+      }
     }
   }
 };
@@ -106,5 +193,12 @@ export default {
 .user-manage-pagination {
   width: 80%;
   margin: 0 auto;
+}
+.show-info {
+  width: 100%;
+  font-size: 18px;
+  &-line {
+    width: 100%;
+  }
 }
 </style>

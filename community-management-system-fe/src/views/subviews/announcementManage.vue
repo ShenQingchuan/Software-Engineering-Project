@@ -32,7 +32,7 @@
           width="200"
         >
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="150">
+        <el-table-column fixed="right" label="操作" width="200">
           <template slot-scope="scope">
             <el-button @click="handleDelete(scope.row)" size="small" type="text"
               >删除
@@ -50,9 +50,9 @@
 </template>
 
 <script>
-import announcementMock from "@/mock/announcement";
 import { mapState } from "vuex";
 import resErrorHandler from "../../utils/resErrorHandler";
+// import announcementMock from "@/mock/announcement";
 
 export default {
   name: "announcementManage",
@@ -82,12 +82,12 @@ export default {
       },
       totalPage: 0,
       totalSize: 0,
-      announcementData: announcementMock
+      announcementData: []
     };
   },
   methods: {
     async handleDelete(row) {
-      this.$message.warning("TODO: 实现删除日志");
+      this.$message.warning("实现删除日志"); // TODO: 实现删除日志
       this.announcementData.splice(row, 1);
     },
     delHtmlTag(str) {
@@ -101,7 +101,11 @@ export default {
     );
     console.log(res);
     resErrorHandler(this, res);
-    if (res.data.resultCode === "200") {
+    if (
+      res.data.resultCode === "200" &&
+      res.data.data &&
+      res.data.data.dataList.length > 0
+    ) {
       this.announcementData = res.data.data.dataList;
       this.totalSize = res.data.data.totalSize;
       this.totalPage = res.data.data.totalPage;
@@ -113,7 +117,10 @@ export default {
 
 <style lang="scss" scoped>
 .page-announcement-manage {
+  width: 75%;
   margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
   padding: 20px;
 

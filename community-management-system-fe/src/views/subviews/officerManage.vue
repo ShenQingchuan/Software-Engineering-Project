@@ -16,18 +16,21 @@
           <el-button @click="handleEditOfficer(scope)" size="small" type="text"
             >修改管理区域
           </el-button>
-          <el-button
-            @click="handleDeleteOfficer(scope)"
-            size="small"
-            type="text"
-            >删除
-          </el-button>
+          &nbsp;
+          <el-popconfirm
+            title="确定删除网格员？"
+            @onConfirm="handleDeleteOfficer(scope)"
+          >
+            <el-button size="small" type="text" slot="reference"
+              >删除
+            </el-button>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
     <div class="flex-box pagination">
-      共 {{ officerCount }} 条记录
-      <el-pagination :total="officerCount" layout="prev, pager, next">
+      共 {{ totalSize }} 条记录
+      <el-pagination :total="totalSize" layout="prev, pager, next">
       </el-pagination>
     </div>
 
@@ -38,6 +41,16 @@
             ><b
               >修改 <span>{{ editing.userName }}</span> 的管理区域</b
             ></span
+          >
+          <el-button
+            @click="
+              () => {
+                showEditCard = false;
+              }
+            "
+            style="float: right; padding: 3px 0; margin-left: 10px;"
+            type="text"
+            >取消</el-button
           >
           <el-button
             @click="submitEdit"
@@ -64,17 +77,17 @@
 </template>
 
 <script>
-import officerManageTableDataMock from "@/mock/officerManageTableData";
 import { mapState } from "vuex";
 import resErrorHandler from "../../utils/resErrorHandler";
+// import officerManageTableDataMock from "@/mock/officerManageTableData";
 // import getOptionsWhileEditingOfficerScopeMock from "@/mock/getOptionsWhileEditingOfficerScope";
 
 export default {
   name: "officerManage",
   data() {
     return {
-      officerCount: 88,
-      officerList: officerManageTableDataMock,
+      totalSize: 0,
+      officerList: [],
 
       showEditCard: false,
       gotOptions: {},
@@ -84,36 +97,84 @@ export default {
   computed: {
     ...mapState(["userInfo"])
   },
+  async mounted() {
+    try {
+      const res = await this.$axios.get(`/admin/getGrids?page=1`);
+      resErrorHandler(this, res);
+      if (res.data.resultCode === "200") {
+        this.officerList = res.data.data.dataList;
+        this.totalSize = res.data.data.totalSize;
+        this.$message.success("获取网格员资料成功！");
+      }
+    } catch (err) {
+      this.$message.error(String(err));
+    }
+  },
   methods: {
     // eslint-disable-next-line no-unused-vars
     async handleEditOfficer(scope) {
-      this.showEditCard = true;
-      this.editing = scope.row;
-      this.editing.areaList.communityArray = []; // 清空原管理区域数组
+      try {
+        this.showEditCard = true;
+        this.editing = scope.row;
+        this.gotOptions.communityArray = [
+          ...this.editing.areaList.communityArray
+        ];
 
-      const res = await this.$axios.get(
-        `/admin/getAreaList?userID=${this.uid}`
-      );
-      resErrorHandler(this, res);
-      if (res.data.resultCode === "200") {
-        this.$message.success("获取该用户对应区域成功");
-        console.log(res.data);
-        if (res.data.data.communityArray.length === 0) {
-          setTimeout(() => {
-            this.$message.warning("已经没有可以分配的小区了！");
-          }, 0);
-          return;
+        const res = await this.$axios.get(
+          `/admin/getAreaList?userID=${scope.row.userID}`
+        );
+        resErrorHandler(this, res);
+        if (res.data.resultCode === "200") {
+          this.$message.success("获取该用户对应区域成功");
+          if (res.data.data.communityArray.length === 0) {
+            setTimeout(() => {
+              this.$message.warning("已经没有可以分配的小区了！");
+            }, 0);
+            return;
+          }
+          this.gotOptions.communityArray = [
+            ...this.gotOptions.communityArray,
+            ...res.data.data.communityArray
+          ];
+          this.$forceUpdate();
         }
-        this.gotOptions = res.data.data.communityArray;
+      } catch (err) {
+        this.$message.error(String(err));
       }
     },
     // eslint-disable-next-line no-unused-vars
-    handleDeleteOfficer(scope) {
-      // TODO: 删除网格员  https://easydoc.xyz/doc/43159074/MAhLR20e/gZNThCm9
+    async handleDeleteOfficer(scope) {
+      try {
+        console.log(`删除 用户id: ${scope.row.id}`);
+        const res = await this.$axios.delete(
+          `/admin/deleteOneGrid/${scope.row.id}`
+        );
+        resErrorHandler(this, res);
+        if (res.data.resultCode === "200") {
+          this.$message.success("删除网格员成功！");
+          this.officerList.splice(this.officerList.indexOf(scope.row), 1);
+        }
+      } catch (err) {
+        this.$message.error(String(err));
+      }
     },
-    submitEdit() {
-      // TODO: 修改管理区域  https://easydoc.xyz/doc/43159074/MAhLR20e/LQWiAz7Y
-      this.showEditCard = false; // 请求成功结束后隐藏卡片
+    async submitEdit() {
+      try {
+        const res = await this.$axios.put(
+          `/admin/modifyAreaOfGrid/${this.editing.id}`,
+          {
+            communityArray: this.editing.areaList.communityArray,
+            districtName: this.editing.areaList.districtName
+          }
+        );
+        resErrorHandler(this, res);
+        if (res.data.resultCode === "200") {
+          this.$message.success("更改管理区域范围成功！");
+          this.showEditCard = false; // 请求成功结束后隐藏卡片
+        }
+      } catch (err) {
+        this.$message.error(String(err));
+      }
     }
   }
 };

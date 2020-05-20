@@ -14,7 +14,10 @@
         label-width="100px"
       >
         <el-form-item label="身份证号">
-          <el-input placeholder="请输入用户 ID" v-model="form.name"></el-input>
+          <el-input
+            placeholder="请输入用户 ID"
+            v-model="form.userID"
+          ></el-input>
         </el-form-item>
         <el-form-item label="所属片区">
           <div class="flex-box jy-start">
@@ -24,7 +27,7 @@
         <el-form-item label="所属小区">
           <el-select
             class="select-restrict"
-            v-model="form.restrict"
+            v-model="form.community"
             placeholder="请选择活动区域"
           >
             <el-option
@@ -41,22 +44,60 @@
 </template>
 
 <script>
-import OfficerGetDistrictNameMock from "../../mock/OfficerGetDistrictName";
+import { mapState } from "vuex";
+import md5 from "md5";
+import resErrorHandler from "../../utils/resErrorHandler";
+// import OfficerGetDistrictNameMock from "../../mock/OfficerGetDistrictName";
 
 export default {
   name: "OfficerAddUser",
+  async mounted() {
+    const res = await this.$axios.get(
+      `/grid/getManageAreaList/${this.userInfo.id}`
+    );
+    resErrorHandler(this, res);
+    console.log(res);
+    if (res.data.resultCode === "200") {
+      this.$message.success("获取到当前网格员管理信息！");
+      this.OfficerGetDistrictName = res.data.data;
+    }
+  },
+  computed: {
+    ...mapState(["userInfo"])
+  },
   data() {
     return {
       form: {
-        userId: "",
-        restrict: "",
+        userID: "",
         community: ""
       },
-      OfficerGetDistrictName: OfficerGetDistrictNameMock
+      OfficerGetDistrictName: {}
     };
   },
   methods: {
-    submitOfficerAddUser() {}
+    async submitOfficerAddUser() {
+      const { userID, community } = this.form;
+      if (!/\d{18}/.test(userID)) {
+        this.$message.error("身份证输入格式出错！");
+        return;
+      }
+
+      try {
+        const res = await this.$axios.post(`/grid/addResidentUser`, {
+          userID,
+          district: this.OfficerGetDistrictName.districtName,
+          community,
+          password: md5(userID.slice(-6))
+        });
+        resErrorHandler(this, res);
+        if (res.data.resultCode === "200") {
+          this.$message.success("添加用户成功！");
+          await this.$router.push("/dashboard/userManage");
+        }
+      } catch (err) {
+        this.$message.error(String(err));
+      }
+    }
   }
 };
 </script>
