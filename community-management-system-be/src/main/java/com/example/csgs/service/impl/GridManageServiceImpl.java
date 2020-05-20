@@ -1,7 +1,5 @@
 package com.example.csgs.service.impl;
 
-import com.example.csgs.entity.AreaList;
-import com.example.csgs.entity.PageQuery;
 import com.example.csgs.entity.*;
 import com.example.csgs.mapper.*;
 import com.example.csgs.service.GridManageService;
@@ -138,15 +136,25 @@ public class GridManageServiceImpl implements GridManageService {
     public boolean addResidentUser(String userID, String districtName, String communityName, String password) {
         UserEntity userEntity = userMapper.findOneByUserID(userID);
         if (userEntity == null) {
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("userID", userID);
-            map.put("password", SHA256Util.getSHA256String(password));
-            userMapper.addResidentUser(map);
             CommunityInfoEntity communityInfoEntity = communityInfoMapper.findByOfGrid(districtName, communityName);
             if (communityInfoEntity != null) {
-                profileMapper.addUserProfile(communityInfoEntity.getId());
-                pwdProMapper.addPwdPro();
-                return true;
+                /*
+                * 目的：在插入user事，同时在pwdPro和profile中对应插入一行数据，并且都与user表关联起来
+                * 处理方法：先在profile和pwdPro表中插入一行数据，各自得到自己表中新增一行数据的主键id值
+                * 最后在user表中，带上用户身份信息和之前两张表插入时，所得到的id一并插入到表中，实现user表与
+                * 另外两张表对应数据行关联起来
+                */
+                InsertCommunityId insertCommunityId = new InsertCommunityId(communityInfoEntity.getId());
+                profileMapper.insertProfile_selectKey(insertCommunityId);
+                PwdProEntity pwdProEntity = new PwdProEntity();
+                pwdProMapper.insertPwdPro_selectKey(pwdProEntity);
+
+                HashMap<String, Object> map = new HashMap<>();
+                map.put("userID", userID);
+                map.put("password", SHA256Util.getSHA256String(password));
+                map.put("profileId", insertCommunityId.getPid());
+                map.put("pwdId", pwdProEntity.getId());
+                return userMapper.addResidentUser(map) > 0;
             }
         }
         return false;
@@ -154,7 +162,6 @@ public class GridManageServiceImpl implements GridManageService {
 
     /**
      * 获取该网格员所管理的区域（id为user表中网格员的id）
-     *
      * @param id user表中网格员id
      */
     @Override

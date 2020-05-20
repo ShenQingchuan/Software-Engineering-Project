@@ -39,7 +39,7 @@
     <select id="findUserByGridInfo" parameterType="hashmap" resultType="User">
         select u.id id,userid,user_name,tel_phone,district_name,community_name
         from user u,user_profile p,community_info c,district d
-        where u.profile_id = p.id and p.community_id = c.id and d.id = c.district_id and u.user_type != '1'
+        where u.profile_id = p.id and p.community_id = c.id and d.id = c.district_id
         <if test="community != ''">
             and community_name = #{community}
         </if>
@@ -56,8 +56,8 @@
     </update>
 
     <insert id="addResidentUser" parameterType="hashmap">
-        insert into user(userid, user_password)
-        values (#{userID}, #{password})
+        insert into user(userid, user_password,profile_id,pwd_pro_id)
+        values (#{userID}, #{password},#{profileId},#{pwdId})
     </insert>
 
     <update id="setGrid">
@@ -77,5 +77,4 @@
         from user
         where id = #{id}
     </select>
-
 </mapper>

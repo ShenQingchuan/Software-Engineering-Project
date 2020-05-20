@@ -23,7 +23,7 @@ public interface UserMapper {
 
     List<User> findUserByGridInfo(HashMap<String, String> map);
 
-    void addResidentUser(HashMap<String, Object> map);
+    int addResidentUser(HashMap<String, Object> map);
 
     void setGrid(@Param("UserID") String UserID);
 

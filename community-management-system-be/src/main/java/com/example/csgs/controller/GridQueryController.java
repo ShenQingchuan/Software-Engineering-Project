@@ -44,7 +44,7 @@ public class GridQueryController {
      * 场景：网格员查询用户信息
      * 组合：<归属地区、姓名>、<归属小区>、<姓名>、<userID>
      */
-    @GetMapping("/multipleConditions/{id}")
+    @PostMapping("/multipleConditions/{id}")
     public Object multipleConditions(@RequestBody JSONObject jsonObject, @PathVariable String id, @RequestParam String page) {
         if (IsInteger.isInteger(id)) {
             String userID = jsonObject.getString("userID");

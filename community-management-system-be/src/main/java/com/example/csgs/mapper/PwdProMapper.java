@@ -20,5 +20,5 @@ public interface PwdProMapper {
 
     int deleteById(Long id);
 
-    void addPwdPro();
+    void insertPwdPro_selectKey(PwdProEntity pwdProEntity);
 }

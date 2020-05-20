@@ -169,10 +169,16 @@
         where id = #{id}
     </delete>
 
-    <insert id="addUserProfile">
-        insert into user_profile(community_id)
-        VALUES (#{communityId})
+    <insert id="insertProfile_selectKey" parameterType="InsertCommunityId">
+        <selectKey keyProperty="pid" order="AFTER" resultType="long">
+            select last_insert_id() AS pid
+        </selectKey>
+        insert into user_profile(community_id) values(#{communityId})
     </insert>
+    <!--    <insert id="addUserProfile">-->
+    <!--        insert into user_profile(community_id)-->
+    <!--        VALUES (#{communityId})-->
+    <!--    </insert>-->
 
 
 </mapper>

@@ -119,7 +119,7 @@ public class AdminAllServiceImpl implements AdminAllService {
             UserProfile userProfile = profileMapper.findById(gridEntity.getUserId().getId());
             //此刻返回的id是grid表中网格员的id
             GridPersonalInfo gridPersonalInfo = new GridPersonalInfo(
-                    gridEntity.getUserId().getId(), userProfile.getUserName(),
+                    gridEntity.getId(), userProfile.getUserName(),
                     gridEntity.getUserId().getUserID(), userProfile.getTelPhone(), areaList);
             gridPersonalInfoList.add(gridPersonalInfo);
         }
@@ -135,6 +135,7 @@ public class AdminAllServiceImpl implements AdminAllService {
     @Override
     public boolean modifyGrid(AreaList areaList, Long id) {
         GridEntity gridEntity = gridMapper.findById(id);
+        log.info(gridEntity);
         if (gridEntity != null) {
             String[] communityArray = areaList.getCommunityArray();
             List<Long> communityIdList = communityInfoMapper.findCommunityIdByGridId(gridEntity.getId());

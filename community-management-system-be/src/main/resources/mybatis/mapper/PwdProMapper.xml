@@ -45,7 +45,10 @@
         where id = #{uid}
     </delete>
 
-    <insert id="addPwdPro">
+    <insert id="insertPwdPro_selectKey" parameterType="PwdProEntity">
+        <selectKey keyProperty="id" order="AFTER" resultType="long">
+            select last_insert_id() AS id
+        </selectKey>
         insert into pwd_protection(answer_one, answer_two, question_one, question_two)
         values ('', '', '', '');
     </insert>

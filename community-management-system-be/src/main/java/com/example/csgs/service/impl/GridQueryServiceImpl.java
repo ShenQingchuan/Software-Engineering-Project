@@ -42,10 +42,10 @@ public class GridQueryServiceImpl implements GridQueryService {
     @Override
     public PageQuery<User> allUserOfGrid(Long id, String page) {
         UserEntity queryUser = userMapper.findById(id);
-
+        log.info(id);
         if (queryUser != null && queryUser.getUserType() == 1) {
             DistrictEntity districtEntity = profileMapper.findDistrictById(id);
-
+            log.info("片区名称："+districtEntity.getDistrictName());
             pageable = PageHelper.startPage(Integer.parseInt(page), pageSize);
             PageHelper.orderBy("id ASC");
             userList = profileMapper.findProfileByDistrict(districtEntity.getDistrictName());

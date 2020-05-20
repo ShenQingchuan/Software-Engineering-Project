@@ -46,7 +46,7 @@ public class UserProfileController {
      */
     @GetMapping("/getProfile/{id}")
     public Object getMaterial(HttpServletRequest request, @PathVariable String id) {
-        if (IsInteger.isInteger(id) && AuthorityUtils.authority(request, id,redisUtils)) {
+        if (IsInteger.isInteger(id)) {
             ProfileInfo material = profileMapper.getMaterial(Long.parseLong(id));
             if (material != null) {
                 log.info("用户<" + id + ">获取资料成功！");

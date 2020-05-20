@@ -116,13 +116,13 @@ public class AdminAllController {
      */
     @PutMapping("/modifyAreaOfGrid/{id}")
     public Object modifyGrid(@RequestBody JSONObject jsonObject, @PathVariable String id) {
-
         AreaList areaList = JSONObject.toJavaObject(jsonObject, AreaList.class);
+        log.info(areaList.toString());
         if (IsInteger.isInteger(id) && adminAllService.modifyGrid(areaList,Long.parseLong(id))) {
-            log.info("[系统管理员]修改网格员id:<"+ Long.parseLong(id) +"Success！");
+            log.info("[系统管理员]修改网格员id:<"+ Long.parseLong(id) +">Success！");
             return ResultUtils.success("网格员管理区域修改成功！");
         }
-        log.info("[系统管理员]修改网格员id:<"+ Long.parseLong(id) +"Failure！");
+        log.info("[系统管理员]修改网格员id:<"+ Long.parseLong(id) +">Failure！");
         return ResultUtils.error("网格员管理区域修改失败！");
     }
 

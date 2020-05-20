@@ -27,5 +27,5 @@ public interface ProfileMapper{
 
     int deleteById(@Param("id") Long id);
 
-    void addUserProfile(Long communityId);
+    void insertProfile_selectKey(InsertCommunityId insertCommunityId);
 }
