@@ -42,7 +42,7 @@ public class JwtUtils {
                 .setSigningKey(SECRET_kEY)
                 .parseClaimsJws(token)
                 .getBody();
-        if (claims.getSubject().equals(SUBJECT)) {
+        if (!claims.isEmpty() && claims.getSubject().equals(SUBJECT)) {
             return claims;
         }
         return null;

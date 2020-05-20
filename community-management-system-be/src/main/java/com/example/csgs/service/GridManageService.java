@@ -1,7 +1,7 @@
 package com.example.csgs.service;
 
-import com.example.csgs.bean.AreaList;
-import com.example.csgs.bean.PageQuery;
+import com.example.csgs.entity.AreaList;
+import com.example.csgs.entity.PageQuery;
 import com.example.csgs.entity.Announcement;
 import com.example.csgs.entity.Journal;
 

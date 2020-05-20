@@ -1,6 +1,6 @@
 package com.example.csgs.utils;
 
-import com.example.csgs.bean.PageQuery;
+import com.example.csgs.entity.PageQuery;
 import com.github.pagehelper.Page;
 
 import java.util.List;

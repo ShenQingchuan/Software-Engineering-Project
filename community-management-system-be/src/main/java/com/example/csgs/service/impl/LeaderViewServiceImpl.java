@@ -1,6 +1,6 @@
 package com.example.csgs.service.impl;
 
-import com.example.csgs.bean.CommunityInfo;
+import com.example.csgs.entity.CommunityInfo;
 import com.example.csgs.entity.CommunityInfoEntity;
 import com.example.csgs.entity.DistrictEntity;
 import com.example.csgs.entity.DistrictInfo;
@@ -8,22 +8,19 @@ import com.example.csgs.mapper.CommunityInfoMapper;
 import com.example.csgs.mapper.DistrictMapper;
 import com.example.csgs.service.LeaderViewService;
 import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
 @Log4j
 @Service
 public class LeaderViewServiceImpl implements LeaderViewService {
-    final DistrictMapper districtMapper;
-    final CommunityInfoMapper communityInfoMapper;
-
-    public LeaderViewServiceImpl(DistrictMapper districtMapper, CommunityInfoMapper communityInfoMapper) {
-        this.districtMapper = districtMapper;
-        this.communityInfoMapper = communityInfoMapper;
-    }
+    @Resource
+    DistrictMapper districtMapper;
+    @Resource
+    CommunityInfoMapper communityInfoMapper;
 
     /**
      * 场景：此时，领导想要看的的整体各项数据（以区为单位展示数据信息内容）

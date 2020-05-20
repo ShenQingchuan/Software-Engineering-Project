@@ -1,35 +1,33 @@
 package com.example.csgs.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.csgs.bean.AreaList;
-import com.example.csgs.bean.CreateGridInfo;
-import com.example.csgs.bean.GridPersonalInfo;
-import com.example.csgs.bean.PageQuery;
+import com.example.csgs.entity.AreaList;
+import com.example.csgs.entity.CreateGridInfo;
+import com.example.csgs.entity.GridPersonalInfo;
+import com.example.csgs.entity.PageQuery;
 import com.example.csgs.entity.ProfileInfo;
 import com.example.csgs.entity.UserEntity;
 import com.example.csgs.mapper.ProfileMapper;
 import com.example.csgs.mapper.UserMapper;
 import com.example.csgs.service.AdminAllService;
+import com.example.csgs.utils.IsInteger;
 import com.example.csgs.utils.ResultUtils;
 import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
 @Log4j
 public class AdminAllController {
-    final AdminAllService adminAllService;
-    final UserMapper userMapper;
-    final ProfileMapper profileMapper;
-
-    public AdminAllController(AdminAllService adminAllService, UserMapper userMapper, ProfileMapper profileMapper) {
-        this.adminAllService = adminAllService;
-        this.userMapper = userMapper;
-        this.profileMapper = profileMapper;
-    }
+    @Resource
+    AdminAllService adminAllService;
+    @Resource
+    UserMapper userMapper;
+    @Resource
+    ProfileMapper profileMapper;
 
     /**
      * 获取用户资料接口
@@ -40,7 +38,7 @@ public class AdminAllController {
         UserEntity userEntity = userMapper.findOneByUserID(userID);
         if (userEntity != null && userEntity.getUserType() == 1) {
             log.info("[系统管理员]用户 <" + userID + "> 不是一名网格员!");
-            return ResultUtils.error("该用户已经是一名网格员！！！","404");
+            return ResultUtils.error("该用户已经是一名网格员！！！");
         }else if (userEntity != null){
             ProfileInfo material = profileMapper.getMaterial(userEntity.getId());
             if (material != null) {
@@ -62,8 +60,8 @@ public class AdminAllController {
             log.info("[系统管理员]用户 <" + userID + "> 获取"+ areaList.getDistrictName() +"所在区域数据信息获取Success！");
             return ResultUtils.success(areaList, "获取"+ areaList.getDistrictName() +"区域数据信息成功！");
         }
-        log.info("[系统管理员]用户 <" + userID + "> 所在区域数据信息获取Failure！");
-        return ResultUtils.error("获取区域数据信息失败(该用户已经是一名网格员)！");
+        log.info("[系统管理员]用户 <" + userID + "> 所在区域数据信息获取Failure(改用户不存在)！");
+        return ResultUtils.error("获取区域数据信息失败(该用户不存在)！");
     }
 
     /**
@@ -118,9 +116,9 @@ public class AdminAllController {
      */
     @PutMapping("/modifyAreaOfGrid/{id}")
     public Object modifyGrid(@RequestBody JSONObject jsonObject, @PathVariable String id) {
-        AreaList areaList = JSONObject.toJavaObject(jsonObject, AreaList.class);
 
-        if (adminAllService.modifyGrid(areaList,Long.parseLong(id))) {
+        AreaList areaList = JSONObject.toJavaObject(jsonObject, AreaList.class);
+        if (IsInteger.isInteger(id) && adminAllService.modifyGrid(areaList,Long.parseLong(id))) {
             log.info("[系统管理员]修改网格员id:<"+ Long.parseLong(id) +"Success！");
             return ResultUtils.success("网格员管理区域修改成功！");
         }
@@ -133,7 +131,7 @@ public class AdminAllController {
      */
     @DeleteMapping("/deleteOneGrid/{id}")
     public Object deleteOneGrid(@PathVariable String id) {
-        if (adminAllService.deleteOneGrid(Long.parseLong(id))) {
+        if (IsInteger.isInteger(id) && adminAllService.deleteOneGrid(Long.parseLong(id))) {
             log.info("[系统管理员]删除网格员id:<"+ Long.parseLong(id) +"Success！");
             return ResultUtils.success("删除id为"+ id +"的网格员操作成功！");
         }

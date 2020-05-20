@@ -1,6 +1,6 @@
 package com.example.csgs.service;
 
-import com.example.csgs.bean.CommunityInfo;
+import com.example.csgs.entity.CommunityInfo;
 import com.example.csgs.entity.DistrictInfo;
 
 import java.util.List;

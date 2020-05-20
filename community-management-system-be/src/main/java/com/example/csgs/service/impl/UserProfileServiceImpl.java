@@ -1,44 +1,27 @@
 package com.example.csgs.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.example.csgs.bean.CommunityInfo;
-import com.example.csgs.bean.PageQuery;
-import com.example.csgs.entity.Announcement;
 import com.example.csgs.entity.CommunityInfoEntity;
 import com.example.csgs.entity.OfGrid;
 import com.example.csgs.entity.UserProfile;
-import com.example.csgs.mapper.AnnouncementMapper;
 import com.example.csgs.mapper.CommunityInfoMapper;
 import com.example.csgs.mapper.ProfileMapper;
-import com.example.csgs.mapper.UserMapper;
 import com.example.csgs.service.UserProfileService;
-import com.example.csgs.utils.CalculatePageUtils;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
-import java.util.List;
 
 @Service
 @Transactional
 @Log4j
 public class UserProfileServiceImpl implements UserProfileService {
-    final UserMapper userMapper;
-    final ProfileMapper profileMapper;
-    final CommunityInfoMapper communityInfoMapper;
-    final AnnouncementMapper announcementMapper;
-
-    public UserProfileServiceImpl(UserMapper userMapper, ProfileMapper profileMapper,
-                                  CommunityInfoMapper communityInfoMapper, AnnouncementMapper announcementMapper) {
-        this.userMapper = userMapper;
-        this.profileMapper = profileMapper;
-        this.communityInfoMapper = communityInfoMapper;
-        this.announcementMapper = announcementMapper;
-    }
+    @Resource
+    ProfileMapper profileMapper;
+    @Resource
+    CommunityInfoMapper communityInfoMapper;
 
     /**
      * 修改资料接口

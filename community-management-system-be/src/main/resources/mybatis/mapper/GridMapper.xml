@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.csgs.mapper.GridMapper">
-    <cache
-            eviction="FIFO"
-            flushInterval="60000"
-            size="512"
-            readOnly="true"/>
+    <cache eviction="FIFO"
+           flushInterval="60000"
+           size="512"
+           readOnly="true"/>
 
     <select id="findDistrictNameByUId" resultType="GridEntity">
         select *
@@ -28,7 +27,7 @@
     </insert>
 
     <select id="findAll" resultMap="GridEntityInfo">
-        select g.id id, district_name, u.id uid
+        select g.id id, userid, district_name, u.id uid
         from grid g,
              user u
         where g.user_id = u.id
