@@ -34,7 +34,7 @@ public class UserSignController {
     RedisUtils redisUtils;
 
     @PostMapping("/signIn")
-    public Object toLogin(@RequestBody JSONObject jsonObject, HttpServletResponse response) {
+    public Object toLogin(@RequestBody JSONObject jsonObject) {
         Subject subject = SecurityUtils.getSubject();
         String userID = jsonObject.getString("userID");
         String password = SHA256Util.getSHA256String(jsonObject.getString("password"));

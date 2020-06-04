@@ -40,6 +40,7 @@ public class ShiroConfig {
         filterMap.put("/resident/**", "authc");
         filterMap.put("/profile/**","authc");
         filterMap.put("/pwdPro/**","authc");
+        filterMap.put("/log/**","authc");
         bean.setFilterChainDefinitionMap(filterMap);
         return bean;
     }
