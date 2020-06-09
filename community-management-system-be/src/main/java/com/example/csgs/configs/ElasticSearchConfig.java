@@ -12,7 +12,6 @@ import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 public class ElasticSearchConfig {
@@ -23,7 +22,7 @@ public class ElasticSearchConfig {
         BasicConfigurator.configure();
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY,
-                new UsernamePasswordCredentials("elastic","Ling861865177"));
+                new UsernamePasswordCredentials("elastic","Joson123"));
 
         RestClientBuilder builder = RestClient.builder(
                 new HttpHost("es-ppulc3rx.public.tencentelasticsearch.com", 9200,"https"))
