@@ -19,6 +19,7 @@ class CsgsApplicationTests {
     RestHighLevelClient restHighLevelClient;
     @Test
     void contextLoads() throws IOException {
+        //测试elasticSearch
         CreateIndexRequest request = new CreateIndexRequest("boss");
         CreateIndexResponse createIndexResponse = restHighLevelClient
                 .indices().create(request, RequestOptions.DEFAULT);
