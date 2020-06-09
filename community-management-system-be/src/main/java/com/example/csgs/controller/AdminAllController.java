@@ -13,6 +13,7 @@ import com.example.csgs.service.AdminAllService;
 import com.example.csgs.utils.IsInteger;
 import com.example.csgs.utils.ResultUtils;
 import lombok.extern.log4j.Log4j;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -28,7 +29,8 @@ public class AdminAllController {
     UserMapper userMapper;
     @Resource
     ProfileMapper profileMapper;
-
+    @Resource
+    RestHighLevelClient restHighLevelClient;
     /**
      * 获取用户资料接口
      * 场景：系统管理员添加网格员时，需要查看该居民用户的基本资料信息
