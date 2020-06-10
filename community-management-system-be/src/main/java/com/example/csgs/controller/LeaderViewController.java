@@ -5,8 +5,8 @@ import com.example.csgs.entity.DistrictEntity;
 import com.example.csgs.entity.DistrictInfo;
 import com.example.csgs.mapper.DistrictMapper;
 import com.example.csgs.service.LeaderViewService;
-import com.example.csgs.utils.IsInteger;
-import com.example.csgs.utils.ResultUtils;
+import com.example.csgs.utils.IsIntegerUtil;
+import com.example.csgs.utils.ResultUtil;
 import lombok.extern.log4j.Log4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,10 +34,10 @@ public class LeaderViewController {
         List<DistrictInfo> districtRSHList = leaderViewService.getDistrictRSHList();
         if (!districtRSHList.isEmpty()) {
             log.info("领导正在查看总体数据.....");
-            return ResultUtils.success(districtRSHList, "获取所有区RPH信息成功！ ");
+            return ResultUtil.success(districtRSHList, "获取所有区RPH信息成功！ ");
         }
         log.info("领导获取总体数据信息失败！");
-        return ResultUtils.error("获取所有区RPH信息失败！ ");
+        return ResultUtil.error("获取所有区RPH信息失败！ ");
     }
 
     /**
@@ -49,7 +49,7 @@ public class LeaderViewController {
     public Object getAllDistrictName() {
         List<DistrictEntity> districtEntities = districtMapper.findAllDistrict();
         log.info("领导正在<片区界面>选择查看哪一个区的RPH信息......");
-        return ResultUtils.success(districtEntities, "获取所有区名信息成功！");
+        return ResultUtil.success(districtEntities, "获取所有区名信息成功！");
     }
 
     /**
@@ -58,14 +58,14 @@ public class LeaderViewController {
      */
     @GetMapping("/getCommunityRPHList/{id}")
     public Object getCommunityRSHList(@PathVariable String id) {
-        if (IsInteger.isInteger(id)) {
+        if (IsIntegerUtil.isInteger(id)) {
             List<CommunityInfo> communityRPHList = leaderViewService.getCommunityRPHList(Long.parseLong(id));
             if (!communityRPHList.isEmpty()) {
                 log.info("获取id<" + id + ">的区所有小区RPH信息成功！ ");
-                return ResultUtils.success(communityRPHList, "获取id<" + id + ">的区所有小区RPH信息成功！ ");
+                return ResultUtil.success(communityRPHList, "获取id<" + id + ">的区所有小区RPH信息成功！ ");
             }
         }
         log.info("获取id<" + id + ">的区所有小区RPH信息失败！ ");
-        return ResultUtils.error("获取id为" + id + "的区所有小区RPH信息失败！ ");
+        return ResultUtil.error("获取id为" + id + "的区所有小区RPH信息失败！ ");
     }
 }

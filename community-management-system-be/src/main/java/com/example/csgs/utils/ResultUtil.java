@@ -3,7 +3,7 @@ package com.example.csgs.utils;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
-public class ResultUtils {
+public class ResultUtil {
 
     @Data
     private static class Result {

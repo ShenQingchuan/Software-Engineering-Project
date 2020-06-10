@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.csgs.entity.UserEntity;
 import com.example.csgs.mapper.UserMapper;
 import com.example.csgs.service.UserPwdProService;
-import com.example.csgs.utils.IsInteger;
-import com.example.csgs.utils.ResultUtils;
+import com.example.csgs.utils.IsIntegerUtil;
+import com.example.csgs.utils.ResultUtil;
 import com.example.csgs.utils.SHA256Util;
 import lombok.extern.log4j.Log4j;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +28,8 @@ public class UserPwdProController {
      */
     @PutMapping("/setUpPwdPro/{id}")
     public Object updatePwdPro(@RequestBody JSONObject jsonObject, @PathVariable String id) {
-        if (!IsInteger.isInteger(id)) {
-            return ResultUtils.error("拒绝访问！请修改请求信息......");
+        if (!IsIntegerUtil.isInteger(id)) {
+            return ResultUtil.error("拒绝访问！请修改请求信息......");
         }
         Long uid = Long.parseLong(id);
         String questionOne = jsonObject.getString("questionOne");
@@ -45,10 +45,10 @@ public class UserPwdProController {
 
         if (userPwdProService.setPwdPro(uid, list)) {
             log.info("用户<"+ id +">设置密保成功！");
-            return ResultUtils.success("密保设置成功");
+            return ResultUtil.success("密保设置成功");
         }
         log.info("用户<"+ id +">设置密保失败！");
-        return ResultUtils.error("密保设置失败！");
+        return ResultUtil.error("密保设置失败！");
     }
 
     /**
@@ -57,8 +57,8 @@ public class UserPwdProController {
      */
     @PutMapping("/modifyPwd/{id}")
     public Object updatePwd(@RequestBody JSONObject jsonObject, @PathVariable String id) {
-        if (!IsInteger.isInteger(id)) {
-            return ResultUtils.error("拒绝访问！请修改请求信息......");
+        if (!IsIntegerUtil.isInteger(id)) {
+            return ResultUtil.error("拒绝访问！请修改请求信息......");
         }
 
         String sha256String = SHA256Util.getSHA256String(jsonObject.getString("newPassword"));
@@ -66,14 +66,14 @@ public class UserPwdProController {
         if (targetUser != null) {
             if (targetUser.getUserPassword().equals(sha256String)) {
                 log.info("用户<"+ id +">密码修改失败,该密码与原始密码相同！");
-                return ResultUtils.error("密码修改失败,该密码与原始密码相同！");
+                return ResultUtil.error("密码修改失败,该密码与原始密码相同！");
             }else if (userMapper.modifyPassword(sha256String, Long.parseLong(id)) > 0) {
                 log.info("用户<"+ id +">密码修改成功！");
-                return ResultUtils.success("密码修改成功！");
+                return ResultUtil.success("密码修改成功！");
             }
         }
         log.info("用户<"+ id +">密码修改失败！");
-        return ResultUtils.error("密码修改失败！");
+        return ResultUtil.error("密码修改失败！");
     }
 
     /**
@@ -81,17 +81,17 @@ public class UserPwdProController {
      */
     @GetMapping("/returnPwdProQue/{id}")
     public Object returnPwdPro(@PathVariable String id) {
-        if (!IsInteger.isInteger(id)) {
-            return ResultUtils.error("拒绝访问！请修改请求信息......");
+        if (!IsIntegerUtil.isInteger(id)) {
+            return ResultUtil.error("拒绝访问！请修改请求信息......");
         }
 
         List<String> list = userPwdProService.returnPwdProQue(Long.parseLong(id));
         if (list != null) {
             log.info("用户<"+ id +">获取密保问题成功！");
-            return ResultUtils.success(list, "获取密保问题成功");
+            return ResultUtil.success(list, "获取密保问题成功");
         }
         log.info("用户<"+ id +">获取密保问题失败！");
-        return ResultUtils.error("获取密保问题失败！");
+        return ResultUtil.error("获取密保问题失败！");
     }
 
     /**
@@ -99,8 +99,8 @@ public class UserPwdProController {
      */
     @PostMapping("/comparePwdProAns/{id}")
     public Object comparePwdPro(@RequestBody JSONObject jsonObject, @PathVariable String id) {
-        if (!IsInteger.isInteger(id)) {
-            return ResultUtils.error("拒绝访问！请修改请求信息......");
+        if (!IsIntegerUtil.isInteger(id)) {
+            return ResultUtil.error("拒绝访问！请修改请求信息......");
         }
 
         String answerOne = jsonObject.getString("answerOne");
@@ -112,10 +112,10 @@ public class UserPwdProController {
 
         if (userPwdProService.comparePwdProAns(Long.parseLong(id), list)) {
             log.info("用户<"+ id +">回答密保问题成功！");
-            return ResultUtils.success("回答密保成功");
+            return ResultUtil.success("回答密保成功");
         }
         log.info("用户<"+ id +">回答密保问题失败！");
-        return ResultUtils.error("回答密保失败！");
+        return ResultUtil.error("回答密保失败！");
     }
 
 }

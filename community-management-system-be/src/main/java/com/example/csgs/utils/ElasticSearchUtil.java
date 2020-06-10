@@ -1,9 +1,7 @@
-package com.example.csgs;
+package com.example.csgs.utils;
 
 import com.alibaba.fastjson.JSON;
-import com.example.csgs.entity.User;
 import com.example.csgs.pojo.JournalEs;
-import lombok.extern.java.Log;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -25,35 +23,30 @@ import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.index.query.MultiMatchQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermQueryBuilder;
-import org.elasticsearch.index.query.TermsQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@Log
-@SpringBootTest
-class CsgsApplicationTests {
+public class ElasticSearchUtil {
     @Resource
     RestHighLevelClient client;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
+    private SearchRequest searchRequest;
+    private SearchSourceBuilder sourceBuilder;
 
     /**
      * 添加索引
      */
-    @Test
-    void contextLoads() throws IOException {
-        CreateIndexRequest request = new CreateIndexRequest("user");
+    public void contextLoads() throws IOException {
+        CreateIndexRequest request = new CreateIndexRequest("journal");
         CreateIndexResponse createIndexResponse = client
                 .indices().create(request, RequestOptions.DEFAULT);
         System.out.println(createIndexResponse);
@@ -63,9 +56,8 @@ class CsgsApplicationTests {
     /**
      * 查询索引是否存在
      */
-    @Test
-    void testExistIndex() throws IOException {
-        GetIndexRequest request = new GetIndexRequest("user");
+    public void existIndex() throws IOException {
+        GetIndexRequest request = new GetIndexRequest("journal");
         boolean exists = client.indices().exists(request, RequestOptions.DEFAULT);
         System.out.println(exists);
     }
@@ -74,9 +66,8 @@ class CsgsApplicationTests {
     /**
      * 删除索引
      */
-    @Test
-    void testDeleteIndex() throws IOException {
-        DeleteIndexRequest request = new DeleteIndexRequest("user");
+    public void deleteIndex() throws IOException {
+        DeleteIndexRequest request = new DeleteIndexRequest("journal");
         AcknowledgedResponse delete = client.indices().delete(request, RequestOptions.DEFAULT);
         System.out.println(delete.isAcknowledged());
     }
@@ -84,15 +75,13 @@ class CsgsApplicationTests {
     /**
      * 添加文档
      */
-    @Test
-    void testAddDocument() throws IOException {
-        JournalEs journal = new JournalEs(1, "融泽嘉园离奇失踪五人", "调查走访", "唐梦予", dateFormat.format(new Date()));
-        IndexRequest request = new IndexRequest("user");
+    public void addDocument(String indexName, Object object) throws IOException {
+        IndexRequest request = new IndexRequest(indexName);
         request.id("1");
         request.timeout(TimeValue.timeValueSeconds(1));
         request.timeout("1s");
 
-        request.source(JSON.toJSONString(journal), XContentType.JSON);
+        request.source(JSON.toJSONString(object), XContentType.JSON);
 
         IndexResponse indexResponse = client.index(request, RequestOptions.DEFAULT);
         System.out.println(indexResponse.toString());
@@ -102,9 +91,8 @@ class CsgsApplicationTests {
     /**
      * 获取文档
      */
-    @Test
-    void testGetDocument() throws IOException {
-        GetRequest getRequest = new GetRequest("user", "1");
+    public void getDocument(String indexName, String id) throws IOException {
+        GetRequest getRequest = new GetRequest(indexName, id);
         GetResponse getResponse = client.get(getRequest, RequestOptions.DEFAULT);
         System.out.println(getResponse.getSourceAsString());
         System.out.println(getResponse);
@@ -113,13 +101,11 @@ class CsgsApplicationTests {
     /**
      * 更新文档
      */
-    @Test
-    void testUpdateDocument() throws IOException {
-        UpdateRequest updateRequest = new UpdateRequest("user", "1");
+    public void updateDocument(Object object, String indexName, String id) throws IOException {
+        UpdateRequest updateRequest = new UpdateRequest(indexName, id);
         updateRequest.timeout("1s");
 
-        JournalEs journal = new JournalEs(1, "融泽嘉园离奇失踪五人", "调查走访", "唐梦予", dateFormat.format(new Date()));
-        updateRequest.doc(JSON.toJSONString(journal), XContentType.JSON);
+        updateRequest.doc(JSON.toJSONString(object), XContentType.JSON);
 
         UpdateResponse updateResponse = client.update(updateRequest, RequestOptions.DEFAULT);
         System.out.println(updateResponse.status());
@@ -128,9 +114,8 @@ class CsgsApplicationTests {
     /**
      * 删除文档
      */
-    @Test
-    void testDeleteDocument() throws IOException {
-        DeleteRequest deleteRequest = new DeleteRequest("user", "1");
+    public void deleteDocument(String indexName, String id) throws IOException {
+        DeleteRequest deleteRequest = new DeleteRequest(indexName, id);
         deleteRequest.timeout("1s");
 
         DeleteResponse deleteResponse = client.delete(deleteRequest, RequestOptions.DEFAULT);
@@ -140,49 +125,75 @@ class CsgsApplicationTests {
     /**
      * 批量插入文档
      */
-    @Test
-    void testBulkRequest() throws IOException {
+    public <T> void bulkRequest(ArrayList<T> dataList, String indexName) throws IOException {
         BulkRequest bulkRequest = new BulkRequest();
         bulkRequest.timeout("10s");
 
-        ArrayList<User> userArrayList = new ArrayList<>();
-
-        userArrayList.add(new User(1L,"510723200011044654","Robin","19980492664","昌平区","融泽嘉园"));
-        userArrayList.add(new User(2L,"510723200011044655","Tmy","19980492665","昌平区","融泽嘉园"));
-        userArrayList.add(new User(3L,"510723200011044656","Sby","19980492666","昌平区","融泽嘉园"));
-        userArrayList.add(new User(4L,"510723200011044657","Hp","19980492667","昌平区","融泽嘉园"));
-
-        for (int i = 0; i < userArrayList.size(); i++) {
-            bulkRequest.add(new IndexRequest("user").
+        for (int i = 0; i < dataList.size(); i++) {
+            bulkRequest.add(new IndexRequest(indexName).
                     id("" + (i + 1)).//注意id的起始值
-                    source(JSON.toJSONString(userArrayList.get(i)), XContentType.JSON)
+                    source(JSON.toJSONString(dataList.get(i)), XContentType.JSON)
             );
         }
+
         BulkResponse bulkResponse = client.bulk(bulkRequest, RequestOptions.DEFAULT);
         System.out.println(!bulkResponse.hasFailures());
     }
 
-    /**
-     * 文档查询
-     */
-    @Test
-    void testSearch() throws IOException {
-        SearchRequest searchRequest = new SearchRequest("user");
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-//        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("creator", "秦先富");//精确查询
-//        MultiMatchQueryBuilder termQueryBuilder = QueryBuilders.multiMatchQuery("秦先富","creator");//多个字段里找text
-        TermsQueryBuilder termQueryBuilder = QueryBuilders.termsQuery("creator","秦先富","何飘");//一个字段里找多个值
-//        MatchAllQueryBuilder matchAllQueryBuilder = QueryBuilders.matchAllQuery(); //匹配所有
-        sourceBuilder.query(termQueryBuilder);
+    private void buildSearchRequest() {
         sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
         searchRequest.source(sourceBuilder);
-
-        SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-//        System.out.println(JSON.toJSONString(searchResponse.getHits()));
-//        System.out.println("===========================");
-        for (SearchHit documentFields : searchResponse.getHits().getHits()) {
-            System.out.println(documentFields.getSourceAsMap());
-        }
     }
 
+    private void createSearchObject(String indexName) {
+        searchRequest = new SearchRequest(indexName);
+        sourceBuilder = new SearchSourceBuilder();
+    }
+
+    /**
+     * 文档精确查询
+     */
+    public SearchResponse termQuery(String indexName,TermQueryBuilder termQueryBuilder) throws IOException {
+        createSearchObject(indexName);
+//        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("creator", "秦先富");//精确查询
+        sourceBuilder.query(termQueryBuilder);
+        buildSearchRequest();
+
+        return client.search(searchRequest, RequestOptions.DEFAULT);
+    }
+
+
+
+    /**
+     * 文档一个name找多个values查询
+     */
+    public SearchResponse termsQuery(String indexName,TermsQueryBuilder termsQueryBuilder) throws IOException {
+        createSearchObject(indexName);
+//        TermsQueryBuilder termsQueryBuilder = QueryBuilders.termsQuery("creator", "秦先富", "何飘");//一个字段里找多个值
+        sourceBuilder.query(termsQueryBuilder);
+        buildSearchRequest();
+        return client.search(searchRequest, RequestOptions.DEFAULT);
+    }
+
+    /**
+     * 文档一个text在多个fieldNames中查询
+     */
+    public SearchResponse multiMatchQuery(String indexName,MultiMatchQueryBuilder multiMatchQueryBuilder) throws IOException {
+        createSearchObject(indexName);
+//        MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery("秦先富","creator");//多个字段里找text
+        sourceBuilder.query(multiMatchQueryBuilder);
+        buildSearchRequest();
+        return client.search(searchRequest, RequestOptions.DEFAULT);
+    }
+
+    /**
+     * 文档所有匹配查询
+     */
+    public SearchResponse matchAllQuery(String indexName) throws IOException {
+        createSearchObject(indexName);
+        MatchAllQueryBuilder matchAllQueryBuilder = QueryBuilders.matchAllQuery(); //匹配所有
+        sourceBuilder.query(matchAllQueryBuilder);
+        buildSearchRequest();
+        return client.search(searchRequest, RequestOptions.DEFAULT);
+    }
 }

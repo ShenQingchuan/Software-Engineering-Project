@@ -1,7 +1,7 @@
 package com.example.csgs.service.impl;
 
 import com.example.csgs.service.UserSignService;
-import com.example.csgs.utils.RedisUtils;
+import com.example.csgs.utils.RedisUtil;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 @Service
 public class UserSignServiceImpl implements UserSignService {
     @Resource
-    RedisUtils redisUtils;
+    RedisUtil redisUtil;
 
     /**
      * 退出登陆
@@ -22,9 +22,9 @@ public class UserSignServiceImpl implements UserSignService {
     public boolean signOut(HttpServletRequest request) {
         String csgs_token = request.getHeader("csgs_token");
         if (!"".equals(csgs_token)) {
-            if (RedisUtils.hasKey(csgs_token)) {
-                log.info("用户 uid: " + redisUtils.get(csgs_token) + " 退出登录...");
-                redisUtils.remove(csgs_token);
+            if (RedisUtil.hasKey(csgs_token)) {
+                log.info("用户 uid: " + redisUtil.get(csgs_token) + " 退出登录...");
+                redisUtil.remove(csgs_token);
                 return true;
             }
         }

@@ -3,7 +3,7 @@ package com.example.csgs.service.impl;
 import com.example.csgs.entity.*;
 import com.example.csgs.mapper.*;
 import com.example.csgs.service.GridManageService;
-import com.example.csgs.utils.CalculatePageUtils;
+import com.example.csgs.utils.CalculatePageUtil;
 import com.example.csgs.utils.SHA256Util;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -97,7 +97,7 @@ public class GridManageServiceImpl implements GridManageService {
             PageHelper.orderBy("id ASC");//按id升序排列
             List<Announcement> announcementList = announcementMapper.findAnnouncementByCreator(id);
 
-            return CalculatePageUtils.getPageInfo(Integer.parseInt(page), pageSize, pageAble, announcementList);
+            return CalculatePageUtil.getPageInfo(Integer.parseInt(page), pageSize, pageAble, announcementList);
         }
         return null;
     }
@@ -117,7 +117,7 @@ public class GridManageServiceImpl implements GridManageService {
             PageHelper.orderBy("id ASC");//按id升序排列
             List<Journal> journalList = journalMapper.findJournalByCreator(id);
 
-            return CalculatePageUtils.getPageInfo(Integer.parseInt(page), pageSize, pageAble, journalList);
+            return CalculatePageUtil.getPageInfo(Integer.parseInt(page), pageSize, pageAble, journalList);
         }
         return null;
     }

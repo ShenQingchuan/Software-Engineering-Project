@@ -4,9 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.csgs.entity.UserEntity;
 import com.example.csgs.mapper.UserMapper;
 import com.example.csgs.service.UserSignService;
-import com.example.csgs.utils.JwtUtils;
-import com.example.csgs.utils.RedisUtils;
-import com.example.csgs.utils.ResultUtils;
+import com.example.csgs.utils.JwtUtil;
+import com.example.csgs.utils.RedisUtil;
+import com.example.csgs.utils.ResultUtil;
 import com.example.csgs.utils.SHA256Util;
 import lombok.extern.log4j.Log4j;
 import org.apache.shiro.SecurityUtils;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +30,7 @@ public class UserSignController {
     @Resource
     UserMapper userMapper;
     @Resource
-    RedisUtils redisUtils;
+    RedisUtil redisUtil;
 
     @PostMapping("/signIn")
     public Object toLogin(@RequestBody JSONObject jsonObject) {
@@ -43,20 +42,20 @@ public class UserSignController {
         try {
             subject.login(token);
             UserEntity userEntity = userMapper.findOneByUserID(userID);
-            String tokens = JwtUtils.genJsonWebToken(userEntity);
+            String tokens = JwtUtil.genJsonWebToken(userEntity);
 
-            redisUtils.set(tokens, String.valueOf(userEntity.getId()), JwtUtils.TOKEN_EXPIRE_TIME);
+            redisUtil.set(tokens, String.valueOf(userEntity.getId()), JwtUtil.TOKEN_EXPIRE_TIME);
             Map<String, String> map = new HashMap<>();
             map.put("token", tokens);
             map.put("sessionID", String.valueOf(subject.getSession().getId()));
             log.info("用户<" + userID + "> 登录成功!");
-            return ResultUtils.success(map, "用户 <" + userID + "> 登录成功!");
+            return ResultUtil.success(map, "用户 <" + userID + "> 登录成功!");
         } catch (UnknownAccountException e) {
             log.info("用户<" + userID + "> 不存在!");
-            return ResultUtils.error("用户 <" + userID + "> 不存在!");
+            return ResultUtil.error("用户 <" + userID + "> 不存在!");
         } catch (IncorrectCredentialsException e) {
             log.info("用户<" + userID + "> 密码错误!");
-            return ResultUtils.error("用户 <" + userID + "> 密码错误!");
+            return ResultUtil.error("用户 <" + userID + "> 密码错误!");
         }
 
     }
@@ -70,13 +69,13 @@ public class UserSignController {
             Subject subject = SecurityUtils.getSubject();
             try {
                 subject.logout();
-                return ResultUtils.success("退出登录Success!");
+                return ResultUtil.success("退出登录Success!");
             } catch (UnknownAccountException e) {
                 log.info("退出登陆Failure！");
-                return ResultUtils.error("退出登录Failure,sessionID不正确！");
+                return ResultUtil.error("退出登录Failure,sessionID不正确！");
             }
         }
         log.info("退出登录Failure，令牌信息不正确！");
-        return ResultUtils.success("退出登录Failure，令牌信息不正确！");
+        return ResultUtil.success("退出登录Failure，令牌信息不正确！");
     }
 }

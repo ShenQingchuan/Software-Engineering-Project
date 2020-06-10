@@ -9,10 +9,10 @@ import com.example.csgs.mapper.AnnouncementMapper;
 import com.example.csgs.mapper.JournalMapper;
 import com.example.csgs.mapper.JournalTypeMapper;
 import com.example.csgs.service.GridManageService;
-import com.example.csgs.utils.AuthorityUtils;
-import com.example.csgs.utils.IsInteger;
-import com.example.csgs.utils.RedisUtils;
-import com.example.csgs.utils.ResultUtils;
+import com.example.csgs.utils.AuthorityUtil;
+import com.example.csgs.utils.IsIntegerUtil;
+import com.example.csgs.utils.RedisUtil;
+import com.example.csgs.utils.ResultUtil;
 import lombok.extern.log4j.Log4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +33,7 @@ public class GridManageController {
     @Resource
     JournalTypeMapper journalTypeMapper;
     @Resource
-    RedisUtils redisUtils;
+    RedisUtil redisUtil;
 
     /**
      * 发布公告接口
@@ -41,18 +41,18 @@ public class GridManageController {
      */
     @PostMapping("/releaseAnnouncement/{id}")
     public Object releaseAnnouncement(HttpServletRequest request, @PathVariable String id, @RequestBody JSONObject jsonObject) {
-        if (IsInteger.isInteger(id) && AuthorityUtils.authority(request, id, redisUtils)) {
+        if (IsIntegerUtil.isInteger(id) && AuthorityUtil.authority(request, id, redisUtil)) {
             String titleName = jsonObject.getString("titleName");
             String content = jsonObject.getString("content");
             if (gridManageService.releaseAnnouncement(Long.parseLong(id), titleName, content)) {
                 log.info("id为<" + id + ">网格员发布公告成功！");
-                return ResultUtils.success("公告发布成功！");
+                return ResultUtil.success("公告发布成功！");
             }
             log.info("id为<" + id + ">网格员发布公告成功！");
-            return ResultUtils.error("公告发布失败！");
+            return ResultUtil.error("公告发布失败！");
         }
         log.info("[Refuse]公告信息发布不匹配！");
-        return ResultUtils.success("[Refuse]公告信息发布不匹配！");
+        return ResultUtil.success("[Refuse]公告信息发布不匹配！");
     }
 
     /**
@@ -61,12 +61,12 @@ public class GridManageController {
      */
     @DeleteMapping("/deleteAnnouncement/{id}")
     public Object deleteAnnouncement(@PathVariable String id) {
-        if (IsInteger.isInteger(id) && announcementMapper.deleteAnnouncement(Long.parseLong(id)) > 0) {
+        if (IsIntegerUtil.isInteger(id) && announcementMapper.deleteAnnouncement(Long.parseLong(id)) > 0) {
             log.info("Announcement表id为<" + id + ">公告被成功删除！");
-            return ResultUtils.success("公告删除成功！");
+            return ResultUtil.success("公告删除成功！");
         }
         log.info("Announcement表id为<" + id + ">公告删除失败！");
-        return ResultUtils.error("公告删除失败！");
+        return ResultUtil.error("公告删除失败！");
     }
 
     /**
@@ -75,12 +75,12 @@ public class GridManageController {
      */
     @DeleteMapping("/deleteJournal/{id}")
     public Object deleteJournal(@PathVariable String id) {
-        if (IsInteger.isInteger(id) && journalMapper.deleteJournal(Long.parseLong(id)) > 0) {
+        if (IsIntegerUtil.isInteger(id) && journalMapper.deleteJournal(Long.parseLong(id)) > 0) {
             log.info("Journal表id为<" + id + ">日志被成功删除！");
-            return ResultUtils.success("日志删除成功！");
+            return ResultUtil.success("日志删除成功！");
         }
         log.info("Journal表id为<" + id + ">日志删除失败！");
-        return ResultUtils.error("日志删除失败！");
+        return ResultUtil.error("日志删除失败！");
     }
 
     /**
@@ -89,21 +89,21 @@ public class GridManageController {
      */
     @GetMapping("/getAnnouncementList/{id}")
     public Object getAnnouncementList(HttpServletRequest request, @PathVariable String id, @RequestParam String page) {
-        if (IsInteger.isInteger(id) && AuthorityUtils.authority(request, id, redisUtils)) {
+        if (IsIntegerUtil.isInteger(id) && AuthorityUtil.authority(request, id, redisUtil)) {
             PageQuery<Announcement> pageQuery = gridManageService.getAnnouncementList(Long.parseLong(id), page);
             if (pageQuery != null && pageQuery.getDataList() != null) {
                 log.info("user表中id为<" + id + ">的网格员获取公告列表信息成功!");
-                return ResultUtils.success(pageQuery, "返回公告信息列表成功！");
+                return ResultUtil.success(pageQuery, "返回公告信息列表成功！");
             }
             if (Integer.parseInt(page) > 1) {
                 log.info("已无更多公告！");
-                return ResultUtils.error(" 已无更多公告！");
+                return ResultUtil.error(" 已无更多公告！");
             }
             log.info("user表中id为<" + id + ">的网格员获取公告列表信息失败!");
-            return ResultUtils.success("返回公告信息列表失败！");
+            return ResultUtil.success("返回公告信息列表失败！");
         }
         log.info("[Refuse]公告信息查询不匹配！");
-        return ResultUtils.success("[Refuse]公告信息查询不匹配！");
+        return ResultUtil.success("[Refuse]公告信息查询不匹配！");
     }
 
     /**
@@ -112,20 +112,20 @@ public class GridManageController {
      */
     @PostMapping("/releaseJournal/{id}")
     public Object releaseJournal(HttpServletRequest request, @RequestBody JSONObject jsonObject, @PathVariable String id) {
-        if (IsInteger.isInteger(id) && AuthorityUtils.authority(request, id, redisUtils)) {
+        if (IsIntegerUtil.isInteger(id) && AuthorityUtil.authority(request, id, redisUtil)) {
             String titleName = jsonObject.getString("titleName");
             String content = jsonObject.getString("content");
             String type = jsonObject.getString("type");
 
             if (gridManageService.releaseJournal(titleName, content, type, Long.parseLong(id))) {
                 log.info("id为<" + id + ">网格员发布日志成功！");
-                return ResultUtils.success("日志信息新增成功！");
+                return ResultUtil.success("日志信息新增成功！");
             }
             log.info("id为<" + id + ">网格员发布日志失败！");
-            return ResultUtils.error("日志信息新增失败！");
+            return ResultUtil.error("日志信息新增失败！");
         }
         log.info("[Refuse]日志信息发布不匹配！");
-        return ResultUtils.success("[Refuse]日志信息发布不匹配！");
+        return ResultUtil.success("[Refuse]日志信息发布不匹配！");
     }
 
     /**
@@ -134,21 +134,21 @@ public class GridManageController {
      */
     @GetMapping("/getJournalList/{id}")
     public Object getJournalList(HttpServletRequest request, @PathVariable String id, @RequestParam String page) {
-        if (IsInteger.isInteger(id) && AuthorityUtils.authority(request, id, redisUtils)) {
+        if (IsIntegerUtil.isInteger(id) && AuthorityUtil.authority(request, id, redisUtil)) {
             PageQuery<Journal> pageQuery = gridManageService.getJournalList(Long.parseLong(id), page);
             if (pageQuery != null && pageQuery.getDataList() != null) {
                 log.info("user表中id为<" + id + ">的网格员获取日志列表信息成功!");
-                return ResultUtils.success(pageQuery, "返回日志信息列表Success！");
+                return ResultUtil.success(pageQuery, "返回日志信息列表Success！");
             }
             if (Integer.parseInt(page) > 1) {
                 log.info("当前已无更多日志");
-                return ResultUtils.error(" 已无更多日志！");
+                return ResultUtil.error(" 已无更多日志！");
             }
             log.info("user表中id为<" + id + ">的网格员获取公告列表信息失败!");
-            return ResultUtils.success("返回日志信息列表Failure！");
+            return ResultUtil.success("返回日志信息列表Failure！");
         }
         log.info("[Refuse]日志信息查询不匹配！");
-        return ResultUtils.success("[Refuse]日志信息查询不匹配！");
+        return ResultUtil.success("[Refuse]日志信息查询不匹配！");
     }
 
     /**
@@ -157,15 +157,15 @@ public class GridManageController {
      */
     @GetMapping("/getJournalContent/{id}")
     public Object getJournalContent(@PathVariable String id) {
-        if (IsInteger.isInteger(id)) {
+        if (IsIntegerUtil.isInteger(id)) {
             String journalContent = journalMapper.findContentById(Long.parseLong(id));
             if (journalContent != null) {
                 log.info("Journal表中id为<" + id + ">的日志内容获取成功!");
-                return ResultUtils.success(journalContent, "返回日志内容成功！");
+                return ResultUtil.success(journalContent, "返回日志内容成功！");
             }
         }
         log.info("Journal表中id为<" + id + ">的日志内容获取失败!");
-        return ResultUtils.success("返回日志内容失败！");
+        return ResultUtil.success("返回日志内容失败！");
     }
 
     /**
@@ -182,10 +182,10 @@ public class GridManageController {
         String password = jsonObject.getString("password");
         if (gridManageService.addResidentUser(userID, district, community, password)) {
             log.info("新增[" + district + ":" + community + "]用户userID<" + userID + ">成功！");
-            return ResultUtils.success("新增居民用户成功！");
+            return ResultUtil.success("新增居民用户成功！");
         }
         log.info("新增[" + district + ":" + community + "]用户userID<" + userID + ">失败！");
-        return ResultUtils.success("新增居民用户失败！");
+        return ResultUtil.success("新增居民用户失败！");
     }
 
     /**
@@ -193,17 +193,17 @@ public class GridManageController {
      */
     @GetMapping("/getManageAreaList/{id}")
     public Object getManageAreaList(HttpServletRequest request, @PathVariable String id) {
-        if (IsInteger.isInteger(id) && AuthorityUtils.authority(request, id, redisUtils)) {
+        if (IsIntegerUtil.isInteger(id) && AuthorityUtil.authority(request, id, redisUtil)) {
             AreaList manageAreaList = gridManageService.getManageAreaList(Long.parseLong(id));
             if (manageAreaList != null) {
                 log.info("网格员id<" + id + ">获取网格员管理区域信息成功！");
-                return ResultUtils.success(manageAreaList, "获取网格员管理区域信息成功！");
+                return ResultUtil.success(manageAreaList, "获取网格员管理区域信息成功！");
             }
             log.info("网格员id<" + id + ">获取网格员管理区域信息失败！");
-            return ResultUtils.error("获取网格员管理区域信息失败！");
+            return ResultUtil.error("获取网格员管理区域信息失败！");
         }
         log.info("[Refuse]网格员管理区域信息查询不匹配！");
-        return ResultUtils.success("[Refuse]网格员管理区域信息查询不匹配！");
+        return ResultUtil.success("[Refuse]网格员管理区域信息查询不匹配！");
     }
 
     /**
@@ -214,9 +214,9 @@ public class GridManageController {
         List<String> allTypeName = journalTypeMapper.findAllTypeName();
         if (!allTypeName.isEmpty()) {
             log.info("网格员获取日志类型名成功！");
-            return ResultUtils.success(allTypeName, "获取日志类型名成功！");
+            return ResultUtil.success(allTypeName, "获取日志类型名成功！");
         }
         log.info("网格员获取日志类型名失败！");
-        return ResultUtils.error("获取日志类型名失败");
+        return ResultUtil.error("获取日志类型名失败");
     }
 }

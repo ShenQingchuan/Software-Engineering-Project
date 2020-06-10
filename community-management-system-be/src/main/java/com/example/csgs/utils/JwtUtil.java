@@ -7,7 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import java.util.Date;
 
-public class JwtUtils {
+public class JwtUtil {
 
     private static final String SUBJECT = "csgs_space";//签名发行者
 

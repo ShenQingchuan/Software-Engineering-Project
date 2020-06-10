@@ -12,7 +12,7 @@
         where id = #{id}
     </select>
 
-    <select id="findOneByUserID"  resultType="UserEntity">
+    <select id="findOneByUserID" resultType="UserEntity">
         select *
         from user u
         where userid = #{userID}
@@ -40,10 +40,10 @@
         select u.id id,userid,user_name,tel_phone,district_name,community_name
         from user u,user_profile p,community_info c,district d
         where u.profile_id = p.id and p.community_id = c.id and d.id = c.district_id
-        <if test="community != ''">
+        <if test="community != null">
             and community_name = #{community}
         </if>
-        <if test="userName != ''">
+        <if test="userName != null">
             and user_name = #{userName}
         </if>
     </select>
@@ -56,8 +56,8 @@
     </update>
 
     <insert id="addResidentUser" parameterType="hashmap">
-        insert into user(userid, user_password,profile_id,pwd_pro_id)
-        values (#{userID}, #{password},#{profileId},#{pwdId})
+        insert into user(userid, user_password, profile_id, pwd_pro_id)
+        values (#{userID}, #{password}, #{profileId}, #{pwdId})
     </insert>
 
     <update id="setGrid">

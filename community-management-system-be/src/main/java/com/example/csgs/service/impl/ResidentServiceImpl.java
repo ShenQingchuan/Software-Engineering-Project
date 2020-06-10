@@ -7,7 +7,7 @@ import com.example.csgs.entity.CommunityInfoEntity;
 import com.example.csgs.mapper.AnnouncementMapper;
 import com.example.csgs.mapper.ProfileMapper;
 import com.example.csgs.service.ResidentService;
-import com.example.csgs.utils.CalculatePageUtils;
+import com.example.csgs.utils.CalculatePageUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.log4j.Log4j;
@@ -53,7 +53,7 @@ public class ResidentServiceImpl implements ResidentService {
             Page<Announcement> pageAble = PageHelper.startPage(Integer.parseInt(page), pageSize);
             PageHelper.orderBy("id ASC");//按id升序排列
             List<Announcement> announcementList = announcementMapper.findAnnouncementByCreator(gid);
-            return CalculatePageUtils.
+            return CalculatePageUtil.
                     getPageInfo(Integer.parseInt(page), pageSize, pageAble, announcementList);
         }
         return null;

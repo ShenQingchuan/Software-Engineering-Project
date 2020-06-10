@@ -10,8 +10,8 @@ import com.example.csgs.entity.UserEntity;
 import com.example.csgs.mapper.ProfileMapper;
 import com.example.csgs.mapper.UserMapper;
 import com.example.csgs.service.AdminAllService;
-import com.example.csgs.utils.IsInteger;
-import com.example.csgs.utils.ResultUtils;
+import com.example.csgs.utils.IsIntegerUtil;
+import com.example.csgs.utils.ResultUtil;
 import lombok.extern.log4j.Log4j;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.web.bind.annotation.*;
@@ -40,16 +40,16 @@ public class AdminAllController {
         UserEntity userEntity = userMapper.findOneByUserID(userID);
         if (userEntity != null && userEntity.getUserType() == 1) {
             log.info("[系统管理员]用户 <" + userID + "> 不是一名网格员!");
-            return ResultUtils.error("该用户已经是一名网格员！！！");
+            return ResultUtil.error("该用户已经是一名网格员！！！");
         }else if (userEntity != null){
             ProfileInfo material = profileMapper.getMaterial(userEntity.getId());
             if (material != null) {
                 log.info("[系统管理员]用户 <" + userID + "> 资料获取Success!");
-                return ResultUtils.success(material, "用户资料获取成功！");
+                return ResultUtil.success(material, "用户资料获取成功！");
             }
         }
         log.info("[系统管理员]用户 <" + userID + "> 资料获取Failure!");
-        return ResultUtils.error("用户资料不存在！");
+        return ResultUtil.error("用户资料不存在！");
     }
     /**
      * 场景：系统管理员新增网格员，首先要获取区域数据信息，然后在其中选择区域分配网格员
@@ -60,10 +60,10 @@ public class AdminAllController {
         AreaList areaList = adminAllService.getAreaList(userID);
         if (areaList != null) {
             log.info("[系统管理员]用户 <" + userID + "> 获取"+ areaList.getDistrictName() +"所在区域数据信息获取Success！");
-            return ResultUtils.success(areaList, "获取"+ areaList.getDistrictName() +"区域数据信息成功！");
+            return ResultUtil.success(areaList, "获取"+ areaList.getDistrictName() +"区域数据信息成功！");
         }
         log.info("[系统管理员]用户 <" + userID + "> 所在区域数据信息获取Failure(改用户不存在)！");
-        return ResultUtils.error("获取区域数据信息失败(该用户不存在)！");
+        return ResultUtil.error("获取区域数据信息失败(该用户不存在)！");
     }
 
     /**
@@ -74,10 +74,10 @@ public class AdminAllController {
         List<AreaList> allAreaList = adminAllService.getAllAreaList();
         if (!allAreaList.isEmpty()) {
             log.info("[系统管理员]获取所有区域数据信息Success！");
-            return ResultUtils.success(allAreaList, "获取所有区域数据信息成功！");
+            return ResultUtil.success(allAreaList, "获取所有区域数据信息成功！");
         }
         log.info("[系统管理员]获取所有区域数据信息Failure！");
-        return ResultUtils.error("获取所有区域数据信息失败！");
+        return ResultUtil.error("获取所有区域数据信息失败！");
     }
 
     /**
@@ -90,10 +90,10 @@ public class AdminAllController {
 
         if (adminAllService.addGrid(createGridInfo)) {
             log.info("[系统管理员]添加身份证号为<"+ createGridInfo.getUserID() +">网格员身份Success！");
-            return ResultUtils.success("添加网格员操作成功！");
+            return ResultUtil.success("添加网格员操作成功！");
         }
         log.info("[系统管理员]添加身份证号为<"+ createGridInfo.getUserID() +">网格员身份Failure！");
-        return ResultUtils.error("添加网格员操作失败！");
+        return ResultUtil.error("添加网格员操作失败！");
     }
 
     /**
@@ -104,10 +104,10 @@ public class AdminAllController {
         PageQuery<GridPersonalInfo> allGrids = adminAllService.getAllGrids(page);
         if (allGrids != null) {
             log.info("[系统管理员]获取所有网格员信息Success！");
-            return ResultUtils.success(allGrids, "获取网格员数据列表成功！");
+            return ResultUtil.success(allGrids, "获取网格员数据列表成功！");
         }
         log.info("[系统管理员]获取所有区域数据信息Failure！");
-        return ResultUtils.error("获取网格员数据列表失败！");
+        return ResultUtil.error("获取网格员数据列表失败！");
     }
 
     /**
@@ -120,12 +120,12 @@ public class AdminAllController {
     public Object modifyGrid(@RequestBody JSONObject jsonObject, @PathVariable String id) {
         AreaList areaList = JSONObject.toJavaObject(jsonObject, AreaList.class);
         log.info(areaList.toString());
-        if (IsInteger.isInteger(id) && adminAllService.modifyGrid(areaList,Long.parseLong(id))) {
+        if (IsIntegerUtil.isInteger(id) && adminAllService.modifyGrid(areaList,Long.parseLong(id))) {
             log.info("[系统管理员]修改网格员id:<"+ Long.parseLong(id) +">Success！");
-            return ResultUtils.success("网格员管理区域修改成功！");
+            return ResultUtil.success("网格员管理区域修改成功！");
         }
         log.info("[系统管理员]修改网格员id:<"+ Long.parseLong(id) +">Failure！");
-        return ResultUtils.error("网格员管理区域修改失败！");
+        return ResultUtil.error("网格员管理区域修改失败！");
     }
 
     /**
@@ -133,11 +133,11 @@ public class AdminAllController {
      */
     @DeleteMapping("/deleteOneGrid/{id}")
     public Object deleteOneGrid(@PathVariable String id) {
-        if (IsInteger.isInteger(id) && adminAllService.deleteOneGrid(Long.parseLong(id))) {
+        if (IsIntegerUtil.isInteger(id) && adminAllService.deleteOneGrid(Long.parseLong(id))) {
             log.info("[系统管理员]删除网格员id:<"+ Long.parseLong(id) +"Success！");
-            return ResultUtils.success("删除id为"+ id +"的网格员操作成功！");
+            return ResultUtil.success("删除id为"+ id +"的网格员操作成功！");
         }
         log.info("[系统管理员]删除网格员id:<"+ Long.parseLong(id) +"Failure！");
-        return ResultUtils.error("删除id为"+ id +"的网格员操作失败！");
+        return ResultUtil.error("删除id为"+ id +"的网格员操作失败！");
     }
 }
