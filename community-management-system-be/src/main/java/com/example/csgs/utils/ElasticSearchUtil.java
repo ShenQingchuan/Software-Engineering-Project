@@ -1,7 +1,6 @@
 package com.example.csgs.utils;
 
 import com.alibaba.fastjson.JSON;
-import com.example.csgs.pojo.JournalEs;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -18,21 +17,20 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.core.CountRequest;
+import org.elasticsearch.client.core.CountResponse;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.*;
-import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class ElasticSearchUtil {
@@ -151,6 +149,15 @@ public class ElasticSearchUtil {
     }
 
     /**
+     * 索引中doc数量查询
+     * @param indexName 索引名
+     */
+    public CountResponse countQuery(String indexName) throws IOException {
+        CountRequest countRequest = new CountRequest(indexName);
+        return client.count(countRequest,RequestOptions.DEFAULT);
+    }
+
+    /**
      * 文档精确查询
      */
     public SearchResponse termQuery(String indexName,TermQueryBuilder termQueryBuilder) throws IOException {
@@ -158,7 +165,6 @@ public class ElasticSearchUtil {
 //        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("creator", "秦先富");//精确查询
         sourceBuilder.query(termQueryBuilder);
         buildSearchRequest();
-
         return client.search(searchRequest, RequestOptions.DEFAULT);
     }
 

@@ -1,7 +1,7 @@
 package com.example.csgs.service.impl;
 
-import com.example.csgs.entity.PageQuery;
 import com.example.csgs.entity.DistrictEntity;
+import com.example.csgs.entity.PageQuery;
 import com.example.csgs.entity.User;
 import com.example.csgs.entity.UserEntity;
 import com.example.csgs.mapper.ProfileMapper;
@@ -16,7 +16,6 @@ import com.github.pagehelper.PageHelper;
 import lombok.extern.log4j.Log4j;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.springframework.stereotype.Service;
 
@@ -87,12 +86,17 @@ public class GridQueryServiceImpl implements GridQueryService {
                 ElasticSearchUtil elasticSearchUtil = new ElasticSearchUtil();
                 if (userName != null && community == null) {
                     SearchResponse searchResponse = elasticSearchUtil.termQuery(
-                            "user", QueryBuilders.termQuery("userName", userName));
+                            "profile", QueryBuilders.termQuery("userName", userName));
                     addDataToUserList(searchResponse);
+                    return new PageQuery<User>(1, 2,
+                            elasticSearchUtil.countQuery("profile").getCount(), userList);
                 } else if (community != null && userName == null) {
                     SearchResponse searchResponse = elasticSearchUtil.termQuery(
-                            "user", QueryBuilders.termQuery("community", community));
+                            "communityInfo", QueryBuilders.termQuery("community", community));
                     addDataToUserList(searchResponse);
+//                    calculatePage();
+                    return new PageQuery<User>(1, 2,
+                            elasticSearchUtil.countQuery("communityInfo").getCount(), userList);
                 } else {
                     HashMap<String, String> map = new HashMap<>();
                     map.put("userName", userName);
@@ -101,15 +105,16 @@ public class GridQueryServiceImpl implements GridQueryService {
                     pageable = PageHelper.startPage(Integer.parseInt(page), pageSize);
                     PageHelper.orderBy("id ASC");
                     userList = userMapper.findUserByGridInfo(map);
+                    return CalculatePageUtil.getPageInfo(Integer.parseInt(page), pageSize, pageable, userList);
                 }
             }
-            return CalculatePageUtil.getPageInfo(Integer.parseInt(page), pageSize, pageable, userList);
         }
         return null;
     }
 
     /**
      * 从searchResponse中拆解数据（多个User实体类）到List集合中
+     *
      * @param searchResponse 使用ElasticSearch所查询到的数据类
      */
     private void addDataToUserList(SearchResponse searchResponse) {

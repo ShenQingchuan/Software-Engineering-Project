@@ -25,9 +25,7 @@ import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.index.query.TermsQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -53,7 +51,7 @@ class CsgsApplicationTests {
      */
     @Test
     void contextLoads() throws IOException {
-        CreateIndexRequest request = new CreateIndexRequest("user");
+        CreateIndexRequest request = new CreateIndexRequest("communityInfo");
         CreateIndexResponse createIndexResponse = client
                 .indices().create(request, RequestOptions.DEFAULT);
         System.out.println(createIndexResponse);
