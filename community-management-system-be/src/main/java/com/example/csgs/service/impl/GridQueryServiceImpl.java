@@ -1,9 +1,6 @@
 package com.example.csgs.service.impl;
 
-import com.example.csgs.entity.DistrictEntity;
-import com.example.csgs.entity.PageQuery;
-import com.example.csgs.entity.User;
-import com.example.csgs.entity.UserEntity;
+import com.example.csgs.entity.*;
 import com.example.csgs.mapper.ProfileMapper;
 import com.example.csgs.mapper.PwdProMapper;
 import com.example.csgs.mapper.UserMapper;
@@ -84,16 +81,18 @@ public class GridQueryServiceImpl implements GridQueryService {
                 userList.add(user);
             } else {
                 ElasticSearchUtil elasticSearchUtil = new ElasticSearchUtil();
-                if (userName != null && community == null) {
+                if (!"".equals(userName) && "".equals(community)) {
                     SearchResponse searchResponse = elasticSearchUtil.termQuery(
-                            "profile", QueryBuilders.termQuery("userName", userName));
-                    addDataToUserList(searchResponse);
+                            "profile", QueryBuilders.termQuery("userName", userName),page);
+                    List<ProfileInfo> profileInfos = parseToDataList(searchResponse, new ProfileInfo());
+
                     return new PageQuery<User>(1, 2,
                             elasticSearchUtil.countQuery("profile").getCount(), userList);
-                } else if (community != null && userName == null) {
+                } else if ("".equals(userName) && !"".equals(community)) {
                     SearchResponse searchResponse = elasticSearchUtil.termQuery(
-                            "communityInfo", QueryBuilders.termQuery("community", community));
-                    addDataToUserList(searchResponse);
+                            "communityInfo", QueryBuilders.termQuery("community", community),page);
+                    List<CommunityInfo> communityInfos = parseToDataList(searchResponse, new CommunityInfo());
+
 //                    calculatePage();
                     return new PageQuery<User>(1, 2,
                             elasticSearchUtil.countQuery("communityInfo").getCount(), userList);
@@ -117,13 +116,15 @@ public class GridQueryServiceImpl implements GridQueryService {
      *
      * @param searchResponse 使用ElasticSearch所查询到的数据类
      */
-    private void addDataToUserList(SearchResponse searchResponse) {
+    private <T>List<T> parseToDataList(SearchResponse searchResponse, T t) {
+        List<T> dataList = new ArrayList<>();
         for (SearchHit documentFields : searchResponse.getHits().getHits()) {
             log.info(documentFields.getSourceAsMap());
             Map<String, Object> sourceAsMap = documentFields.getSourceAsMap();
-            User user1 = MapToBeanUtil.mapToBean(sourceAsMap, new User());
-            userList.add(user1);
+            T t1 = MapToBeanUtil.mapToBean(sourceAsMap, t);
+            dataList.add(t1);
         }
+        return dataList;
     }
 
     /**

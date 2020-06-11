@@ -40,10 +40,10 @@
         select u.id id,userid,user_name,tel_phone,district_name,community_name
         from user u,user_profile p,community_info c,district d
         where u.profile_id = p.id and p.community_id = c.id and d.id = c.district_id
-        <if test="community != null">
+        <if test="community != ''">
             and community_name = #{community}
         </if>
-        <if test="userName != null">
+        <if test="userName != ''">
             and user_name = #{userName}
         </if>
     </select>

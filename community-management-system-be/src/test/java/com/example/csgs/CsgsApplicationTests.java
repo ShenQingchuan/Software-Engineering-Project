@@ -169,7 +169,7 @@ class CsgsApplicationTests {
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
 //        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("creator", "秦先富");//精确查询
 //        MultiMatchQueryBuilder termQueryBuilder = QueryBuilders.multiMatchQuery("秦先富","creator");//多个字段里找text
-        TermsQueryBuilder termQueryBuilder = QueryBuilders.termsQuery("creator","秦先富","何飘");//一个字段里找多个值
+        TermsQueryBuilder termQueryBuilder = QueryBuilders.termsQuery("userid","510722199901032661","510722199901032662");//一个字段里找多个值
 //        MatchAllQueryBuilder matchAllQueryBuilder = QueryBuilders.matchAllQuery(); //匹配所有
         sourceBuilder.query(termQueryBuilder);
         sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
