@@ -6,9 +6,9 @@ export const userLogTypePieOptions = {
   tooltip: {
     trigger: "item",
     formatter: "{a}<br/>{b}：{c}次 ({d}%)",
-    position: function (pos, params, dom, rect, size) {
+    position: function(pos, params, dom, rect, size) {
       // 鼠标在左侧时 tooltip 显示到右侧，鼠标在右侧时 tooltip 显示到左侧。
-      let obj = {top: 60};
+      let obj = { top: 60 };
       obj[["left", "right"][+(pos[0] < size.viewSize[0] / 2)]] = 5;
       return obj;
     }
@@ -78,5 +78,5 @@ export const singleChartOptions = {
     }
   },
   yAxis: {},
-  series: [{type: "bar"}, {type: "bar"}, {type: "bar"}]
+  series: [{ type: "bar" }, { type: "bar" }, { type: "bar" }]
 };

@@ -24,7 +24,7 @@ export async function send(config) {
       type,
       page,
       create_time: `${create_time.getFullYear()}年${create_time.getMonth() +
-      1}月${create_time.getDate()}日 ${localeTimeString.slice(
+        1}月${create_time.getDate()}日 ${localeTimeString.slice(
         2,
         localeTimeString.lastIndexOf(":")
       )}`

@@ -1,23 +1,23 @@
 <template>
-    <div
-            class="subpage-officer-add-user add-user-card"
-            v-bp-default="[
+  <div
+    class="subpage-officer-add-user add-user-card"
+    v-bp-default="[
       userInfo.id,
       '该网格员访问了添加用户页面',
       '页面访问',
       $route.path
     ]"
-    >
-        <el-card class="box-card">
-            <div slot="header" class="inner-box flex-box jy-between">
-                <span><b>添加用户</b></span>
-                <el-button @click="submitOfficerAddUser" type="text"
-                >确认提交
-                </el-button>
-            </div>
-            <el-form
-                    ref="form"
-                    class="add-user-form"
+  >
+    <el-card class="box-card">
+      <div slot="header" class="inner-box flex-box jy-between">
+        <span><b>添加用户</b></span>
+        <el-button @click="submitOfficerAddUser" type="text"
+          >确认提交
+        </el-button>
+      </div>
+      <el-form
+        ref="form"
+        class="add-user-form"
         :model="form"
         label-width="100px"
       >

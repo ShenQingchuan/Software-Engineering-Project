@@ -1,41 +1,41 @@
 <template>
   <el-tabs
-          @tab-click="tabChangeHandler"
-          v-bp-default="[userInfo.id, '访问了数据统计图页', '页面访问', $route.path]"
-          v-loading="loadingChart"
-          v-model="activeName"
+    @tab-click="tabChangeHandler"
+    v-bp-default="[userInfo.id, '访问了数据统计图页', '页面访问', $route.path]"
+    v-loading="loadingChart"
+    v-model="activeName"
   >
     <el-tab-pane label="各片区总体" name="first">
       <div class="all-district flex-box flex-col jy-center">
         <v-chart
-                v-if="allDistrictCharShow"
-                class="main-chart"
-                :options="allDistrictChartOptions"
+          v-if="allDistrictCharShow"
+          class="main-chart"
+          :options="allDistrictChartOptions"
         ></v-chart>
         <div class="tb-gap sort-options flex-box jy-center">
           <el-button
-                  @click="
+            @click="
               sortDataSourceBy(allDistrictChartOptions.dataset.source, '住房')
             "
-                  type="primary"
-                  plain
-          >按照住房数排序
+            type="primary"
+            plain
+            >按照住房数排序
           </el-button>
           <el-button
-                  @click="
+            @click="
               sortDataSourceBy(allDistrictChartOptions.dataset.source, '车位')
             "
-                  type="warning"
-                  plain
-          >按照车位数排序
+            type="warning"
+            plain
+            >按照车位数排序
           </el-button>
           <el-button
-                  @click="
+            @click="
               sortDataSourceBy(allDistrictChartOptions.dataset.source, '人口')
             "
-                  type="success"
-                  plain
-          >按照人口数排序
+            type="success"
+            plain
+            >按照人口数排序
           </el-button>
         </div>
       </div>
@@ -64,22 +64,22 @@
         ></v-chart>
         <div class="tb-gap sort-options flex-box jy-center">
           <el-button
-                  @click="sortDataSourceBy(singleChartOptions.dataset.source, '住房')"
-                  type="primary"
-                  plain
-          >按照住房数排序
+            @click="sortDataSourceBy(singleChartOptions.dataset.source, '住房')"
+            type="primary"
+            plain
+            >按照住房数排序
           </el-button>
           <el-button
-                  @click="sortDataSourceBy(singleChartOptions.dataset.source, '车位')"
-                  type="warning"
-                  plain
-          >按照车位数排序
+            @click="sortDataSourceBy(singleChartOptions.dataset.source, '车位')"
+            type="warning"
+            plain
+            >按照车位数排序
           </el-button>
           <el-button
-                  @click="sortDataSourceBy(singleChartOptions.dataset.source, '人口')"
-                  type="success"
-                  plain
-          >按照人口数排序
+            @click="sortDataSourceBy(singleChartOptions.dataset.source, '人口')"
+            type="success"
+            plain
+            >按照人口数排序
           </el-button>
         </div>
       </div>
@@ -94,25 +94,25 @@
 </template>
 
 <script>
-  import {mapState} from "vuex";
-  import resErrorHandler from "../../utils/resErrorHandler";
-  import {send} from "../../utils/burringPoint";
-  import Echart from "echarts";
-  import {
-    userLogTimeOptionsMaker,
-    userLogTypePieOptions,
-    singleChartOptions
-  } from "../../utils/chartOptions";
-  // import chartForAllMock from "@/mock/chartsForAll";
-  // import chartDataMock from "@/mock/charts";
-  // import allDistrictNameMock from "@/mock/getAllDistrict";
+import { mapState } from "vuex";
+import resErrorHandler from "../../utils/resErrorHandler";
+import { send } from "../../utils/burringPoint";
+import Echart from "echarts";
+import {
+  userLogTimeOptionsMaker,
+  userLogTypePieOptions,
+  singleChartOptions
+} from "../../utils/chartOptions";
+// import chartForAllMock from "@/mock/chartsForAll";
+// import chartDataMock from "@/mock/charts";
+// import allDistrictNameMock from "@/mock/getAllDistrict";
 
-  export default {
-    name: "statistics",
-    data() {
-      return {
-        allDistrict: [],
-        selectedDistrict: "",
+export default {
+  name: "statistics",
+  data() {
+    return {
+      allDistrict: [],
+      selectedDistrict: "",
 
       // Tab
       activeName: "first",
@@ -133,78 +133,78 @@
           }
         },
         yAxis: {},
-        series: [{type: "bar"}, {type: "bar"}, {type: "bar"}]
+        series: [{ type: "bar" }, { type: "bar" }, { type: "bar" }]
       },
-        singleChartOptions,
+      singleChartOptions,
 
-        userLogTypeChartInstance: false,
-        userLogTypeChartOptions: {...userLogTypePieOptions},
-        userLogTimeChartOptions: {}
-      };
-    },
-    computed: {
-      ...mapState(["userInfo"])
-    },
-    beforeDestroy() {
-      this.userLogTypeChartInstance.dispose();
-      this.userLogTimeChartInstance.dispose();
-    },
-    async mounted() {
-      try {
-        const res = await this.$axios.get("/leader/getAllDistrictName");
-        resErrorHandler(this, res);
-        if (res.data.resultCode === "200") {
-          this.allDistrict = res.data.data;
-        }
+      userLogTypeChartInstance: false,
+      userLogTypeChartOptions: { ...userLogTypePieOptions },
+      userLogTimeChartOptions: {}
+    };
+  },
+  computed: {
+    ...mapState(["userInfo"])
+  },
+  beforeDestroy() {
+    this.userLogTypeChartInstance.dispose();
+    this.userLogTimeChartInstance.dispose();
+  },
+  async mounted() {
+    try {
+      const res = await this.$axios.get("/leader/getAllDistrictName");
+      resErrorHandler(this, res);
+      if (res.data.resultCode === "200") {
+        this.allDistrict = res.data.data;
+      }
 
-        this.loadingChart = true;
-        const rphRes = await this.$axios.get("/leader/getDistrictRPHList");
+      this.loadingChart = true;
+      const rphRes = await this.$axios.get("/leader/getDistrictRPHList");
       console.log(rphRes);
       resErrorHandler(this, rphRes);
       if (rphRes.data.resultCode === "200") {
         this.allDistrictChartOptions.dataset.source = rphRes.data.data.map(
-                e => ({
-                  片区: e.district,
-                  住房: e.numHouses,
-                  车位: e.numParkingSpaces,
-                  人口: e.numResidents
-                })
+          e => ({
+            片区: e.district,
+            住房: e.numHouses,
+            车位: e.numParkingSpaces,
+            人口: e.numResidents
+          })
         );
         this.allDistrictCharShow = true;
       }
 
-        const userLogTypeRes = await this.$axios.get(`/log/AggregateQuery/type`);
-        console.log(userLogTypeRes);
-        resErrorHandler(this, userLogTypeRes);
-        if (rphRes.data.resultCode === "200") {
-          const typeData = userLogTypeRes.data.data;
-          this.userLogTypeChartOptions.series[0].data = typeData.map(e => ({
-            name: e.type,
-            value: e.count
-          }));
-          this.userLogTypeChartInstance = Echart.init(
-                  this.$refs.userLogTypeChart
-          );
-          this.userLogTypeChartInstance.setOption(this.userLogTypeChartOptions);
-        }
+      const userLogTypeRes = await this.$axios.get(`/log/AggregateQuery/type`);
+      console.log(userLogTypeRes);
+      resErrorHandler(this, userLogTypeRes);
+      if (rphRes.data.resultCode === "200") {
+        const typeData = userLogTypeRes.data.data;
+        this.userLogTypeChartOptions.series[0].data = typeData.map(e => ({
+          name: e.type,
+          value: e.count
+        }));
+        this.userLogTypeChartInstance = Echart.init(
+          this.$refs.userLogTypeChart
+        );
+        this.userLogTypeChartInstance.setOption(this.userLogTypeChartOptions);
+      }
 
-        const timeLogRes = await this.$axios.get(`/log/AggregateQuery/time`);
-        console.log(timeLogRes);
-        resErrorHandler(this, timeLogRes);
-        if (rphRes.data.resultCode === "200") {
-          const typeData = timeLogRes.data.data;
-          this.userLogTimeChartOptions = userLogTimeOptionsMaker(
-                  typeData.map(e => e.createTime),
-                  typeData.map(e => e.count)
-          );
-          this.userLogTimeChartInstance = Echart.init(
-                  this.$refs.userLogTimeChart
-          );
-          this.userLogTimeChartInstance.setOption(this.userLogTimeChartOptions);
-        }
+      const timeLogRes = await this.$axios.get(`/log/AggregateQuery/time`);
+      console.log(timeLogRes);
+      resErrorHandler(this, timeLogRes);
+      if (rphRes.data.resultCode === "200") {
+        const typeData = timeLogRes.data.data;
+        this.userLogTimeChartOptions = userLogTimeOptionsMaker(
+          typeData.map(e => e.createTime),
+          typeData.map(e => e.count)
+        );
+        this.userLogTimeChartInstance = Echart.init(
+          this.$refs.userLogTimeChart
+        );
+        this.userLogTimeChartInstance.setOption(this.userLogTimeChartOptions);
+      }
 
-        this.loadingChart = false;
-      } catch (err) {
+      this.loadingChart = false;
+    } catch (err) {
       this.$message.error(String(err));
     }
   },
@@ -216,8 +216,8 @@
         "页面访问",
         this.$route.path
       ])
-              .then(res => console.log(res))
-              .catch(err => console.error(err));
+        .then(res => console.log(res))
+        .catch(err => console.error(err));
 
       if (tab.name === "third") {
         this.userlogChartShow = true;
@@ -258,7 +258,7 @@
 </script>
 
 <style lang="scss">
-  /**
+/**
        * 默认尺寸为 600px×400px，如果想让图表响应尺寸变化，可以像下面这样
        * 把尺寸设为百分比值（同时请记得为容器设置尺寸）。
        */
@@ -269,27 +269,27 @@
 </style>
 
 <style lang="scss" scoped>
-  .subpage-statistics {
-    width: 80%;
-    margin: 0 auto;
-  }
+.subpage-statistics {
+  width: 80%;
+  margin: 0 auto;
+}
 
-  .all-district {
-    width: 100%;
-  }
+.all-district {
+  width: 100%;
+}
 
-  .user-log-type {
-    width: 300px;
-    height: 300px;
-  }
+.user-log-type {
+  width: 300px;
+  height: 300px;
+}
 
-  .user-log-time {
-    margin-top: 10px;
-    width: 400px;
-    height: 300px;
-  }
+.user-log-time {
+  margin-top: 10px;
+  width: 400px;
+  height: 300px;
+}
 
-  .main-chart {
-    width: 100%;
-  }
+.main-chart {
+  width: 100%;
+}
 </style>

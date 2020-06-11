@@ -75,8 +75,8 @@
 <script>
 import md5 from "md5";
 import Cookies from "js-cookie";
-import {mapState} from "vuex";
-import {send} from "../utils/burringPoint";
+import { mapState } from "vuex";
+import { send } from "../utils/burringPoint";
 
 export default {
   name: "page-sign",

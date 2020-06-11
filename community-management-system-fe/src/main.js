@@ -133,10 +133,10 @@ Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
 Vue.prototype.$moment = moment;
 
-import {send} from "./utils/burringPoint";
+import { send } from "./utils/burringPoint";
 
 Vue.directive("bp-click", {
-  bind(el, {value}) {
+  bind(el, { value }) {
     el.addEventListener("click", () => {
       send(value)
         .then(res => console.log(res))
@@ -145,7 +145,7 @@ Vue.directive("bp-click", {
   }
 });
 Vue.directive("bp-blur", {
-  bind(el, {value}) {
+  bind(el, { value }) {
     el.addEventListener("blur", () => {
       send(value)
         .then(res => console.log(res))
@@ -154,7 +154,7 @@ Vue.directive("bp-blur", {
   }
 });
 Vue.directive("bp-default", {
-  bind(el, {value}) {
+  bind(el, { value }) {
     send(value)
       .then(res => console.log(res))
       .catch(err => console.error(err));

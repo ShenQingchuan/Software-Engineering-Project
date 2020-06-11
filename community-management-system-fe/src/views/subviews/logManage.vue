@@ -1,18 +1,18 @@
 <template>
-    <div
-            class="page-log-manage"
-            v-bp-default="[userInfo.id, '访问了日志管理页面', '页面访问', $route.path]"
-    >
-        <div class="flex-box log-actions">
-            <el-button
-                    @click="
+  <div
+    class="page-log-manage"
+    v-bp-default="[userInfo.id, '访问了日志管理页面', '页面访问', $route.path]"
+  >
+    <div class="flex-box log-actions">
+      <el-button
+        @click="
           () => {
             $router.push('./addLog');
           }
         "
-                    icon="el-icon-plus"
-                    plain
-                    type="success"
+        icon="el-icon-plus"
+        plain
+        type="success"
         >新增日志</el-button
       >
     </div>

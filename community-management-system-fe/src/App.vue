@@ -1,28 +1,28 @@
 <template>
   <div id="app" v-bp-default="[userInfo.id, '登录了页面', '页面访问', '/']">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
-  import {mapState} from "vuex";
+import { mapState } from "vuex";
 
-  export default {
-    computed: {
-      ...mapState(["userInfo"])
-    }
-  };
+export default {
+  computed: {
+    ...mapState(["userInfo"])
+  }
+};
 </script>
 
 <style lang="scss">
-  * {
-    margin: 0;
-    padding: 0;
-  }
+* {
+  margin: 0;
+  padding: 0;
+}
 
-  a,
-  a:link,
-  a:visited {
+a,
+a:link,
+a:visited {
   color: #2c3e50;
   text-decoration: none;
 }

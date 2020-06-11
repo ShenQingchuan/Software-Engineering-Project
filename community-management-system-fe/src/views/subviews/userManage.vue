@@ -24,9 +24,8 @@
       >查询</el-button
     >
     <el-button @click="goAddUserTab" icon="el-icon-plus" plain type="success"
-    >添加用户
-    </el-button
-    >
+      >添加用户
+    </el-button>
     <el-table
       class="user-manage-data-table"
       width="1150"
@@ -105,7 +104,7 @@
 // import userManageTableDataMock from "@/mock/userManageTableData";
 import { mapState } from "vuex";
 import resErrorHandler from "../../utils/resErrorHandler";
-import {send} from "../../utils/burringPoint";
+import { send } from "../../utils/burringPoint";
 
 export default {
   name: "userManage",
