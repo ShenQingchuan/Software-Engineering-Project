@@ -35,6 +35,7 @@ public class AdminAllController {
      */
     @GetMapping("/getGridProfile")
     public Object getMaterial(@RequestParam String userID) {
+
         UserEntity userEntity = userMapper.findOneByUserID(userID);
         if (userEntity != null && userEntity.getUserType() == 1) {
             log.info("[系统管理员]用户 <" + userID + "> 不是一名网格员!");

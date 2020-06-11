@@ -1,14 +1,23 @@
 <template>
-  <div class="subpage-officer-manage tb-gap flex flex-col">
+  <div
+          class="subpage-officer-manage tb-gap flex flex-col"
+          v-bp-default="[
+      userInfo.id,
+      '访问了添加网格员页面',
+      '页面访问',
+      $route.path
+    ]"
+  >
     <div class="search-form flex-box">
       <label>要搜索的用户：</label>
-      <el-input v-model="userID" placeholder="请输入用户 ID" />
+      <el-input v-model="userID" placeholder="请输入用户 ID"/>
       <el-button
-        @click="submitUserQuery"
-        class="query-submit"
-        plain
-        type="primary"
-        >搜索</el-button
+              @click="submitUserQuery"
+              class="query-submit"
+              plain
+              type="primary"
+      >搜索
+      </el-button
       >
     </div>
 
@@ -76,7 +85,8 @@
 </template>
 
 <script>
-import resErrorHandler from "../../utils/resErrorHandler";
+  import resErrorHandler from "../../utils/resErrorHandler";
+  import {mapState} from "vuex";
 // import officerManageSearchResultMock from "../../mock/officerManageSearchResult";
 
 export default {
@@ -92,6 +102,9 @@ export default {
       communityOptionsList: {}
     };
   },
+  computed: {
+    ...mapState(["userInfo"])
+  },
   methods: {
     async submitUserQuery() {
       if (!/\d{18}/.test(this.userID)) {
@@ -100,7 +113,7 @@ export default {
       }
       // 先查询某用户基本资料 /admin/getGridProfile ，先不展示可选的小区列表，要等管理员确认无误点击按钮后再请求 /getAreaList
       const userRes = await this.$axios.get(
-        `/admin/getGridProfile?userID=${this.userID}`
+              `/admin/getGridProfile?userID=${this.userID}`
       );
       resErrorHandler(this, userRes);
       if (userRes.data.resultCode === "200") {

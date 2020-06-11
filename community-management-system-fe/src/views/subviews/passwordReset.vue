@@ -1,15 +1,18 @@
 <template>
-  <div class="flex-box flex-col jy-center subpage-password-reset">
-    <!-- 步骤条 -->
-    <el-steps
-      :active="step"
-      align-center
-      class="steps-tip"
-      finish-status="success"
-      simple
+    <div
+            class="flex-box flex-col jy-center subpage-password-reset"
+            v-bp-default="[userInfo.id, '该用户开始重置密码', '页面访问', $route.path]"
     >
-      <el-step class="steps-tip-item" title="安全验证"></el-step>
-      <el-step class="steps-tip-item" title="修改密码"></el-step>
+        <!-- 步骤条 -->
+        <el-steps
+                :active="step"
+                align-center
+                class="steps-tip"
+                finish-status="success"
+                simple
+        >
+            <el-step class="steps-tip-item" title="安全验证"></el-step>
+            <el-step class="steps-tip-item" title="修改密码"></el-step>
       <el-step class="steps-tip-item" title="修改成功"></el-step>
     </el-steps>
 

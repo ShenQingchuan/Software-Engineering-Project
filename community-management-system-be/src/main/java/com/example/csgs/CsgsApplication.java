@@ -9,7 +9,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CsgsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CsgsApplication.class, args);
+        String a = "aaa";
+        System.out.println(a.toString());
+
+//        SpringApplication.run(CsgsApplication.class, args);
     }
 
 }

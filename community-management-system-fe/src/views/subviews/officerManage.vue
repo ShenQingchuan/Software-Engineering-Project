@@ -1,15 +1,23 @@
 <template>
-  <div class="subpage-officer-manage">
-    <el-table :data="officerList">
-      <el-table-column fixed label="姓名" prop="userName"></el-table-column>
-      <el-table-column fixed label="联系方式" prop="telPhone"></el-table-column>
-      <el-table-column fixed label="管理区域">
-        <template slot-scope="scope">
-          <b
-            >{{ scope.row.areaList.districtName }} -
-            {{ scope.row.areaList.communityArray.join("/") }}</b
-          >
-        </template>
+    <div
+            class="subpage-officer-manage"
+            v-bp-default="[
+      userInfo.id,
+      '访问了网格员管理页面',
+      '页面访问',
+      $route.path
+    ]"
+    >
+        <el-table :data="officerList">
+            <el-table-column fixed label="姓名" prop="userName"></el-table-column>
+            <el-table-column fixed label="联系方式" prop="telPhone"></el-table-column>
+            <el-table-column fixed label="管理区域">
+                <template slot-scope="scope">
+                    <b
+                    >{{ scope.row.areaList.districtName }} -
+                        {{ scope.row.areaList.communityArray.join("/") }}</b
+                    >
+                </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="150">
         <template slot-scope="scope">

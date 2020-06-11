@@ -1,15 +1,18 @@
 <template>
-  <div class="page-announcement-manage">
-    <div class="flex-box announcement-actions">
-      <el-button
-        @click="
+    <div
+            class="page-announcement-manage"
+            v-bp-default="[userInfo.id, '访问了公告管理页面', '页面访问', $route.path]"
+    >
+        <div class="flex-box announcement-actions">
+            <el-button
+                    @click="
           () => {
             $router.push('./addAnnouncement');
           }
         "
-        icon="el-icon-plus"
-        plain
-        type="success"
+                    icon="el-icon-plus"
+                    plain
+                    type="success"
         >新增公告</el-button
       >
     </div>

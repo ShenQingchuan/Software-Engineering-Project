@@ -23,12 +23,9 @@
     <el-button @click="queryUser" icon="el-icon-search" plain type="primary"
       >查询</el-button
     >
-    <el-button
-      @click="() => $router.push('/dashboard/officerAddUser')"
-      icon="el-icon-plus"
-      plain
-      type="success"
-      >添加用户</el-button
+    <el-button @click="goAddUserTab" icon="el-icon-plus" plain type="success"
+    >添加用户
+    </el-button
     >
     <el-table
       class="user-manage-data-table"
@@ -108,6 +105,7 @@
 // import userManageTableDataMock from "@/mock/userManageTableData";
 import { mapState } from "vuex";
 import resErrorHandler from "../../utils/resErrorHandler";
+import {send} from "../../utils/burringPoint";
 
 export default {
   name: "userManage",
@@ -144,7 +142,9 @@ export default {
     };
   },
   methods: {
+    send,
     async queryUser() {
+      await send([this.userInfo.id, "查询用户", "AJAX请求", this.$route.path]);
       try {
         const res = await this.$axios.post(
           `/query/multipleConditions/${this.userInfo.id}?page=1`,
@@ -180,6 +180,10 @@ export default {
       } catch (err) {
         this.$message.error(String(err));
       }
+    },
+    async goAddUserTab() {
+      await this.$router.push("/dashboard/officerAddUser");
+      await send([this.userInfo.id, "添加用户", "页面切换", this.$route.path]);
     }
   }
 };

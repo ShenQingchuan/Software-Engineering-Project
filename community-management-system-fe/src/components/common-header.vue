@@ -23,26 +23,36 @@
 </template>
 
 <script>
-import Cookies from "js-cookie";
-import logout from "@/mixins/logout";
+  import Cookies from "js-cookie";
+  import logout from "@/mixins/logout";
+  import {send} from "../utils/burringPoint";
+  import {mapState} from "vuex";
 
-export default {
-  name: "common-header",
-  mixins: [logout],
-  data() {
-    return {
-      notificationCount: 5,
-      username: "Tom"
-    };
-  },
-  methods: {
-    logout() {
-      console.log("退出登录");
-      Cookies.remove("csgs_token");
-      Cookies.remove("JSESSIONID");
-      this.$router.push("/sign");
-      this.$message.success("退出登录成功!");
-    }
+  export default {
+    name: "common-header",
+    mixins: [logout],
+    data() {
+      return {
+        notificationCount: 5,
+        username: "Tom"
+      };
+    },
+    computed: {
+      ...mapState(["userInfo"])
+    },
+    methods: {
+      logout() {
+        console.log("正在退出登录...");
+        send([this.userInfo.id, "退出登录了", "行为操作", "/logout"])
+          .then(res => console.log(res))
+          .catch(err => console.error(err))
+          .then(() => {
+            Cookies.remove("csgs_token");
+            Cookies.remove("JSESSIONID");
+            this.$router.push("/sign");
+            this.$nextTick(() => this.$message.success("退出登录成功!"));
+          });
+      }
   }
 };
 </script>

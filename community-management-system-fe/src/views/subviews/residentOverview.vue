@@ -1,5 +1,8 @@
 <template>
-  <div class="flex-box flex-col jy-center subpage-resident-overview">
+  <div
+          class="flex-box flex-col jy-center subpage-resident-overview"
+          v-bp-default="[userInfo.id, '访问了居民总览页', '页面访问', $route.path]"
+  >
     <!-- 小区名称 -->
     <div class="community-title">
       所属小区：<span>{{ community }}</span>
@@ -9,7 +12,7 @@
       <div class="flex-box overview-card">
         <el-card shadow="hover">
           <svg
-            t="1587168238324"
+                  t="1587168238324"
             class="icon"
             viewBox="0 0 1024 1024"
             version="1.1"
