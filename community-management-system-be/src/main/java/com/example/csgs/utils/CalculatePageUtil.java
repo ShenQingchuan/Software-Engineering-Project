@@ -5,7 +5,7 @@ import com.github.pagehelper.Page;
 
 import java.util.List;
 
-public class CalculatePageUtils {
+public class CalculatePageUtil {
     public static<T> PageQuery<T> getPageInfo(int page, long pageSize, Page<T> pageable, List<T> dataList){
         long totalPage;
         if (pageable.getTotal() != 0) {

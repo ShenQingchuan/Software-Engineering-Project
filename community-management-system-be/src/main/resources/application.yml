@@ -32,7 +32,7 @@ spring:
   redis:
     host: 112.126.85.20
     port: 6379
-    timeout: 10000
+    timeout: 50000
     database: 0
 jasypt:
   encryptor:

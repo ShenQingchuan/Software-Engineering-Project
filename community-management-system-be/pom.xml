@@ -16,6 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <elasticsearch.version>7.5.1</elasticsearch.version>
     </properties>
 
     <dependencies>
@@ -85,10 +86,6 @@
             <version>0.4</version>
         </dependency>
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
@@ -143,6 +140,12 @@
             <artifactId>shiro-spring-boot-starter</artifactId>
             <version>1.5.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>7.5.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

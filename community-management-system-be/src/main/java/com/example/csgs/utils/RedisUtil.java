@@ -7,13 +7,13 @@ import javax.annotation.PostConstruct;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class RedisUtils {
+public class RedisUtil {
 
     private final StringRedisTemplate redisTemplate;
 
-    private static RedisUtils redisUtils;
+    private static RedisUtil redisUtil;
 
-    public RedisUtils(StringRedisTemplate redisTemplate) {
+    public RedisUtil(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
@@ -22,7 +22,7 @@ public class RedisUtils {
      */
     @PostConstruct
     public void init() {
-        redisUtils = this;
+        redisUtil = this;
     }
 
     /**
@@ -42,7 +42,7 @@ public class RedisUtils {
      * @param time  秒
      */
     public void set(String key, String value, long time) {
-        redisUtils.redisTemplate.opsForValue().set(key, value, time, TimeUnit.DAYS);
+        redisUtil.redisTemplate.opsForValue().set(key, value, time, TimeUnit.DAYS);
     }
 
     /**
@@ -50,7 +50,7 @@ public class RedisUtils {
      * @param key   键
      */
     public void remove(String key) {
-        redisUtils.redisTemplate.delete(key);
+        redisUtil.redisTemplate.delete(key);
     }
 
     /**
@@ -60,7 +60,7 @@ public class RedisUtils {
      * @param value 值
      */
     public void set(String key, String value) {
-        redisUtils.redisTemplate.opsForValue().set(key, value);
+        redisUtil.redisTemplate.opsForValue().set(key, value);
     }
 
     /**
@@ -70,7 +70,7 @@ public class RedisUtils {
      * @return
      */
     public Long getExpire(String key) {
-        return redisUtils.redisTemplate.getExpire(key, TimeUnit.DAYS);
+        return redisUtil.redisTemplate.getExpire(key, TimeUnit.DAYS);
     }
 
     /**
@@ -80,7 +80,7 @@ public class RedisUtils {
      * @return
      */
     public static Boolean hasKey(String key) {
-        return redisUtils.redisTemplate.hasKey(key);
+        return redisUtil.redisTemplate.hasKey(key);
     }
 
     /**
@@ -91,6 +91,6 @@ public class RedisUtils {
      * @return
      */
     public Boolean expire(String key, long time) {
-        return redisUtils.redisTemplate.expire(key, time, TimeUnit.DAYS);
+        return redisUtil.redisTemplate.expire(key, time, TimeUnit.DAYS);
     }
 }

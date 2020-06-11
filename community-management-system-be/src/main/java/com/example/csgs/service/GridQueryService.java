@@ -3,6 +3,8 @@ package com.example.csgs.service;
 import com.example.csgs.entity.PageQuery;
 import com.example.csgs.entity.User;
 
+import java.io.IOException;
+
 public interface GridQueryService {
 
     /**
@@ -23,7 +25,7 @@ public interface GridQueryService {
      * @param userName 所查询用户的姓名
      * @param community 所查询用户所在的小区名
      */
-    PageQuery<User> multipleConditions(String userID, String userName, String community, Long id, String page);
+    PageQuery<User> multipleConditions(String userID, String userName, String community, Long id, String page) throws IOException;
 
     /**
      * 网格员删除居民用户

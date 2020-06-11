@@ -4,12 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.csgs.entity.PageQuery;
 import com.example.csgs.entity.User;
 import com.example.csgs.service.GridQueryService;
-import com.example.csgs.utils.IsInteger;
-import com.example.csgs.utils.ResultUtils;
+import com.example.csgs.utils.IsIntegerUtil;
+import com.example.csgs.utils.ResultUtil;
 import lombok.extern.log4j.Log4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/query")
@@ -24,29 +25,29 @@ public class GridQueryController {
      */
     @GetMapping("/allUserOfGrid/{id}")
     public Object allUserOfGrid(@PathVariable String id, @RequestParam String page) {
-        if (IsInteger.isInteger(id)) {
+        if (IsIntegerUtil.isInteger(id)) {
             PageQuery<User> pageQuery = gridQueryService.allUserOfGrid(Long.parseLong(id), page);
             if (pageQuery != null) {
                 log.info("网格员id<" + id + ">获取用户数据列表第<" + page + ">页成功！");
-                return ResultUtils.success(pageQuery, "居民用户信息获取成功！");
+                return ResultUtil.success(pageQuery, "居民用户信息获取成功！");
             }
             if (Integer.parseInt(page) > 1) {
                 log.info("已无更多公告！");
-                return ResultUtils.error(" 已无更多公告！");
+                return ResultUtil.error(" 已无更多公告！");
             }
         }
         log.info("网格员id<" + id + ">获取用户数据列表第<" + page + ">页失败！");
-        return ResultUtils.error("居民用户信息获取失败！");
+        return ResultUtil.error("居民用户信息获取失败！");
     }
 
     /**
      * 按各种用户身份信息进行查询
      * 场景：网格员查询用户信息
-     * 组合：<归属地区、姓名>、<归属小区>、<姓名>、<userID>
+     * 组合：<归属小区、姓名>、<归属小区>、<姓名>、<userID>
      */
     @PostMapping("/multipleConditions/{id}")
-    public Object multipleConditions(@RequestBody JSONObject jsonObject, @PathVariable String id, @RequestParam String page) {
-        if (IsInteger.isInteger(id)) {
+    public Object multipleConditions(@RequestBody JSONObject jsonObject, @PathVariable String id, @RequestParam String page) throws IOException {
+        if (IsIntegerUtil.isInteger(id)) {
             String userID = jsonObject.getString("userID");
             String userName = jsonObject.getString("userName");
             String community = jsonObject.getString("community");
@@ -54,11 +55,11 @@ public class GridQueryController {
             PageQuery<User> userPageQuery = gridQueryService.multipleConditions(userID, userName, community, Long.parseLong(id), page);
             if (userPageQuery != null) {
                 log.info("网格员id<" + id + ">查询居民用户信息成功");
-                return ResultUtils.success(userPageQuery, "居民用户信息获取成功");
+                return ResultUtil.success(userPageQuery, "居民用户信息获取成功");
             }
         }
         log.info("网格员id<" + id + ">查询居民用户信息失败");
-        return ResultUtils.error("居民用户信息获取失败！");
+        return ResultUtil.error("居民用户信息获取失败！");
     }
 
     /**
@@ -68,12 +69,12 @@ public class GridQueryController {
      */
     @GetMapping("/deleteResident/{id}")
     public Object deleteUser(@PathVariable String id) {
-        if (IsInteger.isInteger(id) && gridQueryService.deleteUser(Long.parseLong(id))) {
+        if (IsIntegerUtil.isInteger(id) && gridQueryService.deleteUser(Long.parseLong(id))) {
             log.info("居民<" + id + ">成功被网格员删除！");
-            return ResultUtils.success("用户删除成功！");
+            return ResultUtil.success("用户删除成功！");
         }
         log.info("居民<" + id + ">未能被网格员删除！");
-        return ResultUtils.error("用户删除失败！");
+        return ResultUtil.error("用户删除失败！");
     }
 
 }

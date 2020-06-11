@@ -7,7 +7,7 @@ import com.example.csgs.entity.PageQuery;
 import com.example.csgs.entity.*;
 import com.example.csgs.mapper.*;
 import com.example.csgs.service.AdminAllService;
-import com.example.csgs.utils.CalculatePageUtils;
+import com.example.csgs.utils.CalculatePageUtil;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.log4j.Log4j;
@@ -123,7 +123,7 @@ public class AdminAllServiceImpl implements AdminAllService {
                     gridEntity.getUserId().getUserID(), userProfile.getTelPhone(), areaList);
             gridPersonalInfoList.add(gridPersonalInfo);
         }
-        return CalculatePageUtils.getPageInfo(Integer.parseInt(page), pageSize, pageAble, gridPersonalInfoList);
+        return CalculatePageUtil.getPageInfo(Integer.parseInt(page), pageSize, pageAble, gridPersonalInfoList);
     }
 
     /**
