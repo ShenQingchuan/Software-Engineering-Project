@@ -76,6 +76,7 @@
 import md5 from "md5";
 import Cookies from "js-cookie";
 import { mapState } from "vuex";
+import { send } from "../utils/burringPoint";
 
 export default {
   name: "page-sign",
@@ -125,11 +126,17 @@ export default {
             this.$store.commit("setUserInfo", {
               info
             });
+            await this.$router.push("/dashboard");
+            await send([
+              this.userInfo.id,
+              "登录了系统",
+              "页面访问",
+              this.$route.path
+            ]);
           }
         } catch (err) {
           this.$message.error(String(err));
         }
-        await this.$router.push("/dashboard");
       }
     }
   },

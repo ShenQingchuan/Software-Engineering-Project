@@ -1,8 +1,18 @@
 <template>
-  <div id="app">
+  <div id="app" v-bp-default="[userInfo.id, '登录了页面', '页面访问', '/']">
     <router-view />
   </div>
 </template>
+
+<script>
+import { mapState } from "vuex";
+
+export default {
+  computed: {
+    ...mapState(["userInfo"])
+  }
+};
+</script>
 
 <style lang="scss">
 * {

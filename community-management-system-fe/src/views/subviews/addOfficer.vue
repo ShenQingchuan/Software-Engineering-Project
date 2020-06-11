@@ -1,5 +1,13 @@
 <template>
-  <div class="subpage-officer-manage tb-gap flex flex-col">
+  <div
+    class="subpage-officer-manage tb-gap flex flex-col"
+    v-bp-default="[
+      userInfo.id,
+      '访问了添加网格员页面',
+      '页面访问',
+      $route.path
+    ]"
+  >
     <div class="search-form flex-box">
       <label>要搜索的用户：</label>
       <el-input v-model="userID" placeholder="请输入用户 ID" />
@@ -8,8 +16,8 @@
         class="query-submit"
         plain
         type="primary"
-        >搜索</el-button
-      >
+        >搜索
+      </el-button>
     </div>
 
     <el-card
@@ -77,6 +85,7 @@
 
 <script>
 import resErrorHandler from "../../utils/resErrorHandler";
+import { mapState } from "vuex";
 // import officerManageSearchResultMock from "../../mock/officerManageSearchResult";
 
 export default {
@@ -91,6 +100,9 @@ export default {
       showOptionsList: false,
       communityOptionsList: {}
     };
+  },
+  computed: {
+    ...mapState(["userInfo"])
   },
   methods: {
     async submitUserQuery() {

@@ -1,5 +1,13 @@
 <template>
-  <div class="flex-box flex-col bb-full subpage-user-info">
+  <div
+    class="flex-box flex-col bb-full subpage-user-info"
+    v-bp-default="[
+      userInfo.id,
+      '访问了用户资料展示页',
+      '页面访问',
+      $route.path
+    ]"
+  >
     <!--头顶标签-->
     <div class="user-info-header">个人信息</div>
 
@@ -30,7 +38,11 @@
               ></path>
             </svg>
           </div>
-          <el-button class="update-avatar-btn" type="primary" plain
+          <el-button
+            class="update-avatar-btn"
+            plain
+            type="primary"
+            v-bp-click="[userInfo.id, '准备修改头像', '用户行为', $route.path]"
             >修改头像
           </el-button>
           <div slot="tip" class="el-upload__tip">
@@ -186,14 +198,14 @@ export default {
 
       img {
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        max-width: 150px;
+        max-width: 100px;
         width: 100%;
-        margin-top: 20px;
+        margin-top: 10px;
         border-radius: 20px;
       }
 
       .update-avatar-btn {
-        margin-top: 20px;
+        margin-top: 4px;
       }
     }
 

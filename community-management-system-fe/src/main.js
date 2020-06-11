@@ -58,6 +58,7 @@ import ECharts from "vue-echarts"; // 在 webpack 环境下指向 components/ECh
 
 // 手动引入 ECharts 各模块来减小打包体积
 import "echarts/lib/chart/bar";
+import "echarts/lib/chart/pie";
 import "echarts/lib/component/tooltip";
 import "echarts/lib/component/legend";
 import axios from "axios";
@@ -131,6 +132,34 @@ Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$notify = Notification;
 Vue.prototype.$message = Message;
 Vue.prototype.$moment = moment;
+
+import { send } from "./utils/burringPoint";
+
+Vue.directive("bp-click", {
+  bind(el, { value }) {
+    el.addEventListener("click", () => {
+      send(value)
+        .then(res => console.log(res))
+        .catch(err => console.error(err));
+    });
+  }
+});
+Vue.directive("bp-blur", {
+  bind(el, { value }) {
+    el.addEventListener("blur", () => {
+      send(value)
+        .then(res => console.log(res))
+        .catch(err => console.error(err));
+    });
+  }
+});
+Vue.directive("bp-default", {
+  bind(el, { value }) {
+    send(value)
+      .then(res => console.log(res))
+      .catch(err => console.error(err));
+  }
+});
 
 new Vue({
   router,

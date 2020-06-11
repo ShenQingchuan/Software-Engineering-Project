@@ -1,5 +1,8 @@
 <template>
-  <div class="subpage-password-protect">
+  <div
+    class="subpage-password-protect"
+    v-bp-default="[userInfo.id, '该用户开始设置密保', '页面访问', $route.path]"
+  >
     <el-form ref="form" :model="pswdPro" label-width="100px">
       <el-form-item label="密保问题一：">
         <el-select

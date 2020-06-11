@@ -1,12 +1,24 @@
 <template>
-  <div class="subpage-add-announcement">
+  <div
+    class="subpage-add-announcement"
+    v-bp-default="[
+      userInfo.id,
+      `访问了${editor.type}公告页面`,
+      '页面访问',
+      $route.path
+    ]"
+  >
     <h3>{{ editor.type }}公告</h3>
 
     <!--其他属性信息-->
     <div class="meta-form font-bold tb-gap flex-box flex-col jy-start">
       <div class="meta-form-item tb-gap flex-box jy-start">
         <label>标题：</label>
-        <el-input v-model="title" placeholder="请输入标题"></el-input>
+        <el-input
+          @blur="titleBlurHandler"
+          placeholder="请输入标题"
+          v-model="title"
+        ></el-input>
       </div>
     </div>
 
@@ -34,6 +46,7 @@
 <script>
 import { mapState } from "vuex";
 import resErrorHandler from "../../utils/resErrorHandler";
+import { send } from "../../utils/burringPoint";
 
 export default {
   name: "editAnnouncement",
@@ -57,6 +70,16 @@ export default {
     ...mapState(["userInfo"])
   },
   methods: {
+    titleBlurHandler(e) {
+      send([
+        this.userInfo.id,
+        `编辑日志标题中... 当前编辑值: ${e.target.value}`,
+        "文本编辑",
+        this.$route.path
+      ])
+        .then(res => console.log(res))
+        .catch(err => console.error(err));
+    },
     async submitAnnouncement() {
       if (this.editor.source.length === 0 || this.title.length === 0) {
         this.$message.error("不能提交空内容！");

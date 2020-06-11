@@ -1,5 +1,8 @@
 <template>
-  <div class="page-announcement-manage">
+  <div
+    class="page-announcement-manage"
+    v-bp-default="[userInfo.id, '访问了公告管理页面', '页面访问', $route.path]"
+  >
     <div class="flex-box announcement-actions">
       <el-button
         @click="

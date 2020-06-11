@@ -1,5 +1,8 @@
 <template>
-  <div class="page-log-manage">
+  <div
+    class="page-log-manage"
+    v-bp-default="[userInfo.id, '访问了日志管理页面', '页面访问', $route.path]"
+  >
     <div class="flex-box log-actions">
       <el-button
         @click="
