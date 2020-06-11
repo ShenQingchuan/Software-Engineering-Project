@@ -25,8 +25,7 @@ import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermsQueryBuilder;
+import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.junit.jupiter.api.Test;
@@ -51,7 +50,7 @@ class CsgsApplicationTests {
      */
     @Test
     void contextLoads() throws IOException {
-        CreateIndexRequest request = new CreateIndexRequest("communityInfo");
+        CreateIndexRequest request = new CreateIndexRequest("announcement");
         CreateIndexResponse createIndexResponse = client
                 .indices().create(request, RequestOptions.DEFAULT);
         System.out.println(createIndexResponse);
@@ -74,7 +73,7 @@ class CsgsApplicationTests {
      */
     @Test
     void testDeleteIndex() throws IOException {
-        DeleteIndexRequest request = new DeleteIndexRequest("user");
+        DeleteIndexRequest request = new DeleteIndexRequest("announcement");
         AcknowledgedResponse delete = client.indices().delete(request, RequestOptions.DEFAULT);
         System.out.println(delete.isAcknowledged());
     }
@@ -151,7 +150,7 @@ class CsgsApplicationTests {
         userArrayList.add(new User(4L,"510723200011044657","Hp","19980492667","昌平区","融泽嘉园"));
 
         for (int i = 0; i < userArrayList.size(); i++) {
-            bulkRequest.add(new IndexRequest("user").
+            bulkRequest.add(new IndexRequest("announcement").
                     id("" + (i + 1)).//注意id的起始值
                     source(JSON.toJSONString(userArrayList.get(i)), XContentType.JSON)
             );
@@ -165,12 +164,12 @@ class CsgsApplicationTests {
      */
     @Test
     void testSearch() throws IOException {
-        SearchRequest searchRequest = new SearchRequest("user");
+        SearchRequest searchRequest = new SearchRequest("announcement");
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-//        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("creator", "秦先富");//精确查询
-//        MultiMatchQueryBuilder termQueryBuilder = QueryBuilders.multiMatchQuery("秦先富","creator");//多个字段里找text
-        TermsQueryBuilder termQueryBuilder = QueryBuilders.termsQuery("userid","510722199901032661","510722199901032662");//一个字段里找多个值
-//        MatchAllQueryBuilder matchAllQueryBuilder = QueryBuilders.matchAllQuery(); //匹配所有
+        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("title_name", "南村群童欺我老无力");//精确查询
+//        MultiMatchQueryBuilder termQueryBuilder = QueryBuilders.multiMatchQuery("南村群童欺我老无","title_name","content");//多个字段里找text
+//        TermsQueryBuilder termQueryBuilder = QueryBuilders.termsQuery("userid","510722199901032661","510722199901032662");//一个字段里找多个值
+//        RangeQueryBuilder matchAllQueryBuilder = QueryBuilders.rangeQuery("user_name"); //匹配所有
         sourceBuilder.query(termQueryBuilder);
         sourceBuilder.timeout(new TimeValue(60, TimeUnit.SECONDS));
         searchRequest.source(sourceBuilder);

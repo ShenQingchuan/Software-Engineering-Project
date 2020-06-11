@@ -162,7 +162,6 @@ public class ElasticSearchUtil {
      */
     public SearchResponse termQuery(String indexName,TermQueryBuilder termQueryBuilder,String page) throws IOException {
         createSearchObject(indexName);
-//        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("creator", "秦先富");//精确查询
         sourceBuilder.from((Integer.parseInt(page)-1)*10);
         sourceBuilder.size(10);
         sourceBuilder.query(termQueryBuilder);
@@ -177,7 +176,6 @@ public class ElasticSearchUtil {
      */
     public SearchResponse termsQuery(String indexName,TermsQueryBuilder termsQueryBuilder,String page) throws IOException {
         createSearchObject(indexName);
-//        TermsQueryBuilder termsQueryBuilder = QueryBuilders.termsQuery("creator", "秦先富", "何飘");//一个字段里找多个值
         sourceBuilder.from((Integer.parseInt(page)-1)*10);
         sourceBuilder.size(10);
         sourceBuilder.query(termsQueryBuilder);

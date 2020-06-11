@@ -80,33 +80,15 @@ public class GridQueryServiceImpl implements GridQueryService {
                 pageable.setTotal(1);
                 userList.add(user);
             } else {
-                ElasticSearchUtil elasticSearchUtil = new ElasticSearchUtil();
-                if (!"".equals(userName) && "".equals(community)) {
-                    SearchResponse searchResponse = elasticSearchUtil.termQuery(
-                            "profile", QueryBuilders.termQuery("userName", userName),page);
-                    List<ProfileInfo> profileInfos = parseToDataList(searchResponse, new ProfileInfo());
+                HashMap<String, String> map = new HashMap<>();
+                map.put("userName", userName);
+                map.put("community", community);
 
-                    return new PageQuery<User>(1, 2,
-                            elasticSearchUtil.countQuery("profile").getCount(), userList);
-                } else if ("".equals(userName) && !"".equals(community)) {
-                    SearchResponse searchResponse = elasticSearchUtil.termQuery(
-                            "communityInfo", QueryBuilders.termQuery("community", community),page);
-                    List<CommunityInfo> communityInfos = parseToDataList(searchResponse, new CommunityInfo());
-
-//                    calculatePage();
-                    return new PageQuery<User>(1, 2,
-                            elasticSearchUtil.countQuery("communityInfo").getCount(), userList);
-                } else {
-                    HashMap<String, String> map = new HashMap<>();
-                    map.put("userName", userName);
-                    map.put("community", community);
-
-                    pageable = PageHelper.startPage(Integer.parseInt(page), pageSize);
-                    PageHelper.orderBy("id ASC");
-                    userList = userMapper.findUserByGridInfo(map);
-                    return CalculatePageUtil.getPageInfo(Integer.parseInt(page), pageSize, pageable, userList);
-                }
+                pageable = PageHelper.startPage(Integer.parseInt(page), pageSize);
+                PageHelper.orderBy("id ASC");
+                userList = userMapper.findUserByGridInfo(map);
             }
+            return CalculatePageUtil.getPageInfo(Integer.parseInt(page), pageSize, pageable, userList);
         }
         return null;
     }
@@ -116,7 +98,7 @@ public class GridQueryServiceImpl implements GridQueryService {
      *
      * @param searchResponse 使用ElasticSearch所查询到的数据类
      */
-    private <T>List<T> parseToDataList(SearchResponse searchResponse, T t) {
+    private <T> List<T> parseToDataList(SearchResponse searchResponse, T t) {
         List<T> dataList = new ArrayList<>();
         for (SearchHit documentFields : searchResponse.getHits().getHits()) {
             log.info(documentFields.getSourceAsMap());
