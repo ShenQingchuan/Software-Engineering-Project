@@ -1,16 +1,6 @@
 package com.example.csgs.service.impl;
 
-import com.example.csgs.entity.Announcement;
-import com.example.csgs.entity.CommunityInfo;
-import com.example.csgs.entity.CommunityInfoEntity;
-import com.example.csgs.entity.PageQuery;
-import com.example.csgs.mapper.AnnouncementMapper;
-import com.example.csgs.mapper.ProfileMapper;
 import com.example.csgs.service.LuceneService;
-import com.example.csgs.service.ResidentService;
-import com.example.csgs.utils.CalculatePageUtil;
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import lombok.extern.log4j.Log4j;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -26,7 +16,6 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.swing.text.Highlighter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,8 +42,8 @@ public class LuceneServiceImpl implements LuceneService {
     public List<Map<String, Object>> multiMatchQuery(String indexName, MultiMatchQueryBuilder matchQueryBuilder,
                                                      String page) throws IOException {
         createSearchObject(indexName);
-        sourceBuilder.from((Integer.parseInt(page) - 1) * 10);
-        sourceBuilder.size(10);
+        sourceBuilder.from((Integer.parseInt(page) - 1) * 15);
+        sourceBuilder.size(15);
         sourceBuilder.query(matchQueryBuilder);
         buildSearchRequest(); //构建SearchRequest
         setKeywordHighlight();//设置相应字段高亮

@@ -55,7 +55,6 @@ public class ElasticSearchUtil {
         CreateIndexResponse createIndexResponse = client
                 .indices().create(request, RequestOptions.DEFAULT);
         System.out.println(createIndexResponse);
-
     }
 
     /**
