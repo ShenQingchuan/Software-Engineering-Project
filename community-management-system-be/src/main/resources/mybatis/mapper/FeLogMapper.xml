@@ -10,4 +10,11 @@
         values (#{event}, #{type}, #{page}, #{createTime}, #{userId})
     </insert>
 
+    <select id="queryTimeLog" resultType="LogTimeResult">
+        select create_time,count(*) count from fe_log group by create_time
+    </select>
+
+    <select id="queryTypeLog" resultType="LogTypeResult">
+        select type,count(*) count from fe_log group by type
+    </select>
 </mapper>

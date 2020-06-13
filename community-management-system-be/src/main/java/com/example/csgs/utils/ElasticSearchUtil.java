@@ -1,6 +1,7 @@
 package com.example.csgs.utils;
 
 import com.alibaba.fastjson.JSON;
+import lombok.extern.java.Log;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -25,16 +26,22 @@ import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.*;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+@Log
 public class ElasticSearchUtil {
     @Resource
+    @Qualifier("restHighLevelClient")
     RestHighLevelClient client;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
     private SearchRequest searchRequest;
@@ -48,7 +55,6 @@ public class ElasticSearchUtil {
         CreateIndexResponse createIndexResponse = client
                 .indices().create(request, RequestOptions.DEFAULT);
         System.out.println(createIndexResponse);
-
     }
 
     /**
@@ -150,32 +156,34 @@ public class ElasticSearchUtil {
 
     /**
      * 索引中doc数量查询
+     *
      * @param indexName 索引名
      */
     public CountResponse countQuery(String indexName) throws IOException {
         CountRequest countRequest = new CountRequest(indexName);
-        return client.count(countRequest,RequestOptions.DEFAULT);
+        return client.count(countRequest, RequestOptions.DEFAULT);
     }
 
     /**
      * 文档精确查询
      */
-    public SearchResponse termQuery(String indexName,TermQueryBuilder termQueryBuilder) throws IOException {
+    public SearchResponse termQuery(String indexName, TermQueryBuilder termQueryBuilder, String page) throws IOException {
         createSearchObject(indexName);
-//        TermQueryBuilder termQueryBuilder = QueryBuilders.termQuery("creator", "秦先富");//精确查询
+        sourceBuilder.from((Integer.parseInt(page) - 1) * 20);
+        sourceBuilder.size(20);
         sourceBuilder.query(termQueryBuilder);
         buildSearchRequest();
         return client.search(searchRequest, RequestOptions.DEFAULT);
     }
 
 
-
     /**
      * 文档一个name找多个values查询
      */
-    public SearchResponse termsQuery(String indexName,TermsQueryBuilder termsQueryBuilder) throws IOException {
+    public SearchResponse termsQuery(String indexName, TermsQueryBuilder termsQueryBuilder, String page) throws IOException {
         createSearchObject(indexName);
-//        TermsQueryBuilder termsQueryBuilder = QueryBuilders.termsQuery("creator", "秦先富", "何飘");//一个字段里找多个值
+        sourceBuilder.from((Integer.parseInt(page) - 1) * 10);
+        sourceBuilder.size(10);
         sourceBuilder.query(termsQueryBuilder);
         buildSearchRequest();
         return client.search(searchRequest, RequestOptions.DEFAULT);
@@ -184,20 +192,31 @@ public class ElasticSearchUtil {
     /**
      * 文档一个text在多个fieldNames中查询
      */
-    public SearchResponse multiMatchQuery(String indexName,MultiMatchQueryBuilder multiMatchQueryBuilder) throws IOException {
+    public List<Map<String, Object>> multiMatchQuery(String indexName, MultiMatchQueryBuilder multiMatchQueryBuilder, String page) throws IOException {
         createSearchObject(indexName);
-//        MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery("秦先富","creator");//多个字段里找text
+        sourceBuilder.from((Integer.parseInt(page) - 1) * 10);
+        sourceBuilder.size(10);
         sourceBuilder.query(multiMatchQueryBuilder);
         buildSearchRequest();
-        return client.search(searchRequest, RequestOptions.DEFAULT);
+        SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+        ArrayList<Map<String, Object>> list = new ArrayList<>();
+        if (searchResponse != null) {
+            for (SearchHit documentFields : searchResponse.getHits().getHits()) {
+                Map<String, Object> sourceAsMap = documentFields.getSourceAsMap();
+                list.add(sourceAsMap);
+            }
+        }
+        return list;
     }
 
     /**
      * 文档所有匹配查询
      */
-    public SearchResponse matchAllQuery(String indexName) throws IOException {
+    public SearchResponse matchAllQuery(String indexName, String page) throws IOException {
         createSearchObject(indexName);
         MatchAllQueryBuilder matchAllQueryBuilder = QueryBuilders.matchAllQuery(); //匹配所有
+        sourceBuilder.from((Integer.parseInt(page) - 1) * 10);
+        sourceBuilder.size(10);
         sourceBuilder.query(matchAllQueryBuilder);
         buildSearchRequest();
         return client.search(searchRequest, RequestOptions.DEFAULT);

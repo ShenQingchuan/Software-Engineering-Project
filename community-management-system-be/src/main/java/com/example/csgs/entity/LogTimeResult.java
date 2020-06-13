@@ -1,4 +1,4 @@
-package com.example.csgs.pojo;
+package com.example.csgs.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,11 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JournalEs {
-    private long id;
-    private String titleName;
-    private String typeName;
-    private String creator;
+public class LogTimeResult {
     private String createTime;
-
+    private int count;
 }
