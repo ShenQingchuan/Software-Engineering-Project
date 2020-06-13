@@ -27,7 +27,7 @@
         <div class="text-align-left flex-box jy-between" slot="header">
           <span><b v-html="record.title_name"></b></span>
           <span
-            ><b>日志时间：</b
+            ><b>{{ indexName === "journal" ? "日志" : "公告" }}时间：</b
             >{{ new Date(record.create_time).toLocaleString() }}</span
           >
         </div>
@@ -41,14 +41,6 @@
 import resErrorHandler from "../../utils/resErrorHandler";
 import { mapState } from "vuex";
 
-const escapeMap = {
-  "<": "&#60;",
-  ">": "&#62;",
-  '"': "&#34;",
-  "'": "&#39;",
-  "&": "&#38;"
-};
-
 export default {
   name: "search",
   data() {
@@ -61,6 +53,12 @@ export default {
   },
   computed: {
     ...mapState(["userInfo"])
+  },
+  watch: {
+    indexName() {
+      this.resultData = [];
+      this.keyword = "";
+    }
   },
   methods: {
     async submitSearch() {
@@ -77,9 +75,6 @@ export default {
         this.$message.error(String(err));
         this.resultData = [];
       }
-    },
-    escapeHTML(content) {
-      return content.replace(/&(?![\w#]+;)|[<>"']/g, s => escapeMap[s]);
     }
   }
 };
