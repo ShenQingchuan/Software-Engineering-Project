@@ -35,7 +35,6 @@ public class LuceneServiceImpl implements LuceneService {
      * @param indexName 索引名
      * @param matchQueryBuilder 复合查询条件
      * @param page 页数
-     * @return
      * @throws IOException
      */
     @Override
