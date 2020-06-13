@@ -36,6 +36,7 @@ export const userLogTypePieOptions = {
 
 export function userLogTimeOptionsMaker(timeList, valueList) {
   return {
+    tooltip: {},
     title: {
       left: "center",
       text: "前端操作日志数量，按日期聚合："

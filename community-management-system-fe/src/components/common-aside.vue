@@ -102,10 +102,17 @@
             </el-menu-item>
             <el-menu-item
               @click="() => $router.push('/dashboard/officerManage')"
-              index="4-1"
+              index="4-2"
             >
               <i class="el-icon-connection" />
               <a>网格员管理</a>
+            </el-menu-item>
+            <el-menu-item
+              @click="() => $router.push('/dashboard/search')"
+              index="4-3"
+            >
+              <i class="el-icon-search" />
+              <a>全文检索</a>
             </el-menu-item>
           </el-menu-item-group>
         </el-submenu>

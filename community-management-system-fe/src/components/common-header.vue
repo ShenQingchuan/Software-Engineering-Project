@@ -3,7 +3,7 @@
     <!--用户操作下拉菜单-->
     <el-dropdown class="user-dropdown">
       <span class="user-dropdown-btn">
-        {{ username }}
+        {{ userInfo.userName }}
         <i class="el-icon-arrow-down el-icon--right" />
       </span>
       <el-dropdown-menu slot="dropdown">

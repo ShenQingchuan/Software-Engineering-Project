@@ -182,7 +182,7 @@ export default {
     },
     async goAddUserTab() {
       await this.$router.push("/dashboard/officerAddUser");
-      await send([this.userInfo.id, "添加用户", "页面切换", this.$route.path]);
+      await send([this.userId, "准备添加用户", "页面切换", this.$route.path]);
     }
   }
 };

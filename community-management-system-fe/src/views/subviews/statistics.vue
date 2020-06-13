@@ -285,7 +285,7 @@ export default {
 
 .user-log-time {
   margin-top: 10px;
-  width: 400px;
+  width: 800px;
   height: 300px;
 }
 

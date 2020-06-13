@@ -68,7 +68,7 @@
           >
         </div>
         <div class="flex-box flex-col jy-start">
-          <h3 class="tb-gap text-align-left width-100-percent">
+          <h3 class="tb-gap text-align-left w-full">
             管理区域：{{ editing.areaList.districtName }}
           </h3>
           <el-checkbox-group v-model="editing.areaList.communityArray">

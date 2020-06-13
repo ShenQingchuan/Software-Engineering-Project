@@ -16,6 +16,7 @@ import statistics from "../views/subviews/statistics";
 import officerManage from "../views/subviews/officerManage";
 import Cookies from "js-cookie";
 import setPasswordProtect from "../views/subviews/setPasswordProtect";
+import Search from "../views/subviews/search";
 
 Vue.use(VueRouter);
 
@@ -146,6 +147,14 @@ const routes = [
         component: setPasswordProtect,
         meta: {
           title: buildTitle("设置密保")
+        }
+      },
+      {
+        path: "/dashboard/search",
+        name: "/dashboard/search",
+        component: Search,
+        meta: {
+          title: buildTitle("全文检索")
         }
       }
     ]
