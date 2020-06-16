@@ -203,10 +203,10 @@
         * 添加索引
 
           ```java
-              /**
+          /**
               * 添加索引
               */
-              public void contextLoads() throws IOException {
+          public void contextLoads() throws IOException {
                 CreateIndexRequest request = new CreateIndexRequest("journal");
                 CreateIndexResponse createIndexResponse = client
                   .indices().create(request, RequestOptions.DEFAULT);
@@ -217,10 +217,10 @@
         * 查询索引是否存在
 
           ```java
-              /**
+          /**
               * 查询索引是否存在
               */
-              public void existIndex() throws IOException {
+          public void existIndex() throws IOException {
                 GetIndexRequest request = new GetIndexRequest("journal");
                 boolean exists = client.indices().exists(request, RequestOptions.DEFAULT);
                 System.out.println(exists);
