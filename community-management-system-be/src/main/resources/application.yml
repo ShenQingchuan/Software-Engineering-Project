@@ -31,7 +31,7 @@ spring:
       connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
   redis:
     host: 112.126.85.20
-    port: 6379
+    port: 6378
     timeout: 50000
     database: 0
 jasypt:

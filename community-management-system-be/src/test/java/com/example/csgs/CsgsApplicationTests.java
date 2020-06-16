@@ -29,6 +29,7 @@ import org.elasticsearch.index.query.*;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
@@ -45,9 +46,9 @@ class CsgsApplicationTests {
     RestHighLevelClient client;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日 HH:mm");
 
-    /**
-     * 添加索引
-     */
+//    /**
+//     * 添加索引
+//     */
 //    @Test
 //    void contextLoads() throws IOException {
 //        CreateIndexRequest request = new CreateIndexRequest("announcement");

@@ -217,7 +217,7 @@
         * 查询索引是否存在
 
           ```java
-              /**
+             /**
               * 查询索引是否存在
               */
              public void existIndex() throws IOException {
@@ -230,7 +230,7 @@
         * 删除索引
 
           ```java
-              /**
+             /**
               * 删除索引
               */
               public void deleteIndex() throws IOException {
@@ -365,7 +365,7 @@
                   buildSearchRequest();
                   return client.search(searchRequest, RequestOptions.DEFAULT);
               }
-          		/**
+          	 /**
           		* 其余的TermsQueryBuilder、MultiMatchQueryBuilder、matchAllQuery都是类似的操作
           		*/
           ```
