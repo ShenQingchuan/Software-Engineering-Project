@@ -18,7 +18,7 @@
     "leancloud-storage": "^4.5.3",
     "mavon-editor": "^2.9.0",
     "md5": "^2.2.1",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "vue": "^2.6.11",
     "vue-echarts": "^5.0.0-beta.0",
     "vue-router": "^3.1.5",
